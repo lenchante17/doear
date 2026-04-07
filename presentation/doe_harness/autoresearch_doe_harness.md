@@ -27,8 +27,6 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:950](./assets/automl_intro.jpeg)
 
-[출처 이미지](https://miro.medium.com/v2/resize:fit:1382/1*ip8VpZ4_KJP8R5EwJ3zRgw.jpeg)
-
 ---
 <!-- footer: "NAS" -->
 
@@ -122,13 +120,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 9. MLOps는 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업이다
 
-![w:1040](./assets/mlops_kubeflow.svg)
+![w:880](./assets/mlops_kubeflow.svg)
 
 - Autoresearch loop는 이 큰 ML lifecycle 안의 일부
 - 실제 시스템: `data`, `experiment`, `model registry`, `deployment`, `monitoring`
 - 핵심 역할: `지속 운영`, `추적`, `승격`, `유지관리`
-
-[출처 이미지](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg)
 
 ---
 <!-- footer: "부족한 점" -->
@@ -164,8 +160,6 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![h:330](./assets/doe_cake.png)
 
-[출처 이미지](https://i0.wp.com/michelbaudin.com/wp-content/uploads/2020/10/AstakhovVisualizationOfDOEOnCake.png?resize=691%2C406&ssl=1)
-
 ---
 <!-- footer: "빌려오는 DoE 개념" -->
 
@@ -182,16 +176,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 14. DoE-guided 운영과 비교한 Agents
 
-| 운영 방식 | 특징 |
-| --- | --- |
-| Vanilla autoresearch | `edit → run → score` 반복, 실험 성격 혼재 |
-| DoE-guided autoresearch | factor 정의, 단계 분리, effect / interaction 축적 |
-
-| Agent | 설명 |
-| --- | --- |
-| `01 Sequential` | 최신 기록에 맞춰 작은 변경을 순차 적용 |
-| `02 Simple DoE` | factor와 level을 두고 screening 중심 비교 |
-| `03 Advanced DoE Tic-Tac-To` | staged DoE + 실험 타입 예산 분배 |
+| Agent | 운영 방식 | 특징 |
+| --- | --- | --- |
+| `01 Sequential` | Vanilla autoresearch | 최신 기록에 맞춰 작은 변경을 순차 적용 |
+| `02 Simple DoE` | DoE-guided screening | factor와 level을 두고 screening 중심 비교 |
+| `03 Advanced DoE Tic-Tac-To` | DoE-guided staged program | staged DoE + 실험 타입 예산 분배 |
 
 - `Tic`: 둘 이상 모듈 동시 변경
 - `Tac`: 한 모듈 교체
@@ -208,8 +197,15 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | `cifar10_real` | `max_samples=4000` | `mlp` | 세 agent 모두 `mlp_anchor` control에서 시작 |
 | `twenty_newsgroups_real` | `max_samples=8000`, `max_features=2000`, `ngram_max=2`, `min_df=2` | `mlp` | 같은 loop로 benchmark만 전환 |
 
-- 실행 방식: agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
-- 이번 결과: 각 agent가 같은 start control에서 출발해 validation-only `200` runs를 누적
+실행 조건
+- agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
+- 같은 start control에서 출발해 validation-only `200` runs 누적
+
+MLP에서 바꿀 수 있는 요소
+- preprocessing: `normalization`, `projection`, `projection_dim`
+- model structure: `hidden_dims`
+- optimization: `activation`, `solver`, `learning_rate_init`, `batch_size`
+- regularization / norm: `normalization_layer`, `weight_decay`
 
 ---
 <!-- footer: "결과 테이블" -->
