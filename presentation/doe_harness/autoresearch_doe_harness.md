@@ -21,22 +21,22 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 
 ## 1. AutoML이란 무엇인가?
 
-- AutoML은 모델 개발의 탐색 일부를 자동화한다.
-- 대표 대상은 `model selection`, `hyperparameter tuning`, `pipeline search`다.
-- 핵심은 비교적 주어진 `search space` 안에서 좋은 설정을 찾는 것이다.
+- 모델 개발 탐색 일부 자동화
+- 대표 대상: `model selection`, `hyperparameter tuning`, `pipeline search`
+- 핵심: 비교적 주어진 `search space` 안 최적 설정 탐색
 
 ![w:950](./assets/automl_intro.jpeg)
 
-[Source image](https://miro.medium.com/v2/resize:fit:1382/1*ip8VpZ4_KJP8R5EwJ3zRgw.jpeg)
+[출처 이미지](https://miro.medium.com/v2/resize:fit:1382/1*ip8VpZ4_KJP8R5EwJ3zRgw.jpeg)
 
 ---
 <!-- footer: "NAS" -->
 
 ## 2. `Neural Architecture Search`는 AutoML의 확장이다
 
-- `NAS`는 parameter가 아니라 architecture 자체를 탐색 대상으로 올린다.
-- 즉 AutoML은 점점 `더 넓은 search space`를 다루는 방향으로 확장돼 왔다.
-- 하지만 여전히 중심은 대체로 `모델/파이프라인 후보 탐색`이었다.
+- parameter 대신 architecture 탐색
+- AutoML의 `더 넓은 search space` 확장선
+- 그래도 중심은 여전히 모델/파이프라인 후보 탐색
 
 ![w:900](./assets/nas_intro.jpg)
 
@@ -47,22 +47,23 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 
 ## 3. `Autoresearch`는 어떻게 등장했고 무엇이 다른가?
 
-- [karpathy/autoresearch](https://github.com/karpathy/autoresearch)는 작은 training setup 위에서 `read → edit → run → keep-or-revert` loop를 보여줬다.
-- Autoresearch는 agent가 연구 workflow 일부를 직접 수행하는 연구 자동화 계열이다.
-- 여기서 agent는 설정만 고르는 것이 아니라 `code`, `module`, `experiment` 자체를 건드린다.
-- 즉 AutoML이 `주어진 search space`를 최적화했다면, Autoresearch는 `research loop` 쪽으로 탐색 대상을 넓힌다.
-- 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher)처럼 더 넓은 연구 자동화 계열이 빠르게 늘었다.
+- [karpathy/autoresearch](https://github.com/karpathy/autoresearch): 작은 training setup 위 `read → edit → run → keep-or-revert` loop 제시
+- 연구 workflow 일부를 agent가 직접 수행하는 자동화 계열
+- 설정 탐색이 아니라 `code`, `module`, `experiment` 자체 수정
+- AutoML의 `fixed search space` 바깥으로 확장
+- 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 등으로 빠르게 확장
 
 ---
 <!-- footer: "실제로 한 일" -->
 
 ## 4. 실제로 agent는 이런 일을 했다
 
-- 코드를 읽고 현재 baseline이 무엇인지 파악한다.
-- 작은 가설 하나를 잡고 학습 코드나 설정을 수정한다.
-- 짧은 실험을 실행해 metric 변화를 확인한다.
-- 결과가 나쁘면 revert하고, 의미 있으면 keep한 뒤 다음 실험으로 넘어간다.
-- 즉 `edit 한 번`이 아니라 `짧은 실험 loop의 누적`이 핵심이다.
+- 코드 읽기, baseline 파악
+- 작은 가설 하나 선택
+- 학습 코드나 설정 수정
+- 짧은 실험 실행, metric 확인
+- 나쁘면 revert, 의미 있으면 keep
+- 핵심: `edit 한 번`이 아니라 `짧은 실험 loop의 누적`
 
 `Question → Read → Edit → Run → Analyze → Next experiment`
 
@@ -94,10 +95,10 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 
 ## 7. 왜 MLOps가 공통 기반이 되는가?
 
-- AutoML도 Autoresearch도 결국 `많은 run`을 비교하고 누적하는 문제다.
-- run 수가 커지면 `tracking`, `lineage`, `orchestration` 없이는 자동화가 지식으로 남지 않는다.
-- agent가 코드를 바꾸기 시작하면 `artifact`, `promotion`, `monitoring`, `cost control`이 더 중요해진다.
-- 결국 MLOps는 `실험을 많이 돌리는 시스템`을 안정적으로 유지관리하는 운영 층이다.
+- 공통 문제: `많은 run` 비교와 누적
+- 필수 요소: `tracking`, `lineage`, `orchestration`
+- agent edit가 들어오면 `artifact`, `promotion`, `monitoring`, `cost control` 중요도 상승
+- 결국 운영 문제
 
 ---
 <!-- footer: "핵심 MLOps 요소" -->
@@ -114,15 +115,15 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 ---
 <!-- footer: "Kubeflow lifecycle" -->
 
-## 9. MLOps는 더 큰 파이프라인을 안정적으로 유지하는 작업이다
+## 9. MLOps는 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업이다
 
 ![w:1040](./assets/mlops_kubeflow.svg)
 
-- Autoresearch가 관여하는 loop는 이 큰 ML lifecycle 안의 일부다.
-- 실제 시스템은 `data`, `experiment`, `model registry`, `deployment`, `monitoring`까지 함께 굴러간다.
-- 그래서 MLOps의 역할은 연결만이 아니라 `지속적 운영`, `추적`, `승격`, `유지관리`다.
+- Autoresearch loop는 이 큰 ML lifecycle 안의 일부
+- 실제 시스템: `data`, `experiment`, `model registry`, `deployment`, `monitoring`
+- 핵심 역할: `지속 운영`, `추적`, `승격`, `유지관리`
 
-[Source image](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg)
+[출처 이미지](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg)
 
 ---
 <!-- _class: title -->
@@ -130,7 +131,7 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 
 # 10. Prelim 정리
 
-배경은 여기까지다.
+배경은 여기까지.
 
 이제 질문은
 `Research Agent에 어떤 harness가 필요한가?`
@@ -147,7 +148,7 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 | regression test | robustness / replication |
 | deploy guardrail | experiment promotion rule |
 
-- 그래서 높은 점수만으로는 좋은 연구 탐색인지 말하기 어렵다.
+- 높은 점수만으로는 좋은 연구 탐색인지 판단 어려움
 
 ---
 <!-- footer: "DOE를 harness로 보기" -->
@@ -161,7 +162,7 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 | sequential refinement | 유망 구간을 단계적으로 세밀화 |
 | robustness / confirmation | 우연한 win과 재현 가능한 win을 분리 |
 
-- 즉 DOE는 실험 순서와 비교 규칙을 준다.
+- DOE는 실험 순서와 비교 규칙 제공
 
 ---
 <!-- footer: "loop 변화" -->
@@ -208,7 +209,7 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 
 - `실험 후 채움`
 - `experiment budget` 또는 `run count` 대비 `best-so-far metric`
-- 수렴 속도, plateau 형태, sample efficiency 비교
+- 수렴 속도, plateau, sample efficiency 비교
 
 `x-axis = budget / run count`
 
@@ -229,10 +230,10 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 
 ## 18. 왜 DOE-guided Agent는 다를 수 있는가?
 
-- `search space`가 더 구조화된다.
-- 중복되거나 정보량이 낮은 실험이 줄어든다.
-- 상호작용을 우연히가 아니라 의도적으로 본다.
-- robustness 단계가 분리된다.
+- `search space` 구조화
+- 중복되거나 정보량 낮은 실험 감소
+- 상호작용을 우연이 아니라 의도적으로 확인
+- robustness 단계 분리
 
 ---
 <!-- footer: "연구 루프" -->
@@ -257,28 +258,28 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 | 부분적 | 구현 및 실행, 결과 분석 |
 | 약함 | 문헌 조사, 가설 생성 |
 
-- 즉 DOE는 `research loop` 전체보다 experimentation layer를 강하게 규율한다.
+- DOE는 `research loop` 전체보다 experimentation layer 규율에 강함
 
 ---
 <!-- footer: "한계" -->
 
 ## 21. 한계
 
-- `literature review`나 `hypothesis generation` 자체를 대체하진 못한다.
-- open-ended research space는 factorization이 어렵다.
-- large-scale training에서는 replication 비용이 크다.
-- evaluation harness가 약하면 DOE도 흔들린다.
+- `literature review`, `hypothesis generation` 자체 대체는 어려움
+- open-ended research space는 factorization이 어려움
+- large-scale training은 replication 비용 큼
+- evaluation harness가 약하면 DOE도 쉽게 흔들림
 
 ---
 <!-- footer: "결론" -->
 
 ## 22. 결론
 
-- AutoML에서 Autoresearch로 갈수록 `search space`는 넓어진다.
-- search space가 넓어질수록 더 강한 `harness`가 필요하다.
-- DOE는 Research Agent의 experimentation harness로 매우 유력한 후보다.
+- AutoML에서 Autoresearch로 갈수록 `search space` 확장
+- 넓어진 space만큼 더 강한 `harness` 필요
+- DOE는 Research Agent의 experimentation harness 후보
 
-> 다음 단계는 더 좋은 agent 자체보다 더 좋은 harness이다.
+> 다음 단계는 더 좋은 agent 자체보다 더 좋은 harness
 
 ---
 <!-- _class: tinytext -->
