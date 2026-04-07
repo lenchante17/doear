@@ -182,10 +182,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | `02 Simple DoE` | DoE-guided screening | factor와 level을 두고 screening 중심 비교 |
 | `03 Advanced DoE Tic-Tac-To` | DoE-guided staged program | staged DoE + 실험 타입 예산 분배 |
 
-- `Tic`: 둘 이상 모듈 동시 변경
-- `Tac`: 한 모듈 교체
-- `To`: 같은 구조 안 수치 조정
-- 운영 규칙: `Tic:Tac:To = 1:2:4`
+- `Tic / Tac / To`: 다중 모듈 변경 / 단일 모듈 교체 / 같은 구조 안 수치 조정, 목표 비율 `1:2:4`
 
 ---
 <!-- footer: "실험 설정" -->
