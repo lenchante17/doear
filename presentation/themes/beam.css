@@ -150,15 +150,17 @@ section.tinytext > table {
   font-size: 0.68em;
 }
 
+section img,
 img[alt~="center"] {
   display: block;
   margin: 0 auto;
 }
 
 table {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   border-collapse: collapse;
-  margin-top: 0.35em;
+  margin: 0.35em auto 0;
   font-size: 0.8em;
 }
 
@@ -167,6 +169,7 @@ td {
   border: 1px solid #d8d8d8;
   padding: 0.32em 0.45em;
   vertical-align: top;
+  text-align: center;
 }
 
 th {

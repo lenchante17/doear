@@ -38,6 +38,8 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 - 즉 AutoML은 점점 `더 넓은 search space`를 다루는 방향으로 확장돼 왔다.
 - 하지만 여전히 중심은 대체로 `모델/파이프라인 후보 탐색`이었다.
 
+![w:900](./assets/nas_intro.jpg)
+
 `hyperparameter search → pipeline search → architecture search`
 
 ---
@@ -52,29 +54,28 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 - 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher)처럼 더 넓은 연구 자동화 계열이 빠르게 늘었다.
 
 ---
+<!-- footer: "실제로 한 일" -->
+
+## 4. 실제로 agent는 이런 일을 했다
+
+- 코드를 읽고 현재 baseline이 무엇인지 파악한다.
+- 작은 가설 하나를 잡고 학습 코드나 설정을 수정한다.
+- 짧은 실험을 실행해 metric 변화를 확인한다.
+- 결과가 나쁘면 revert하고, 의미 있으면 keep한 뒤 다음 실험으로 넘어간다.
+- 즉 `edit 한 번`이 아니라 `짧은 실험 loop의 누적`이 핵심이다.
+
+`Question → Read → Edit → Run → Analyze → Next experiment`
+
+---
 <!-- footer: "질문의 이동" -->
 
-## 4. 그래서 질문이 바뀐다
+## 5. 그래서 질문이 바뀐다
 
 | AutoML에서의 질문 | Autoresearch에서의 질문 |
 | --- | --- |
 | 어떤 설정이 가장 좋은가? | 다음에 어떤 실험을 해야 하는가? |
 | 정해진 공간 안에서 어떻게 최적화할까? | search space 자체를 바꿔도 되는가? |
 | 최고 점수는 무엇인가? | 어떤 결과를 믿고 승격할 것인가? |
-
-`Question → Read → Edit → Run → Analyze → Next experiment`
-
----
-<!-- footer: "기본 loop" -->
-
-## 5. Autoresearch agent의 기본 loop
-
-| 단계 | agent가 하는 일 |
-| --- | --- |
-| read | 논문, 코드, 이전 결과를 읽는다 |
-| edit | 가설에 맞춰 코드나 설정을 바꾼다 |
-| run | 실험을 실행하고 metric을 수집한다 |
-| analyze | 결과를 해석하고 다음 실험으로 넘긴다 |
 
 ---
 <!-- footer: "사용례와 확장" -->
@@ -91,33 +92,29 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 ---
 <!-- footer: "왜 MLOps가 중요한가" -->
 
-<!-- _class: tinytext -->
-<style scoped>
-table {
-  margin: 0 auto;
-}
-th, td {
-  text-align: center;
-}
-</style>
-
 ## 7. 왜 MLOps가 공통 기반이 되는가?
 
 - AutoML도 Autoresearch도 결국 `많은 run`을 비교하고 누적하는 문제다.
 - run 수가 커지면 `tracking`, `lineage`, `orchestration` 없이는 자동화가 지식으로 남지 않는다.
 - agent가 코드를 바꾸기 시작하면 `artifact`, `promotion`, `monitoring`, `cost control`이 더 중요해진다.
+- 결국 MLOps는 `실험을 많이 돌리는 시스템`을 안정적으로 유지관리하는 운영 층이다.
 
-| MLOps가 없으면 | 생기는 문제 |
-| --- | --- |
-| tracking 없음 | 최고 run를 잃는다 |
-| lineage 없음 | 왜 좋아졌는지 설명 못 한다 |
-| orchestration 없음 | 반복 loop가 수작업으로 돌아간다 |
-| monitoring 없음 | 배포 후 feedback이 끊긴다 |
+---
+<!-- footer: "핵심 MLOps 요소" -->
+
+## 8. AutoML과 Autoresearch가 공통으로 요구하는 MLOps 요소
+
+| 요소 | AutoML에서의 역할 | Autoresearch에서의 역할 |
+| --- | --- | --- |
+| tracking | sweep 비교 | hypothesis / code edit history 비교 |
+| orchestration | search job 실행 | agent + eval job 실행 |
+| registry / lineage | best model 승격 | experiment / prompt / code provenance 보존 |
+| monitoring / cost | retrain trigger, SLO | budget, drift, unsafe promotion guardrail |
 
 ---
 <!-- footer: "Kubeflow lifecycle" -->
 
-## 8. MLOps는 더 큰 파이프라인을 안정적으로 유지하는 작업이다
+## 9. MLOps는 더 큰 파이프라인을 안정적으로 유지하는 작업이다
 
 ![w:1040](./assets/mlops_kubeflow.svg)
 
@@ -126,18 +123,6 @@ th, td {
 - 그래서 MLOps의 역할은 연결만이 아니라 `지속적 운영`, `추적`, `승격`, `유지관리`다.
 
 [Source image](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg)
-
----
-<!-- footer: "핵심 MLOps 요소" -->
-
-## 9. AutoML과 Autoresearch가 공통으로 요구하는 MLOps 요소
-
-| 요소 | AutoML에서의 역할 | Autoresearch에서의 역할 |
-| --- | --- | --- |
-| tracking | sweep 비교 | hypothesis / code edit history 비교 |
-| orchestration | search job 실행 | agent + eval job 실행 |
-| registry / lineage | best model 승격 | experiment / prompt / code provenance 보존 |
-| monitoring / cost | retrain trigger, SLO | budget, drift, unsafe promotion guardrail |
 
 ---
 <!-- _class: title -->
@@ -307,4 +292,4 @@ th, td {
 | end-to-end systems | [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) |
 | deep research | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) |
 | evaluation | [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench) |
-| visuals | [AutoML image](https://miro.medium.com/v2/resize:fit:1382/1*ip8VpZ4_KJP8R5EwJ3zRgw.jpeg), [Kubeflow model registry lifecycle image](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg) |
+| visuals | [AutoML image](https://miro.medium.com/v2/resize:fit:1382/1*ip8VpZ4_KJP8R5EwJ3zRgw.jpeg), [NAS image](https://i.ytimg.com/vi/_dR8a5ZcBgM/sddefault.jpg), [Kubeflow model registry lifecycle image](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg) |
