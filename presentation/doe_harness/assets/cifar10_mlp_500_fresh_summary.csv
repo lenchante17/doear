@@ -1,0 +1,4 @@
+agent,runs,best_validation,hidden_test,generalization_gap,run_of_best,gain_vs_run1,mean_best_so_far,incumbent_changes,plateau_tail,best_candidate,best_config
+01 Ratchet,500,0.43,0.385,0.044999999999999984,8,0.07166699999999998,0.42936999800000003,3,492,r219_b,"norm=standard, outlier=none, proj=none, hidden=[128, 128], activation=relu, solver=adam, norm_layer=batchnorm, wd=0.00001, lr=0.002, bs=64"
+02 Screening DoE,500,0.418333,0.37,0.048333000000000015,16,0.06,0.41717968,7,484,u016_repo_refine_8,"norm=standard, outlier=clip_percentile, proj=none, hidden=[128, 64], activation=relu, solver=adamw, norm_layer=batchnorm, wd=0, lr=0.0005, bs=64"
+03 Advanced DoE,500,0.47,0.43,0.03999999999999998,475,0.11166699999999996,0.45442321199999997,12,25,475_refinement_397_refinement_390_refinement_118_interaction_091_int,"norm=maxabs, outlier=none, proj=pca, hidden=[128, 64], activation=leaky_relu, solver=adamw, norm_layer=batchnorm, wd=0.004704, lr=0.0006, bs=32"

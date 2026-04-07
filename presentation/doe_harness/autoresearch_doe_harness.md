@@ -178,11 +178,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 | Agent | 운영 방식 | 특징 |
 | --- | --- | --- |
-| `01 Sequential` | Vanilla autoresearch | 최신 기록에 맞춰 작은 변경을 순차 적용 |
-| `02 Simple DoE` | DoE-guided screening | factor와 level을 두고 screening 중심 비교 |
-| `03 Advanced DoE Tic-Tac-To` | DoE-guided staged program | staged DoE + 실험 타입 예산 분배 |
-
-- `Tic / Tac / To`: 다중 모듈 변경 / 단일 모듈 교체 / 같은 구조 안 수치 조정, 목표 비율 `1:2:4`
+| `01 Ratchet` | local ratchet loop | incumbent를 branch head로 두고 좁게 mutation |
+| `02 Screening DoE` | simple screening | round마다 한 design question만 분리해 main effect를 읽음 |
+| `03 Advanced DoE` | staged DoE program | screening → interaction check → local refinement |
 
 ---
 <!-- footer: "실험 설정" -->
@@ -194,144 +192,159 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | benchmarks | `cifar10_real`, `twenty_newsgroups_real` |
 | data budget | CIFAR-10 `max_samples=4000`, 20 Newsgroups `max_samples=8000` |
 | model | `mlp` |
-| agents | `01 Sequential`, `02 Simple DoE`, `03 Advanced DoE + Tic-Tac-To` |
-| execution | agent별 isolated root에서 validation `200` rounds 후 hidden finalize |
+| agents | `01 Ratchet`, `02 Screening DoE`, `03 Advanced DoE` |
+| execution | dataset × agent별 isolated root `6`개에서 validation `500` runs 후 hidden finalize |
 
 실행 조건
 - agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
-- 같은 start control에서 출발해 validation-only `200` runs 누적
-- hidden test는 탐색 종료 뒤 `finalize-agent`에서만 공개
-- text는 고정 TF-IDF 표현 위에서 MLP만 탐색하고, 이미지도 projection 없이 raw feature 위 MLP만 탐색
+- validation-only `500` runs를 먼저 누적하고 hidden test는 마지막 `finalize-agent`에서만 공개
+- 이번 batch는 이전 curated `8` knobs가 아니라 넓어진 MLP search surface를 사용
 
-NN-only curated search surface: `8` knobs
-- preprocessing: `normalization`
-- model structure: `hidden_dims`
-- optimization: `activation`, `solver`, `learning_rate_init`, `batch_size`
-- regularization / norm: `normalization_layer`, `weight_decay`
-
-고정한 convention
-- `projection = none`, `outlier_strategy = none`, `resampling = none`
-- `early_stopping = true`, `max_iter = 120`, `learning_rate = constant`
+열려 있는 주요 축
+- preprocessing: `normalization`, `outlier`, `projection`, `resampling`
+- architecture: `hidden_dims`, `activation`, `normalization_layer`
+- optimization: `solver`, `learning_rate`, `batch_size`, `max_iter`
+- regularization / stability: `weight_decay`, `dropout`, `noise`, `label_smoothing`, `residual_connections`
 
 ---
-<!-- _class: tinytext -->
 <!-- footer: "결과 테이블" -->
 
 ## 16. CIFAR-10 결과: validation 탐색과 hidden test
 
-조건: `cifar10_real` / `mlp` / curated `8` knobs / validation `200` runs + hidden finalize
+조건: `cifar10_real` / `mlp` / broad search surface / validation `500` runs + hidden finalize
 
 | Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
 | --- | --- | --- | --- | --- | --- |
-| `01 Sequential` | `0.3717` | `0.3417` | `0.0300` | `1` | `1` |
-| `02 Simple DoE` | `0.3933` | `0.3917` | `0.0017` | `26` | `5` |
-| `03 Advanced DoE + Tic-Tac-To` | `0.3967` | `0.3850` | `0.0117` | `41` | `5` |
+| `01 Ratchet` | `0.4300` | `0.3850` | `0.0450` | `8` | `3` |
+| `02 Screening DoE` | `0.4183` | `0.3700` | `0.0483` | `16` | `7` |
+| `03 Advanced DoE` | `0.4700` | `0.4300` | `0.0400` | `475` | `12` |
 
 대표 config
-- `01 Sequential`: `standard + [64,32] + relu + adam + no internal norm + wd=0.0005 + lr=0.001 + bs=64`
-- `02 Simple DoE`: `standard + [64,64,64] + relu + adam + batchnorm + wd=0.001 + lr=0.001 + bs=32`
-- `03 Advanced DoE + Tic-Tac-To`: `maxabs + [32,64] + leaky_relu + adam + layernorm + wd=0.0008 + lr=0.0012 + bs=128`
+- `01 Ratchet`: `standard + [128,128] + relu + adam + batchnorm + wd=1e-5 + lr=0.002 + bs=64`
+- `02 Screening DoE`: `standard + clip_percentile + [128,64] + relu + adamw + batchnorm + cosine + residual`
+- `03 Advanced DoE`: `maxabs + pca32 + [128,64] + leaky_relu + adamw + batchnorm + dropout`
 
 ---
 <!-- footer: "탐색 궤적" -->
 
 ## 17. CIFAR-10 결과: 탐색 궤적
 
-![w:690](./assets/cifar10_nnonly_mlp_200_best_so_far.svg)
+![w:690](./assets/cifar10_mlp_500_fresh_best_so_far.svg)
 
-- `Sequential`: `run 1` 이후 거의 움직이지 못했다.
-- `Simple DoE`: `run 26`에 best를 찾았고 hidden 유지력이 가장 좋았다.
-- `Advanced DoE + Tic-Tac-To`: `run 41`까지 개선했고, `Tic:Tac:To = 29:57:113`으로 목표 `1:2:4`에 근접했다.
+- `Ratchet`은 `run 8`에 좋은 basin을 찾았지만 그 뒤 장기 개선은 거의 없었다.
+- `Screening DoE`는 `run 16`까지 빠르게 올라갔지만 ceiling이 낮았다.
+- `Advanced DoE`는 `run 475`까지 improvement를 이어가며 가장 높은 validation과 hidden을 모두 만들었다.
+
+---
+<!-- footer: "CIFAR 해석" -->
+
+## 18. CIFAR-10 해석
+
+- 넓어진 search space에서는 late-stage staged DoE payoff가 확실했다.
+- image 쪽에서는 projection, AdamW, dropout, batchnorm 조합이 실제로 도움이 됐다.
+- `Ratchet`은 빠른 basin discovery에는 강했지만 interaction-heavy region으로는 잘 못 넘어갔다.
+- `Screening DoE`는 main effect 파악은 빨랐지만, 후반 refinement depth는 `Advanced DoE`보다 약했다.
 
 ---
 <!-- footer: "Text 결과" -->
 
-## 18. 20 Newsgroups 결과: validation 탐색과 hidden test
+## 19. 20 Newsgroups 결과: validation 탐색과 hidden test
 
-조건: `twenty_newsgroups_real` / `mlp` / curated `8` knobs / validation `200` runs + hidden finalize
+조건: `twenty_newsgroups_real` / `mlp` / broad search surface / validation `500` runs + hidden finalize
 
 | Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
 | --- | --- | --- | --- | --- | --- |
-| `01 Sequential` | `0.4892` | `0.4825` | `0.0067` | `1` | `1` |
-| `02 Simple DoE` | `0.5442` | `0.5325` | `0.0117` | `29` | `9` |
-| `03 Advanced DoE + Tic-Tac-To` | `0.4892` | `0.4825` | `0.0067` | `1` | `1` |
+| `01 Ratchet` | `0.5267` | `0.5092` | `0.0175` | `78` | `10` |
+| `02 Screening DoE` | `0.5575` | `0.5475` | `0.0100` | `47` | `11` |
+| `03 Advanced DoE` | `0.5325` | `0.5308` | `0.0017` | `315` | `9` |
 
 대표 config
-- `01 Sequential`: `maxabs + [64,32] + relu + adam + layernorm + wd=0.0005 + lr=0.001 + bs=64`
-- `02 Simple DoE`: `standard + [64] + tanh + adam + layernorm + wd=0.0005 + lr=0.002 + bs=64`
-- `03 Advanced DoE + Tic-Tac-To`: `maxabs + [64,32] + relu + adam + layernorm + wd=0.0005 + lr=0.001 + bs=64`
+- `01 Ratchet`: `signed_log1p + svd256 + [64,32] + gelu + adam + input_noise`
+- `02 Screening DoE`: `robust + no projection + [64,64] + relu + adam + linear_decay + dropout`
+- `03 Advanced DoE`: `standard + no projection + [128,128] + tanh + adam + wd=1e-4`
 
 ---
 <!-- footer: "Text 궤적" -->
 
-## 19. 20 Newsgroups 결과: 탐색 궤적
+## 20. 20 Newsgroups 결과: 탐색 궤적
 
-![w:690](./assets/twenty_newsgroups_nnonly_mlp_200_best_so_far.svg)
+![w:690](./assets/twenty_newsgroups_mlp_500_fresh_best_so_far.svg)
 
-- `Sequential`과 `Advanced`는 baseline 근처에 머물렀다.
-- `Simple DoE`만 early screening으로 basin을 바꿨고 그 우위를 유지했다.
-- 이 text/TF-IDF 공간에서는 interaction 탐색보다 first-order screening payoff가 더 컸다.
+- `Screening DoE`는 `run 47`에 winner를 찾고 끝까지 유지했다.
+- `Advanced DoE`는 `run 315`까지 늦게 개선했지만 text에서는 screening을 넘지 못했다.
+- `Ratchet`도 개선은 했지만, 500-run budget을 모두 가치 있게 쓰지는 못했다.
 
 ---
-<!-- footer: "교차 해석" -->
+<!-- footer: "Text 해석" -->
 
-## 20. 두 dataset을 같이 보면
+## 21. 20 Newsgroups 해석
 
-- CIFAR: highest validation은 `Advanced`, hidden best는 `Simple DoE`
-- Text: validation과 hidden 모두 `Simple DoE` 우세
-- 해석: image-like space에선 staged search가, text-like space에선 screening이 더 잘 맞았다.
-- `Sequential`은 두 dataset 모두 incumbent trap에 취약했다.
+- sparse TF-IDF text 공간에서는 first-order screening payoff가 interaction 탐색보다 컸다.
+- best text config는 projection 없이도 충분히 강했고, robust scaling과 중간 폭 MLP가 안정적이었다.
+- `Advanced DoE`는 late improvement는 있었지만, 그 budget이 screening의 early win을 뒤집지는 못했다.
+- `Ratchet`은 좋은 region은 찾았지만 후반 loop discipline이 약했다.
 
 ---
 <!-- footer: "지식 추출" -->
 
-## 21. 히스토리와 피드백에서 추출한 지식
+## 22. 히스토리에서 남는 지식
 
-`01 Sequential`
-- 빠른 sanity check와 baseline 확보에는 유용하다.
-- 첫 incumbent가 local optimum이면 장기 예산을 줘도 잘 못 빠져나온다.
+`01 Ratchet`
+- 빠른 basin discovery에는 여전히 유용하다.
+- CIFAR에선 early width/normalization search, text에선 noise/SVD 조합을 빨리 찾았다.
+- 대신 plateau 뒤 reset discipline이 약하면 긴 예산을 낭비하기 쉽다.
 
-`02 Simple DoE`
-- CIFAR prior: `standard + [64,64,64] + relu + adam + batchnorm + wd=0.001 + lr=0.001 + bs=32`
-- Text prior: `standard + [64] + tanh + adam + layernorm + wd=0.0005 + lr=0.002 + bs=64`
-- 두 dataset 모두 hidden transfer가 가장 안정적이었다.
+`02 Screening DoE`
+- text prior: `robust/no projection/relu/adam` 계열이 강하다.
+- CIFAR에서는 early screens로 상위 basin은 찾지만, late interaction payoff는 제한적이다.
+- 두 dataset 모두 best를 비교적 이른 round에 찾는 경향이 강했다.
 
-`03 Advanced DoE + Tic-Tac-To`
-- CIFAR prior: `maxabs + [32,64] + leaky_relu + adam + layernorm + wd=0.0008 + lr=0.0012 + bs=128`
-- text에서는 staged budget이 basin 전환으로 이어지지 못했다.
-- `Tic/Tac/To` 예산은 image-like search space에서 더 유효했다.
+`03 Advanced DoE`
+- CIFAR prior: `projection + AdamW + stronger regularization` 조합이 late-stage에서 실제 payoff를 냈다.
+- text에서는 late staged refinement가 improvement는 만들었지만 winner를 바꾸지는 못했다.
+- 넓은 search space일수록 staged DoE 가치가 커지고, 단순한 space일수록 screening이 더 싸고 강하다.
 
 ---
 <!-- footer: "히스토리 진단" -->
 
-## 22. 히스토리 진단: baseline보다 loop quality 문제가 더 컸다
+## 23. 히스토리 진단
 
-| Agent | CIFAR trace | Text trace | 진단 |
+| Agent | CIFAR trace | Text trace | 읽을 점 |
 | --- | --- | --- | --- |
-| `Sequential` | best가 `run 1` | best가 `run 1` | incumbent replay, 탐색 붕괴 |
-| `Simple DoE` | `run 26`까지 개선 | `run 29`까지 개선 | screening은 의미 있었고 후반은 다소 중복 |
-| `Advanced DoE + Tic-Tac-To` | `run 41`까지 개선 | best가 `run 1` | CIFAR에선 유효, text에선 backend-safe anchor에 고착 |
+| `Ratchet` | best `run 8`, updates `3` | best `run 78`, updates `10` | 초반엔 빠르지만 후반 탐색 품질이 급격히 떨어짐 |
+| `Screening DoE` | best `run 16`, updates `7` | best `run 47`, updates `11` | main-effect 중심 탐색이 가장 효율적일 때가 분명히 있음 |
+| `Advanced DoE` | best `run 475`, updates `12` | best `run 315`, updates `9` | budget이 충분하면 late interaction/refinement가 실제 payoff를 낼 수 있음 |
 
-- `baseline이 너무 강해서 못 넘었다`는 설명은 충분하지 않다.
-- 실제로는 일부 agent가 중간부터 같은 안전 설정을 반복 제출하며 탐색이 멈췄다.
-- 다음 harness 개선 우선순위는 `더 똑똑한 전략`보다 `중복 submission 방지`, `backend-fix loop 차단`, `stagnation reset`이다.
+- 이번 batch에서는 예전처럼 `run 1 trap`이 핵심 문제는 아니었다.
+- 대신 dataset마다 `어떤 탐색 구조가 budget을 가장 잘 쓰는가`가 갈렸다.
+- CIFAR는 staged search가, text는 early screening이 더 유효했다.
+
+---
+<!-- footer: "요약" -->
+
+## 24. 요약
+
+- CIFAR winner: `03 Advanced DoE`, val `0.4700`, test `0.4300`
+- Text winner: `02 Screening DoE`, val `0.5575`, test `0.5475`
+- 같은 `mlp`라도 dataset이 바뀌면 좋은 harness가 달라졌다.
+- 넓은 image-like space는 staged DOE에 보상이 있었고, sparse text space는 screening이 더 효율적이었다.
 
 ---
 <!-- footer: "한계" -->
 
-## 23. 한계
+## 25. 한계
 
 - 이번 결과는 single split 기준이라 분산 추정이 약하다.
-- hidden test도 agent당 한 번만 열었으므로, replication이나 confidence interval은 없다.
-- search space를 `8` knobs로 강하게 줄였기 때문에 DOE의 장점이 일부 과소평가될 수 있다.
-- 반대로 이 정도로 좁은 space에서도 `Sequential`이 쉽게 고착됐다는 점은 autoresearch loop 자체의 취약점이다.
-- text는 fixed TF-IDF representation 위 실험이라, representation search까지 포함한 결론은 아니다.
+- hidden test도 agent당 한 번만 열었으므로 replication이나 confidence interval은 없다.
+- fixed subset 위 실험이라 dataset 전체 분포를 대표한다고 보기는 어렵다.
+- text는 여전히 fixed TF-IDF representation 위 실험이라 representation search까지 포함한 결론은 아니다.
+- 500-run budget은 충분히 길지만, budget 자체가 전략의 일부이므로 cost-aware 비교는 따로 봐야 한다.
 
 ---
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 24. References
+## 26. References
 
 | 구분 | 예시 |
 | --- | --- |
