@@ -191,16 +191,17 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 | 항목 | 설정 |
 | --- | --- |
-| benchmark | `cifar10_real` |
-| data budget | `max_samples=4000`, fixed split seed `42` |
+| benchmarks | `cifar10_real`, `twenty_newsgroups_real` |
+| data budget | CIFAR-10 `max_samples=4000`, 20 Newsgroups `max_samples=8000` |
 | model | `mlp` |
 | agents | `01 Sequential`, `02 Simple DoE`, `03 Advanced DoE + Tic-Tac-To` |
-| execution | agent별 isolated root에서 validation `50` rounds 후 hidden finalize |
+| execution | agent별 isolated root에서 validation `200` rounds 후 hidden finalize |
 
 실행 조건
 - agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
-- 같은 start control에서 출발해 validation-only `50` runs 누적
+- 같은 start control에서 출발해 validation-only `200` runs 누적
 - hidden test는 탐색 종료 뒤 `finalize-agent`에서만 공개
+- text는 고정 TF-IDF 표현 위에서 MLP만 탐색하고, 이미지도 projection 없이 raw feature 위 MLP만 탐색
 
 NN-only curated search surface: `8` knobs
 - preprocessing: `normalization`
@@ -216,9 +217,9 @@ NN-only curated search surface: `8` knobs
 <!-- _class: tinytext -->
 <!-- footer: "결과 테이블" -->
 
-## 16. 결과: validation 탐색과 hidden test
+## 16. CIFAR-10 결과: validation 탐색과 hidden test
 
-조건: `cifar10_real` / `mlp` / curated `8` knobs / validation `50` runs + hidden finalize
+조건: `cifar10_real` / `mlp` / curated `8` knobs / validation `200` runs + hidden finalize
 
 | Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
 | --- | --- | --- | --- | --- | --- |
@@ -234,71 +235,88 @@ NN-only curated search surface: `8` knobs
 ---
 <!-- footer: "탐색 궤적" -->
 
-## 17. 결과: 탐색 궤적
+## 17. CIFAR-10 결과: 탐색 궤적
 
-![w:690](./assets/cifar10_nnonly_mlp_50_best_so_far.svg)
+![w:690](./assets/cifar10_nnonly_mlp_200_best_so_far.svg)
 
-- `Sequential`: round `1`에서 best를 잡은 뒤 끝까지 incumbent를 못 넘겼다.
-- `Simple DoE`: screening 뒤 `26` round에서 best를 찾고 hidden에서도 거의 그대로 유지했다.
-- `Advanced DoE + Tic-Tac-To`: `41` round까지 개선을 이어갔고, 실제 move count는 `Tic:Tac:To = 7:14:28`로 `1:2:4`에 거의 맞았다.
-
----
-<!-- footer: "히스토리 해석" -->
-
-## 18. 히스토리에서 읽히는 결론
-
-- validation 최고점은 `Advanced DoE + Tic-Tac-To`였지만 hidden 최고점은 `Simple DoE`였다.
-- `Sequential`은 첫 incumbent를 빠르게 잡았지만, one-factor local loop가 그대로 굳어져 탐색이 사실상 멈췄다.
-- `Simple DoE`는 screening으로 좋은 basin을 찾은 뒤, 그 basin이 hidden에서도 거의 그대로 유지됐다.
-- `Advanced DoE + Tic-Tac-To`는 가장 풍부한 validation basin을 찾았지만, interaction-heavy refinement가 validation noise를 더 쫓은 흔적도 남겼다.
-- 이 batch에선 "누가 validation을 가장 높였나"보다 "누가 transfer되는 prior를 남겼나"가 더 중요했다.
+- `Sequential`: round `1` incumbent에 그대로 고착됐다.
+- `Simple DoE`: `26` round에서 best를 찾았고 hidden에서도 가장 잘 유지됐다.
+- `Advanced DoE + Tic-Tac-To`: `41` round까지 개선을 이어갔고, 실제 move count는 `Tic:Tac:To = 29:57:113`로 `1:2:4`에 가깝다.
 
 ---
-<!-- footer: "지식 추출 1" -->
+<!-- footer: "Text 결과" -->
 
-## 19. 히스토리와 피드백에서 추출한 튜닝 지식
+## 18. 20 Newsgroups 결과: validation 탐색과 hidden test
+
+조건: `twenty_newsgroups_real` / `mlp` / curated `8` knobs / validation `200` runs + hidden finalize
+
+| Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
+| --- | --- | --- | --- | --- | --- |
+| `01 Sequential` | `0.4892` | `0.4825` | `0.0067` | `1` | `1` |
+| `02 Simple DoE` | `0.5442` | `0.5325` | `0.0117` | `29` | `9` |
+| `03 Advanced DoE + Tic-Tac-To` | `0.4892` | `0.4825` | `0.0067` | `1` | `1` |
+
+대표 config
+- `01 Sequential`: `maxabs + [64,32] + relu + adam + layernorm + wd=0.0005 + lr=0.001 + bs=64`
+- `02 Simple DoE`: `standard + [64] + tanh + adam + layernorm + wd=0.0005 + lr=0.002 + bs=64`
+- `03 Advanced DoE + Tic-Tac-To`: `maxabs + [64,32] + relu + adam + layernorm + wd=0.0005 + lr=0.001 + bs=64`
+
+---
+<!-- footer: "Text 궤적" -->
+
+## 19. 20 Newsgroups 결과: 탐색 궤적
+
+![w:690](./assets/twenty_newsgroups_nnonly_mlp_200_best_so_far.svg)
+
+- `Sequential`과 `Advanced`는 사실상 baseline에 고착됐다.
+- `Simple DoE`만 early screening으로 basin을 바꿨고, 그 우위를 `200` run 내내 유지했다.
+- text/TF-IDF 공간에서는 long-horizon interaction 탐색보다 first-order factor screening payoff가 더 컸다.
+
+---
+<!-- footer: "교차 해석" -->
+
+## 20. 두 dataset을 같이 보면
+
+- CIFAR에서는 `Advanced DoE + Tic-Tac-To`가 highest validation을 찾았지만 hidden best는 `Simple DoE`였다.
+- text에서는 `Simple DoE`가 validation과 hidden 둘 다 가장 높았고, 나머지 둘은 baseline을 벗어나지 못했다.
+- 즉 image batch에선 interaction-aware staged search가 의미 있었지만, text batch에선 dominant first-order factor를 빨리 찾는 편이 더 중요했다.
+- `Sequential`은 두 dataset 모두 incumbent trap에 취약했다.
+
+---
+<!-- footer: "지식 추출" -->
+
+## 21. 히스토리와 피드백에서 추출한 지식
 
 `01 Sequential`
-- 강한 prior: `standard` normalization이 시작점 `maxabs`보다 바로 우세했다.
-- 약한 branch: `tanh`, 추가 width 변경, `layernorm`은 incumbent를 넘지 못했다.
-- 프로세스 지식: 첫 incumbent가 moderate local optimum일 때, 순차 one-factor loop는 쉽게 고착된다.
+- 좋은 용도는 빠른 sanity check와 baseline 확보다.
+- 실패 모드는 명확하다: 첫 incumbent가 moderate local optimum이면 200 run을 줘도 못 빠져나온다.
 
 `02 Simple DoE`
-- 강한 prior: `standard + [64,64,64] + relu + adam + batchnorm + wd=0.001 + lr=0.001 + bs=32`
-- 가장 중요한 성질은 hidden gap이 `0.0017`로 매우 작았다는 점이다.
-- 프로세스 지식: factor screening이 잘 되면, paired anchor/probe만으로도 transferable prior를 만들 수 있다.
-
----
-<!-- footer: "지식 추출 2" -->
-
-## 20. 히스토리와 피드백에서 추출한 튜닝 지식
+- CIFAR strong prior: `standard + [64,64,64] + relu + adam + batchnorm + wd=0.001 + lr=0.001 + bs=32`
+- Text strong prior: `standard + [64] + tanh + adam + layernorm + wd=0.0005 + lr=0.002 + bs=64`
+- 두 dataset 모두에서 hidden transfer가 가장 안정적이었다.
 
 `03 Advanced DoE + Tic-Tac-To`
-- 강한 prior: `maxabs + [32,64] + leaky_relu + adam + layernorm + wd=0.0008 + lr=0.0012 + bs=128`
-- interaction 지식: `standard`로 scale을 바꾸거나 internal norm을 제거하면 성능이 눈에 띄게 무너졌다.
-- 예산 지식: 실제 move count `7:14:28`로 `Tic:Tac:To ≈ 1:2:4`를 거의 지켰다.
-- 다만 hidden gap이 `0.0117`이라, richer exploration이 항상 better transfer를 보장하진 않았다.
-
-메타 지식
-- `history.md`와 `feedback.md`는 다음 benchmark에 재사용할 `configuration prior`와 `search policy prior` 원천이다.
-- DOE 계열은 `hypothesis / factors / levels / conclusion` 구조 덕분에 지식 추출이 쉽고, hidden 결과와 함께 보면 prior의 신뢰도까지 평가할 수 있다.
+- CIFAR strong prior: `maxabs + [32,64] + leaky_relu + adam + layernorm + wd=0.0008 + lr=0.0012 + bs=128`
+- text에서는 stage overhead가 있었지만 실제로는 basin 전환을 못 만들었다.
+- `Tic/Tac/To` 예산은 image-like search space에서 더 가치가 컸다.
 
 ---
 <!-- footer: "한계" -->
 
-## 21. 한계
+## 22. 한계
 
-- 이번 결과는 `cifar10_real` subset `4000`과 single split 기준이라 분산 추정이 약하다.
+- 이번 결과는 single split 기준이라 분산 추정이 약하다.
 - hidden test도 agent당 한 번만 열었으므로, replication이나 confidence interval은 없다.
 - search space를 `8` knobs로 강하게 줄였기 때문에 DOE의 장점이 일부 과소평가될 수 있다.
 - 반대로 이 정도로 좁은 space에서도 `Sequential`이 쉽게 고착됐다는 점은 autoresearch loop 자체의 취약점이다.
-- larger benchmark나 text benchmark로 가면 ranking이 달라질 수 있다.
+- text는 fixed TF-IDF representation 위 실험이라, representation search까지 포함한 결론은 아니다.
 
 ---
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 22. References
+## 23. References
 
 | 구분 | 예시 |
 | --- | --- |
