@@ -3,35 +3,32 @@ marp: true
 theme: beam
 paginate: true
 size: 16:9
-title: AutoML에서 Autoresearch로
+title: AutoML, Autoresearch, MLOps +@
 description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 
 <!-- _class: title -->
 <!-- footer: "" -->
 
-# AutoML에서 Autoresearch로
+# AutoML, Autoresearch, MLOps +@
 
 DOE는 Research Agent의 Harness가 될 수 있는가?
 
-AutoML, Autoresearch, MLOps, DOE-guided Agent
+배경 정리 + harness 제안
 
 ---
-<!-- footer: "핵심 질문" -->
+<!-- footer: "Karpathy 제안" -->
 
-## 1. 왜 지금 이 주제인가?
+## 1. `Autoresearch`라는 말은 어디서 왔나?
 
-- Coding Agent는 `test`와 `CI` 위에서 빠르게 발전하고 있다.
-- Research automation도 문헌, 코드, 실험, 보고서까지 넓어지고 있다.
-- 이제 질문은 실행 가능성보다 `어떤 harness가 연구 실험을 규율하는가`이다.
+- 2026년 [karpathy/autoresearch](https://github.com/karpathy/autoresearch)가 작은 but real training setup 위의 autonomous research loop를 대중적으로 제시했다.
+- 핵심 아이디어는 agent가 `read → edit → run → keep-or-revert`를 반복하며 밤새 실험을 누적하는 것이다.
+- 이후 [SakanaAI/AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [microsoft/RD-Agent](https://github.com/microsoft/RD-Agent), [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 같은 계열로 빠르게 분화했다.
 
-| 빠르게 강해지는 것 | 아직 약한 것 |
-| --- | --- |
-| Coding Agent의 실제 배포 | research loop의 규율 |
-| end-to-end automation demo | reproducibility / robustness |
+- 즉 `Autoresearch`는 단일 repo 이름을 넘어서 research automation의 한 계열 이름이 되고 있다.
 
 ---
-<!-- footer: "AutoML = bounded search" -->
+<!-- footer: "제한된 search space" -->
 
 ## 2. AutoML이란 무엇인가?
 
@@ -42,9 +39,18 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 `Data → Search over models/pipelines → Evaluation → Best configuration`
 
 ---
+<!-- footer: "AutoML 시각화: visionplatform.ai, 2026-04-07 확인" -->
+
+## 3. AutoML은 이런 그림으로 설명되는 경우가 많다
+
+![w:1050](https://visionplatform.ai/wp-content/uploads/2023/09/Screenshot-2023-09-13-at-21.26.41-1024x498.png)
+
+[Source: visionplatform.ai](https://visionplatform.ai/hyperparameter-optimization-yolov8/)
+
+---
 <!-- footer: "Autoresearch 개념" -->
 
-## 3. Autoresearch란 무엇인가?
+## 4. Autoresearch란 무엇인가?
 
 - Autoresearch는 연구 workflow 일부를 agent가 직접 수행하는 형태다.
 - 대상은 `config`가 아니라 `가설`, `code`, `pipeline`, `experiment plan`까지 넓어진다.
@@ -55,7 +61,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "Autoresearch loop" -->
 
-## 4. Autoresearch agent는 어떻게 일하는가?
+## 5. Autoresearch agent는 어떻게 일하는가?
 
 | 단계 | agent가 하는 일 |
 | --- | --- |
@@ -69,7 +75,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "핵심 비교" -->
 
-## 5. AutoML vs. Autoresearch
+## 6. AutoML vs. Autoresearch
 
 | 항목 | AutoML | Autoresearch |
 | --- | --- | --- |
@@ -81,45 +87,76 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "현재 사용례" -->
 
-## 6. 현재 사용례
+## 7. 현재 사용례
 
-| 연구 작업 | 이미 자동화되는 형태 |
+| 작업 | 예시 |
 | --- | --- |
-| 지식 수집 | 논문 검색, 요약, citation report |
-| 아이디어 정리 | novelty check, proposal refinement |
-| 실험 실행 | code edit, run, compare, keep-or-revert |
-| 결과 산출 | analysis, draft, figure, reviewer response |
+| 문헌 조사 / deep research | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) |
+| 코드 수정 + 실험 반복 | [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent) |
+| end-to-end 연구 자동화 | [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) |
+| benchmark / evaluation | [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench) |
 
 ---
 <!-- footer: "발전 방향" -->
 
-## 7. 발전 방향
+## 8. 발전 방향
 
-- `topic → experiment → paper`를 한 loop로 묶는 시도
-- Coding Agent를 실행층으로 쓰는 구조
-- `benchmark`, `memory`, `reusable skills` 강화
-- consumer GPU, WebGPU, swarm 등 infra 다변화
+- 후속 ecosystem과 hardware fork가 빠르게 늘고 있다. [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch)
+- `idea → experiment → paper`형 end-to-end stack이 두터워지고 있다. [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools)
+- benchmark가 점점 기준점이 되고 있다. [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench)
+- `memory`, `skills`, `plugin`으로 연구 loop를 모듈화하는 흐름이 보인다. [GPT Researcher](https://github.com/assafelovic/gpt-researcher), [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch)
 
 ---
-<!-- footer: "공통 기반" -->
+<!-- footer: "왜 MLOps가 중요한가" -->
 
-## 8. 자동화를 가능하게 하는 공통 기반: MLOps
+## 9. 왜 MLOps가 공통 기반이 되는가?
 
-- 반복 자동화에는 `tracking`, `orchestration`, `reproducibility`가 필요하다.
-- 여기에 `artifact`, `monitoring`, `cost governance`가 붙어야 운영 가능성이 생긴다.
-- 그래서 `MLOps`는 AutoML 뒤처리가 아니라 둘의 공통 기반이다.
+- AutoML도 Autoresearch도 결국 `많은 run`을 비교하고 누적하는 문제다.
+- run 수가 커지면 `tracking`, `lineage`, `orchestration` 없이는 자동화가 지식으로 남지 않는다.
+- agent가 코드를 바꾸기 시작하면 `artifact`, `promotion`, `monitoring`, `cost control`이 더 중요해진다.
 
-| 공통 인프라 | AutoML에서의 역할 | Autoresearch에서의 역할 |
+| MLOps가 없으면 | 생기는 문제 |
+| --- | --- |
+| tracking 없음 | 최고 run를 잃는다 |
+| lineage 없음 | 왜 좋아졌는지 설명 못 한다 |
+| orchestration 없음 | 반복 loop가 수작업으로 돌아간다 |
+| monitoring 없음 | 배포 후 feedback이 끊긴다 |
+
+---
+<!-- footer: "loop 시각화: TechTarget, 2026-04-07 확인" -->
+
+## 10. MLOps는 결국 loop를 운영하는 discipline이다
+
+![w:900](https://www.techtarget.com/rms/onlineimages/itops-devops_infinity_loop-f_mobile.png)
+
+MLOps는 이 반복 구조를 `data`, `model`, `artifact`, `deployment`까지 확장한다.
+
+---
+<!-- footer: "tracking 시각화: MLflow docs, 2026-04-07 확인" -->
+
+## 11. 실무에서는 tracking UI가 지식 저장소가 된다
+
+![w:1050](https://www.mlflow.org/docs/latest/assets/images/tracking-metrics-ui-temp-ffc0da57b388076730e20207dbd7f9c4.png)
+
+`run`, `metric`, `artifact`가 남아야 자동화가 누적된다.
+
+---
+<!-- footer: "핵심 MLOps 요소" -->
+
+## 12. AutoML과 Autoresearch가 공통으로 요구하는 MLOps 요소
+
+| 요소 | AutoML에서의 역할 | Autoresearch에서의 역할 |
 | --- | --- | --- |
-| tracking | 후보 비교 | 실험 history 축적 |
-| orchestration | search job 실행 | multi-step agent loop 실행 |
-| reproducibility | 재실행 / 검증 | hypothesis와 edit 검증 |
+| tracking | sweep 비교 | hypothesis / code edit history 비교 |
+| orchestration | search job 실행 | agent + eval job 실행 |
+| registry / lineage | best model 승격 | experiment / prompt / code provenance 보존 |
+| monitoring / cost | retrain trigger, SLO | budget, drift, unsafe promotion guardrail |
 
 ---
 <!-- _class: title -->
 <!-- footer: "본론 시작" -->
 
-# Prelim 정리
+# 13. Prelim 정리
 
 배경은 여기까지다.
 
@@ -127,9 +164,9 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 `Research Agent에 어떤 harness가 필요한가?`
 
 ---
-<!-- footer: "Harness gap" -->
+<!-- footer: "harness 공백" -->
 
-## 9. Harness gap
+## 14. Harness gap
 
 | Coding Agent 쪽에서 이미 흔한 것 | Research Agent 쪽에서 아직 약한 것 |
 | --- | --- |
@@ -141,9 +178,9 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 - 그래서 높은 점수만으로는 좋은 연구 탐색인지 말하기 어렵다.
 
 ---
-<!-- footer: "DOE as harness" -->
+<!-- footer: "DOE를 harness로 보기" -->
 
-## 10. DOE를 Harness 후보로 보기
+## 15. DOE를 Harness 후보로 보기
 
 | DOE primitive | Agent loop에서의 역할 |
 | --- | --- |
@@ -155,9 +192,9 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 - 즉 DOE는 실험 순서와 비교 규칙을 준다.
 
 ---
-<!-- footer: "Loop 변화" -->
+<!-- footer: "loop 변화" -->
 
-## 11. Agent loop에 무엇이 달라지는가?
+## 16. Agent loop에 무엇이 달라지는가?
 
 | 단계 | Vanilla Agent | DOE-guided Agent |
 | --- | --- | --- |
@@ -167,9 +204,9 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 | 승격 | high score 채택 | robustness 후 promote |
 
 ---
-<!-- footer: "Setup" -->
+<!-- footer: "실험 설정" -->
 
-## 12. 실험 설정
+## 17. 실험 설정
 
 | Variant | 설명 | 비교 목적 |
 | --- | --- | --- |
@@ -182,9 +219,9 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "결과 placeholder" -->
 
-## 13. 결과 요약
+## 18. 결과 요약
 
-`TBD after experiments`
+`실험 후 채움`
 
 | Variant | Best score | Avg improvement | Runs | Cost | Robustness pass |
 | --- | --- | --- | --- | --- | --- |
@@ -193,11 +230,11 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 | DOE + X | TBD | TBD | TBD | TBD | TBD |
 
 ---
-<!-- footer: "Dynamics placeholder" -->
+<!-- footer: "추이 placeholder" -->
 
-## 14. 성능 향상 추이
+## 19. 성능 향상 추이
 
-- `TBD after experiments`
+- `실험 후 채움`
 - `experiment budget` 또는 `run count` 대비 `best-so-far metric`
 - 수렴 속도, plateau 형태, sample efficiency 비교
 
@@ -206,11 +243,11 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 `y-axis = best-so-far metric`
 
 ---
-<!-- footer: "Portfolio placeholder" -->
+<!-- footer: "포트폴리오 placeholder" -->
 
-## 15. 실험 포트폴리오 또는 실패 구조
+## 20. 실험 포트폴리오 또는 실패 구조
 
-- `TBD after experiments`
+- `실험 후 채움`
 - `Tic / Tac / To` 비율
 - 또는 실패 분류
 - 또는 `information gain vs. performance gain`
@@ -218,7 +255,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "해석" -->
 
-## 16. 왜 DOE-guided Agent는 다를 수 있는가?
+## 21. 왜 DOE-guided Agent는 다를 수 있는가?
 
 - `search space`가 더 구조화된다.
 - 중복되거나 정보량이 낮은 실험이 줄어든다.
@@ -228,7 +265,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "연구 루프" -->
 
-## 17. 대학원 연구 루프는 더 넓다
+## 22. 대학원 연구 루프는 더 넓다
 
 - 문헌 조사
 - 가설 수립
@@ -240,7 +277,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "DOE의 범위" -->
 
-## 18. DOE가 주로 커버하는 구간
+## 23. DOE가 주로 커버하는 구간
 
 | 구간 | DOE의 역할 |
 | --- | --- |
@@ -253,7 +290,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "한계" -->
 
-## 19. 한계
+## 24. 한계
 
 - `literature review`나 `hypothesis generation` 자체를 대체하진 못한다.
 - open-ended research space는 factorization이 어렵다.
@@ -263,7 +300,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "결론" -->
 
-## 20. 결론
+## 25. 결론
 
 - AutoML에서 Autoresearch로 갈수록 `search space`는 넓어진다.
 - search space가 넓어질수록 더 강한 `harness`가 필요하다.
@@ -273,14 +310,14 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 
 ---
 <!-- _class: tinytext -->
-<!-- footer: "Sources" -->
+<!-- footer: "출처" -->
 
-## 21. References
+## 26. References
 
 | 구분 | 예시 |
 | --- | --- |
-| curated landscape | `alvinreal/awesome-autoresearch`, `handsome-rich/Awesome-Auto-Research-Tools` |
-| end-to-end systems | `karpathy/autoresearch`, `microsoft/RD-Agent`, `SakanaAI/AI-Scientist` |
-| deep research | `assafelovic/gpt-researcher`, `Open Deep Research`, `PaperQA2` |
-| experiment/code agents | `OpenHands`, `Aider`, `SWE-agent`, `AIDE` |
-| evaluation | `openai/mle-bench`, `snap-stanford/MLAgentBench`, `chchenhui/mlrbench` |
+| curated landscape | [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools) |
+| end-to-end systems | [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) |
+| deep research | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) |
+| evaluation | [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench) |
+| visuals / MLOps | [visionplatform.ai YOLOv8 HPO](https://visionplatform.ai/hyperparameter-optimization-yolov8/), [TechTarget MLOps lifecycle article](https://www.techtarget.com/searchenterpriseai/tip/Inside-the-MLOps-lifecycle-stages), [MLflow Tracking docs](https://www.mlflow.org/docs/latest/ml/tracking), [Azure MLOps overview](https://azure.microsoft.com/en-us/solutions/machine-learning-ops/) |
