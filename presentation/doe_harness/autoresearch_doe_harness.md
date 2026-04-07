@@ -30,13 +30,24 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 [Source image](https://miro.medium.com/v2/resize:fit:1382/1*ip8VpZ4_KJP8R5EwJ3zRgw.jpeg)
 
 ---
+<!-- footer: "NAS" -->
+
+## 2. `Neural Architecture Search`는 AutoML의 확장이다
+
+- `NAS`는 parameter가 아니라 architecture 자체를 탐색 대상으로 올린다.
+- 즉 AutoML은 점점 `더 넓은 search space`를 다루는 방향으로 확장돼 왔다.
+- 하지만 여전히 중심은 대체로 `모델/파이프라인 후보 탐색`이었다.
+
+`hyperparameter search → pipeline search → architecture search`
+
+---
 <!-- footer: "Autoresearch의 등장" -->
 
-## 2. `Autoresearch`는 어떻게 등장했는가?
+## 3. `Autoresearch`는 어떻게 등장했는가?
 
 - [karpathy/autoresearch](https://github.com/karpathy/autoresearch)는 작은 training setup 위에서 `read → edit → run → keep-or-revert` loop를 보여줬다.
 - 이 지점부터 질문이 바뀐다.
-  `좋은 hyperparameter를 찾는가?`에서 `좋은 실험 program을 만들 수 있는가?`로 이동한다.
+  `좋은 설정을 찾는가?`에서 `좋은 실험 program을 만들 수 있는가?`로 이동한다.
 - 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher)처럼 더 넓은 연구 자동화 계열이 빠르게 늘었다.
 
 - 즉 `Autoresearch`는 단일 repo 이름을 넘어서 research automation의 한 계열 이름이 되고 있다.
@@ -44,18 +55,18 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 ---
 <!-- footer: "Autoresearch 개념" -->
 
-## 3. Autoresearch란 무엇인가?
+## 4. Autoresearch란 무엇인가?
 
 - Autoresearch는 연구 workflow 일부를 agent가 직접 수행하는 형태다.
 - 대상은 `config`가 아니라 `가설`, `code`, `pipeline`, `experiment plan`까지 넓어진다.
-- 목표도 단일 최고 설정보다 더 나은 실험 program을 찾는 데 가깝다.
+- 핵심은 단발성 search보다 `읽고, 바꾸고, 실행하고, 해석하는 연구 loop`다.
 
 `Question → Read → Edit → Run → Analyze → Next experiment`
 
 ---
-<!-- footer: "핵심 차이" -->
+<!-- footer: "경계선 정리" -->
 
-## 4. AutoML vs. Autoresearch
+## 5. AutoML vs. Autoresearch
 
 | 항목 | AutoML | Autoresearch |
 | --- | --- | --- |
@@ -65,30 +76,29 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 | 필요한 인프라 | experiment infra | experiment + memory + harness |
 
 ---
-<!-- footer: "현재 사용례" -->
+<!-- footer: "사용례와 확장" -->
 
-## 5. 현재 사용례는 이미 넓다
+## 6. 사용례와 확장은 함께 커지고 있다
 
-| 작업 | 예시 |
+| 현재 보이는 사용례 | 지금 커지는 확장 |
 | --- | --- |
-| 문헌 조사 / deep research | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) |
-| 코드 수정 + 실험 반복 | [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent) |
-| end-to-end 연구 자동화 | [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) |
-| benchmark / evaluation | [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench) |
-| plugin / skill 생태계 | [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools) |
-
----
-<!-- footer: "발전 방향" -->
-
-## 6. 사용례가 확장되면서 무엇이 달라지나?
-
-- 후속 ecosystem과 hardware fork가 빠르게 늘고 있다. [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch)
-- `idea → experiment → paper`형 end-to-end stack이 두터워지고 있다. [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools)
-- benchmark가 점점 기준점이 되고 있다. [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench)
-- `memory`, `skills`, `plugin`으로 연구 loop를 모듈화하는 흐름이 보인다. [GPT Researcher](https://github.com/assafelovic/gpt-researcher), [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch)
+| 문헌 조사 / deep research: [GPT Researcher](https://github.com/assafelovic/gpt-researcher) | end-to-end 연구 자동화: [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) |
+| 코드 수정 + 실험 반복: [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent) | benchmark / evaluation: [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench) |
+| 보고서 / 초안 생성 | plugin / skill 생태계: [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools) |
+| domain-specific workflow | memory, reusable modules, hardware fork |
 
 ---
 <!-- footer: "왜 MLOps가 중요한가" -->
+
+<!-- _class: tinytext -->
+<style scoped>
+table {
+  margin: 0 auto;
+}
+th, td {
+  text-align: center;
+}
+</style>
 
 ## 7. 왜 MLOps가 공통 기반이 되는가?
 
@@ -106,11 +116,13 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 ---
 <!-- footer: "Kubeflow lifecycle" -->
 
-## 8. MLOps는 experimentation과 production을 잇는다
+## 8. MLOps는 더 큰 파이프라인을 안정적으로 유지하는 작업이다
 
 ![w:1040](./assets/mlops_kubeflow.svg)
 
-`model registry`는 실험 결과와 운영 단계를 이어 붙이는 접점이다.
+- Autoresearch가 관여하는 loop는 이 큰 ML lifecycle 안의 일부다.
+- 실제 시스템은 `data`, `experiment`, `model registry`, `deployment`, `monitoring`까지 함께 굴러간다.
+- 그래서 MLOps의 역할은 연결만이 아니라 `지속적 운영`, `추적`, `승격`, `유지관리`다.
 
 [Source image](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg)
 
