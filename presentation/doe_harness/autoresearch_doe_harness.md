@@ -62,45 +62,23 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 | explicit objective 최적화 | objective + reasoning + iteration |
 
 ---
-<!-- footer: "MLOps는 AutoML 뒤에 붙는 부속물이 아니라 자동화를 가능하게 하는 공통 기반이다." -->
+<!-- footer: "넓어진 search space는 더 강한 behavioral constraint를 요구한다." -->
 
-## 4. 자동화를 가능하게 하는 공통 기반: MLOps
+## 4. AutoML vs. Autoresearch
 
-- AutoML이든 Autoresearch든 자동화를 반복 가능하게 만들려면 실행 인프라가 필요하다.
-- `experiment tracking`, `orchestration`, `reproducibility`가 있어야 탐색이 지식으로 남는다.
-- `artifact 관리`, `registry`, `monitoring`, `cost governance`가 있어야 자동화가 운영 가능해진다.
-- 즉 `MLOps`는 AutoML의 뒤처리가 아니라, 둘 다를 떠받치는 공통 substrate에 가깝다.
-
-| 공통 인프라 | AutoML에서의 역할 | Autoresearch에서의 역할 |
+| 항목 | AutoML | Autoresearch |
 | --- | --- | --- |
-| tracking | 후보 비교 | 실험 history 축적 |
-| orchestration | search job 실행 | multi-step agent loop 실행 |
-| reproducibility | 재실행 / 검증 | hypothesis와 edit 검증 |
-| cost governance | budget control | long-horizon research budget 관리 |
-
----
-<!-- footer: "Source: curated autoresearch repos, accessed 2026-04-07" -->
-
-## 5. Autoresearch 현황
-
-현재 공개 생태계는 이미 `단일 demo`보다 `layered ecosystem` 쪽으로 분화되고 있다.
-
-| 보이는 층 | 현재 공개 생태계에서 관찰되는 묶음 |
-| --- | --- |
-| end-to-end systems | topic → experiment → paper 자동화 |
-| deep research | literature search, synthesis, citation report |
-| experiment/code agents | 코드 수정, 실행, 평가 자동화 |
-| skills / plugins | 반복 가능한 research workflow 모듈화 |
-| benchmarks | `MLE-bench`, `MLAgentBench`, `MLR-Bench` 등 평가 체계 |
-| hardware / infra ports | consumer GPU, WebGPU, swarm, persistent memory |
-
-- 즉 현재의 흐름은 "하나의 강한 agent"보다 "생태계 + 실행 인프라 + benchmark + reusable skill" 쪽으로 이동 중이다.
+| 탐색 대상 | config, architecture | hypothesis, code, module, pipeline, experiment program |
+| 평가 | explicit objective | objective + reasoning + iteration |
+| 인간 역할 | search space 설계 | research program 설계 |
+| 주요 위험 | 비효율적 탐색 | metric hacking, incoherent search |
+| 필요한 인프라 | experiment infra | experiment + memory + harness |
 
 ---
 <!-- _class: tinytext -->
 <!-- footer: "사용례는 curated repo들에 등장하는 실제 task 유형을 요약한 것이다." -->
 
-## 6. 현재 보이는 사용례
+## 5. 현재 보이는 사용례
 
 | 연구 작업 | 이미 자동화되는 형태 |
 | --- | --- |
@@ -117,7 +95,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 <!-- _class: tinytext -->
 <!-- footer: "발전 방향은 ecosystem이 지금 어떤 층으로 두터워지는지를 요약한다." -->
 
-## 7. 지금 보이는 발전 방향
+## 6. 지금 보이는 발전 방향
 
 | 방향 | 의미 |
 | --- | --- |
@@ -131,22 +109,37 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 - 다시 말해 Autoresearch는 "한 번의 인상적인 demo"에서 "programmable research stack"으로 이동 중이다.
 
 ---
-<!-- footer: "넓어진 search space는 더 강한 behavioral constraint를 요구한다." -->
+<!-- footer: "MLOps는 AutoML 뒤에 붙는 부속물이 아니라 자동화를 가능하게 하는 공통 기반이다." -->
 
-## 8. AutoML vs. Autoresearch
+## 7. 자동화를 가능하게 하는 공통 기반: MLOps
 
-| 항목 | AutoML | Autoresearch |
+- AutoML이든 Autoresearch든 자동화를 반복 가능하게 만들려면 실행 인프라가 필요하다.
+- `experiment tracking`, `orchestration`, `reproducibility`가 있어야 탐색이 지식으로 남는다.
+- `artifact 관리`, `registry`, `monitoring`, `cost governance`가 있어야 자동화가 운영 가능해진다.
+- 즉 `MLOps`는 AutoML의 뒤처리가 아니라, 둘 다를 떠받치는 공통 substrate에 가깝다.
+
+| 공통 인프라 | AutoML에서의 역할 | Autoresearch에서의 역할 |
 | --- | --- | --- |
-| 탐색 대상 | config, architecture | hypothesis, code, module, pipeline, experiment program |
-| 평가 | explicit objective | objective + reasoning + iteration |
-| 인간 역할 | search space 설계 | research program 설계 |
-| 주요 위험 | 비효율적 탐색 | metric hacking, incoherent search |
-| 필요한 인프라 | experiment infra | experiment + memory + harness |
+| tracking | 후보 비교 | 실험 history 축적 |
+| orchestration | search job 실행 | multi-step agent loop 실행 |
+| reproducibility | 재실행 / 검증 | hypothesis와 edit 검증 |
+| cost governance | budget control | long-horizon research budget 관리 |
+
+---
+<!-- _class: title -->
+<!-- footer: "Prelim 종료: 이제부터는 harness와 DOE가 본론이다." -->
+
+# Prelim 정리
+
+여기까지는 배경이다.
+
+이제 핵심 질문은
+`Research Agent에 어떤 harness가 필요한가?`이다.
 
 ---
 <!-- footer: "Coding Agent를 믿게 만든 것은 모델만이 아니라 harness였다." -->
 
-## 9. Harness gap
+## 8. Harness gap
 
 | Coding Agent 쪽에서 이미 흔한 것 | Research Agent 쪽에서 아직 약한 것 |
 | --- | --- |
@@ -161,7 +154,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "DOE를 통계 기법이 아니라 agent 운영 규율로 본다." -->
 
-## 10. DOE를 Harness 후보로 보기
+## 9. DOE를 Harness 후보로 보기
 
 | DOE primitive | Agent loop에서의 역할 |
 | --- | --- |
@@ -175,7 +168,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "점수만이 아니라 experiment ordering과 interpretation 구조가 달라진다." -->
 
-## 11. Agent loop에 무엇이 달라지는가?
+## 10. Agent loop에 무엇이 달라지는가?
 
 | 단계 | Vanilla Agent | DOE-guided Agent |
 | --- | --- | --- |
@@ -188,7 +181,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "이 비교는 prompt wording이 아니라 harness 설계 비교다." -->
 
-## 12. 실험 설정
+## 11. 실험 설정
 
 | Variant | 설명 | 비교 목적 |
 | --- | --- | --- |
@@ -201,7 +194,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "결과 표는 성능, 비용, 안정성을 함께 보여줘야 한다." -->
 
-## 13. 결과 요약
+## 12. 결과 요약
 
 - Placeholder only: 실험 완료 후 채움
 
@@ -214,7 +207,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "최종 점수보다 learning dynamics의 차이를 보여주는 그래프다." -->
 
-## 14. 성능 향상 추이
+## 13. 성능 향상 추이
 
 - Placeholder only: 실험 완료 후 채움
 - `experiment budget` 또는 `run count` 대비 `best-so-far metric`
@@ -227,7 +220,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "DOE의 가치는 headline score보다 탐색의 질 변화에 있다." -->
 
-## 15. 실험 포트폴리오 또는 실패 구조
+## 14. 실험 포트폴리오 또는 실패 구조
 
 - Placeholder only: 실험 완료 후 채움
 - Option A: `Tic / Tac / To` 비율
@@ -237,7 +230,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "숫자 해석은 agent behavior와 experiment program 변화로 연결돼야 한다." -->
 
-## 16. 왜 DOE-guided Agent는 다를 수 있는가?
+## 15. 왜 DOE-guided Agent는 다를 수 있는가?
 
 - `search space`가 더 구조화된다.
 - 중복되거나 정보량이 낮은 실험이 줄어든다.
@@ -249,7 +242,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 <!-- _class: tinytext -->
 <!-- footer: "문헌 조사, 가설 수립 같은 단계는 DOE의 바깥 또는 상위 층에 더 가깝다." -->
 
-## 17. 대학원 연구 루프와 DOE의 범위
+## 16. 대학원 연구 루프와 DOE의 범위
 
 | 연구 루프 단계 | DOE가 직접 다루는 정도 |
 | --- | --- |
@@ -266,7 +259,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "DOE는 강한 후보이지만 만능 해법은 아니다." -->
 
-## 18. 한계
+## 17. 한계
 
 - DOE가 `literature review`나 `hypothesis generation` 자체를 대체하진 못한다.
 - open-ended research space는 깔끔한 factorization이 어렵다.
@@ -277,7 +270,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 ---
 <!-- footer: "마지막 메시지는 better agents보다 better harnesses다." -->
 
-## 19. 결론
+## 18. 결론
 
 - AutoML에서 Autoresearch로 갈수록 `search space`는 넓어진다.
 - search space가 넓어질수록 더 강한 `harness`가 필요하다.
@@ -289,7 +282,7 @@ AutoML, Autoresearch, MLOps, DOE-guided Agent
 <!-- _class: tinytext -->
 <!-- footer: "웹 기반 사례와 분류는 2026-04-07 기준" -->
 
-## 20. References
+## 19. References
 
 | 구분 | 예시 |
 | --- | --- |
