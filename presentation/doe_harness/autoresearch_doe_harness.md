@@ -162,7 +162,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 한 번의 최고점보다 `요인`, `상호작용`, `안정성` 파악에 강점
 - 핵심 질문: 무엇을 바꿨고, 무엇이 실제로 영향을 줬는가
 
-![w:820](./assets/doe_cake.png)
+![w:700](./assets/doe_cake.png)
 
 [출처 이미지](https://i0.wp.com/michelbaudin.com/wp-content/uploads/2020/10/AstakhovVisualizationOfDOEOnCake.png?resize=691%2C406&ssl=1)
 
