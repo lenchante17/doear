@@ -43,37 +43,38 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 ---
 <!-- footer: "Autoresearch의 등장" -->
 
-## 3. `Autoresearch`는 어떻게 등장했는가?
+## 3. `Autoresearch`는 어떻게 등장했고 무엇이 다른가?
 
 - [karpathy/autoresearch](https://github.com/karpathy/autoresearch)는 작은 training setup 위에서 `read → edit → run → keep-or-revert` loop를 보여줬다.
-- 이 지점부터 질문이 바뀐다.
-  `좋은 설정을 찾는가?`에서 `좋은 실험 program을 만들 수 있는가?`로 이동한다.
+- Autoresearch는 agent가 연구 workflow 일부를 직접 수행하는 연구 자동화 계열이다.
+- 여기서 agent는 설정만 고르는 것이 아니라 `code`, `module`, `experiment` 자체를 건드린다.
+- 즉 AutoML이 `주어진 search space`를 최적화했다면, Autoresearch는 `research loop` 쪽으로 탐색 대상을 넓힌다.
 - 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher)처럼 더 넓은 연구 자동화 계열이 빠르게 늘었다.
 
-- 즉 `Autoresearch`는 단일 repo 이름을 넘어서 research automation의 한 계열 이름이 되고 있다.
-
 ---
-<!-- footer: "Autoresearch 개념" -->
+<!-- footer: "질문의 이동" -->
 
-## 4. Autoresearch란 무엇인가?
+## 4. 그래서 질문이 바뀐다
 
-- Autoresearch는 연구 workflow 일부를 agent가 직접 수행하는 형태다.
-- 대상은 `config`가 아니라 `가설`, `code`, `pipeline`, `experiment plan`까지 넓어진다.
-- 핵심은 단발성 search보다 `읽고, 바꾸고, 실행하고, 해석하는 연구 loop`다.
+| AutoML에서의 질문 | Autoresearch에서의 질문 |
+| --- | --- |
+| 어떤 설정이 가장 좋은가? | 다음에 어떤 실험을 해야 하는가? |
+| 정해진 공간 안에서 어떻게 최적화할까? | search space 자체를 바꿔도 되는가? |
+| 최고 점수는 무엇인가? | 어떤 결과를 믿고 승격할 것인가? |
 
 `Question → Read → Edit → Run → Analyze → Next experiment`
 
 ---
-<!-- footer: "경계선 정리" -->
+<!-- footer: "기본 loop" -->
 
-## 5. AutoML vs. Autoresearch
+## 5. Autoresearch agent의 기본 loop
 
-| 항목 | AutoML | Autoresearch |
-| --- | --- | --- |
-| 탐색 대상 | config, architecture | hypothesis, code, module, pipeline, experiment program |
-| 평가 | explicit objective | objective + reasoning + iteration |
-| 주요 위험 | 비효율적 탐색 | metric hacking, incoherent search |
-| 필요한 인프라 | experiment infra | experiment + memory + harness |
+| 단계 | agent가 하는 일 |
+| --- | --- |
+| read | 논문, 코드, 이전 결과를 읽는다 |
+| edit | 가설에 맞춰 코드나 설정을 바꾼다 |
+| run | 실험을 실행하고 metric을 수집한다 |
+| analyze | 결과를 해석하고 다음 실험으로 넘긴다 |
 
 ---
 <!-- footer: "사용례와 확장" -->
