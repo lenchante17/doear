@@ -224,11 +224,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 17. 결과: 성능, 효율, 안정성
 
-실험 조건
-- benchmark: `cifar10_real`
-- model family: `mlp`
-- search surface: curated `10` knobs only
-- 공개 지표: validation only, hidden test는 열지 않음
+조건: `cifar10_real` / `mlp` / curated `10` knobs / validation only
 
 | Agent | Best Val | Run of Best | Gain vs Run 1 | Mean Best-so-Far | Incumbent Updates |
 | --- | --- | --- | --- | --- | --- |
@@ -236,66 +232,75 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | `02 Simple DoE` | `0.3850` | `8` | `+0.0133` | `0.3846` | `3` |
 | `03 Advanced DoE + Tic-Tac-To` | `0.4033` | `51` | `+0.0450` | `0.4012` | `5` |
 
-Best configs
-- `01 Sequential`: `maxabs + svd(32) + [64,32] + relu + adam + batchnorm + wd=0.001 + lr=0.0005 + bs=32`
-- `02 Simple DoE`: `standard + no projection + [64,32] + relu + adam + no internal norm + wd=0.0005 + lr=0.0003 + bs=128`
-- `03 Advanced DoE + Tic-Tac-To`: `maxabs + svd(32) + [64,32] + relu + adam + no internal norm + wd=0.001 + lr=0.0005 + bs=64`
+---
+<!-- footer: "best config" -->
+
+## 18. 결과: 대표 Config
+
+- `01 Sequential`
+  `maxabs + svd(32) + [64,32] + relu + adam + batchnorm + wd=0.001 + lr=0.0005 + bs=32`
+- `02 Simple DoE`
+  `standard + no projection + [64,32] + relu + adam + no internal norm + wd=0.0005 + lr=0.0003 + bs=128`
+- `03 Advanced DoE + Tic-Tac-To`
+  `maxabs + svd(32) + [64,32] + relu + adam + no internal norm + wd=0.001 + lr=0.0005 + bs=64`
 
 ---
 <!-- footer: "탐색 궤적" -->
 
-## 18. 결과: 탐색 궤적
+## 19. 결과: 탐색 궤적
 
 ![w:1080](./assets/cifar10_curated10_mlp_best_so_far.svg)
 
-- `x-axis`: run budget, `y-axis`: best-so-far validation accuracy
-- `01 Sequential`는 `run 37`에 최고점 도달 후 긴 plateau를 유지
-- `02 Simple DoE`는 `run 8`에 빠르게 best를 찾았지만 이후 ceiling이 거의 오르지 않음
-- `03 Advanced DoE + Tic-Tac-To`는 `run 51`까지 improvement를 이어가며 `Simple DoE`보다 높은 ceiling 확보
-- 관측된 `Tic:Tac:To = 29:57:114 ≈ 1:1.97:3.93`, 즉 목표 `1:2:4`에 거의 수렴
+- `01 Sequential`: `run 37`에 최고점 도달 후 긴 plateau 유지
+- `02 Simple DoE`: `run 8`에 빠르게 best를 찾았지만 ceiling 상승은 약함
+- `03 Advanced DoE + Tic-Tac-To`: `run 51`까지 improvement 지속
+- 관측된 `Tic:Tac:To = 29:57:114 ≈ 1:1.97:3.93`
 
 ---
 <!-- footer: "히스토리 해석" -->
 
-## 19. 히스토리에서 읽히는 결론
+## 20. 히스토리에서 읽히는 결론
 
-- `Sequential`은 좁은 search space에서 가장 강했다. projection, normalization layer, learning rate, batch size를 한 축씩 밀어 보며 강한 incumbent를 빠르게 만들었고, 이후 그 basin을 오래 지켰다.
-- `Simple DoE`는 screening efficiency는 높았지만, factor re-screening이 길어지면서 search diversification이 약해졌다. 좋은 baseline은 빨리 찾았지만 그 이후 ceiling을 거의 못 올렸다.
-- `Advanced DoE + Tic-Tac-To`는 `Simple DoE`보다 훨씬 건강한 중후반 탐색을 보였다. `Tac`과 `To`를 많이 쓰면서도 `Tic`을 완전히 버리지 않아, plateau 이후에도 구조적 escape 시도를 유지했다.
-- 다만 현재 curated surface에서는 `Sequential`이 여전히 최고였다. 즉 factor space가 충분히 작고 convention이 안정적이면, 복잡한 design보다 strong local refinement가 더 효율적일 수 있다.
-- 반대로 `Advanced DoE + Tic-Tac-To`가 `Simple DoE`를 확실히 앞선 것은 중요하다. screening-only 프레임은 early orientation에는 좋지만, long-horizon search에는 staged refinement와 budget allocation이 필요하다는 뜻이다.
+- `Sequential`은 좁은 surface에서 가장 강했다.
+- `Simple DoE`는 early screening은 빨랐지만 ceiling을 많이 못 올렸다.
+- `Advanced DoE + Tic-Tac-To`는 중후반 탐색 건강도가 가장 좋았다.
+- 작은 factor space에선 strong local refinement가 더 효율적일 수 있다.
+- screening-only보다 staged refinement와 budget allocation이 더 중요했다.
 
 ---
-<!-- footer: "지식 추출" -->
+<!-- footer: "지식 추출 1" -->
 
-## 20. 히스토리와 피드백에서 추출한 튜닝 지식
+## 21. 히스토리와 피드백에서 추출한 튜닝 지식
 
 `01 Sequential`
 - 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam`
-- 추가 prior: `batchnorm`, `batch_size=32`, `learning_rate_init=0.0005`, `weight_decay=0.001` 쪽이 ceiling을 높였다.
-- 실패 prior: `sgd` 전환은 반복적으로 약했다.
-- 프로세스 지식: projection → internal normalization → learning rate → batch size 순으로 한 축씩 줄여 가는 local refinement가 효과적이었다.
+- `batchnorm`, `batch_size=32`, `lr=0.0005`, `wd=0.001` 쪽이 강했다.
+- `sgd` 전환은 반복적으로 약했다.
 
 `02 Simple DoE`
 - 강한 basin: `standard + no projection + [64,32] + relu + adam + batch_size=128`
-- 추가 prior: screening 초기엔 `normalization`, `learning_rate_init`, `batch_size`를 먼저 보는 편이 효율적이었다.
-- 한계 지식: 빠른 orientation에는 좋았지만, 이후에도 screening 프레임이 길어지면 ceiling이 잘 안 오른다.
-- 프로세스 지식: simple DOE는 `early factor ranking`에는 좋지만 `late-stage refinement policy`를 별도로 가져가야 한다.
+- 초반엔 `normalization`, `learning_rate_init`, `batch_size` screening이 효율적이었다.
+- 이후 late-stage refinement policy가 따로 필요했다.
+
+---
+<!-- footer: "지식 추출 2" -->
+
+## 22. 히스토리와 피드백에서 추출한 튜닝 지식
 
 `03 Advanced DoE + Tic-Tac-To`
 - 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam + batch_size=64`
-- 추가 prior: `learning_rate_init=0.0005`, `weight_decay=0.001` 근처가 반복적으로 살아남았다.
-- 실패 prior: `32x32`, `tanh`, `std+pca32` branch는 interaction check 단계에서 자주 약했다.
-- 프로세스 지식: `screening → interaction_checks → local_refinement` 단계 구분과 `Tic:Tac:To ≈ 1:2:4` 예산 분배가 long-horizon search를 더 건강하게 만들었다.
+- `lr=0.0005`, `wd=0.001` 근처가 반복적으로 살아남았다.
+- `32x32`, `tanh`, `std+pca32` branch는 자주 약했다.
+- `screening → interaction → local refinement`와 `Tic:Tac:To ≈ 1:2:4`가 long-horizon search에 유효했다.
 
 메타 지식
-- `history.md`와 `feedback.md`는 단순 로그가 아니라, 다음 benchmark에서 재사용 가능한 `configuration prior`와 `search policy prior`를 추출하는 지식 원천이 될 수 있다.
-- 특히 DOE 계열은 `hypothesis / factors / levels / conclusion`이 notes에 구조화되어 있어, agent별 지식 추출이 더 쉽다.
+- `history.md`와 `feedback.md`는 다음 benchmark에 재사용할 `configuration prior`와 `search policy prior` 원천이다.
+- DOE 계열은 `hypothesis / factors / levels / conclusion` 구조가 남아 지식 추출이 쉽다.
 
 ---
 <!-- footer: "한계" -->
 
-## 21. 한계
+## 23. 한계
 
 - 문헌 조사나 가설 생성 자체를 대체하진 못함
 - 완전히 open-ended한 구조 탐색은 factorization이 어려움
@@ -307,7 +312,7 @@ Best configs
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 22. References
+## 24. References
 
 | 구분 | 예시 |
 | --- | --- |
