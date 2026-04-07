@@ -239,9 +239,9 @@ NN-only curated search surface: `8` knobs
 
 ![w:690](./assets/cifar10_nnonly_mlp_200_best_so_far.svg)
 
-- `Sequential`: round `1` incumbent에 그대로 고착됐다.
-- `Simple DoE`: `26` round에서 best를 찾았고 hidden에서도 가장 잘 유지됐다.
-- `Advanced DoE + Tic-Tac-To`: `41` round까지 개선을 이어갔고, 실제 move count는 `Tic:Tac:To = 29:57:113`로 `1:2:4`에 가깝다.
+- `Sequential`: `run 1` 이후 거의 움직이지 못했다.
+- `Simple DoE`: `run 26`에 best를 찾았고 hidden 유지력이 가장 좋았다.
+- `Advanced DoE + Tic-Tac-To`: `run 41`까지 개선했고, `Tic:Tac:To = 29:57:113`으로 목표 `1:2:4`에 근접했다.
 
 ---
 <!-- footer: "Text 결과" -->
@@ -268,18 +268,18 @@ NN-only curated search surface: `8` knobs
 
 ![w:690](./assets/twenty_newsgroups_nnonly_mlp_200_best_so_far.svg)
 
-- `Sequential`과 `Advanced`는 사실상 baseline에 고착됐다.
-- `Simple DoE`만 early screening으로 basin을 바꿨고, 그 우위를 `200` run 내내 유지했다.
-- text/TF-IDF 공간에서는 long-horizon interaction 탐색보다 first-order factor screening payoff가 더 컸다.
+- `Sequential`과 `Advanced`는 baseline 근처에 머물렀다.
+- `Simple DoE`만 early screening으로 basin을 바꿨고 그 우위를 유지했다.
+- 이 text/TF-IDF 공간에서는 interaction 탐색보다 first-order screening payoff가 더 컸다.
 
 ---
 <!-- footer: "교차 해석" -->
 
 ## 20. 두 dataset을 같이 보면
 
-- CIFAR에서는 `Advanced DoE + Tic-Tac-To`가 highest validation을 찾았지만 hidden best는 `Simple DoE`였다.
-- text에서는 `Simple DoE`가 validation과 hidden 둘 다 가장 높았고, 나머지 둘은 baseline을 벗어나지 못했다.
-- 즉 image batch에선 interaction-aware staged search가 의미 있었지만, text batch에선 dominant first-order factor를 빨리 찾는 편이 더 중요했다.
+- CIFAR: highest validation은 `Advanced`, hidden best는 `Simple DoE`
+- Text: validation과 hidden 모두 `Simple DoE` 우세
+- 해석: image-like space에선 staged search가, text-like space에선 screening이 더 잘 맞았다.
 - `Sequential`은 두 dataset 모두 incumbent trap에 취약했다.
 
 ---
@@ -288,23 +288,38 @@ NN-only curated search surface: `8` knobs
 ## 21. 히스토리와 피드백에서 추출한 지식
 
 `01 Sequential`
-- 좋은 용도는 빠른 sanity check와 baseline 확보다.
-- 실패 모드는 명확하다: 첫 incumbent가 moderate local optimum이면 200 run을 줘도 못 빠져나온다.
+- 빠른 sanity check와 baseline 확보에는 유용하다.
+- 첫 incumbent가 local optimum이면 장기 예산을 줘도 잘 못 빠져나온다.
 
 `02 Simple DoE`
-- CIFAR strong prior: `standard + [64,64,64] + relu + adam + batchnorm + wd=0.001 + lr=0.001 + bs=32`
-- Text strong prior: `standard + [64] + tanh + adam + layernorm + wd=0.0005 + lr=0.002 + bs=64`
-- 두 dataset 모두에서 hidden transfer가 가장 안정적이었다.
+- CIFAR prior: `standard + [64,64,64] + relu + adam + batchnorm + wd=0.001 + lr=0.001 + bs=32`
+- Text prior: `standard + [64] + tanh + adam + layernorm + wd=0.0005 + lr=0.002 + bs=64`
+- 두 dataset 모두 hidden transfer가 가장 안정적이었다.
 
 `03 Advanced DoE + Tic-Tac-To`
-- CIFAR strong prior: `maxabs + [32,64] + leaky_relu + adam + layernorm + wd=0.0008 + lr=0.0012 + bs=128`
-- text에서는 stage overhead가 있었지만 실제로는 basin 전환을 못 만들었다.
-- `Tic/Tac/To` 예산은 image-like search space에서 더 가치가 컸다.
+- CIFAR prior: `maxabs + [32,64] + leaky_relu + adam + layernorm + wd=0.0008 + lr=0.0012 + bs=128`
+- text에서는 staged budget이 basin 전환으로 이어지지 못했다.
+- `Tic/Tac/To` 예산은 image-like search space에서 더 유효했다.
+
+---
+<!-- footer: "히스토리 진단" -->
+
+## 22. 히스토리 진단: baseline보다 loop quality 문제가 더 컸다
+
+| Agent | CIFAR trace | Text trace | 진단 |
+| --- | --- | --- | --- |
+| `Sequential` | best가 `run 1` | best가 `run 1` | incumbent replay, 탐색 붕괴 |
+| `Simple DoE` | `run 26`까지 개선 | `run 29`까지 개선 | screening은 의미 있었고 후반은 다소 중복 |
+| `Advanced DoE + Tic-Tac-To` | `run 41`까지 개선 | best가 `run 1` | CIFAR에선 유효, text에선 backend-safe anchor에 고착 |
+
+- `baseline이 너무 강해서 못 넘었다`는 설명은 충분하지 않다.
+- 실제로는 일부 agent가 중간부터 같은 안전 설정을 반복 제출하며 탐색이 멈췄다.
+- 다음 harness 개선 우선순위는 `더 똑똑한 전략`보다 `중복 submission 방지`, `backend-fix loop 차단`, `stagnation reset`이다.
 
 ---
 <!-- footer: "한계" -->
 
-## 22. 한계
+## 23. 한계
 
 - 이번 결과는 single split 기준이라 분산 추정이 약하다.
 - hidden test도 agent당 한 번만 열었으므로, replication이나 confidence interval은 없다.
@@ -316,7 +331,7 @@ NN-only curated search surface: `8` knobs
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 23. References
+## 24. References
 
 | 구분 | 예시 |
 | --- | --- |
