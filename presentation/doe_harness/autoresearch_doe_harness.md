@@ -48,8 +48,7 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 ## 3. `Autoresearch`는 어떻게 등장했고 무엇이 다른가?
 
 - [karpathy/autoresearch](https://github.com/karpathy/autoresearch): 작은 training setup 위 `read → edit → run → keep-or-revert` loop 제시
-- 연구 workflow 일부를 agent가 직접 수행하는 자동화 계열
-- 설정 탐색이 아니라 `code`, `module`, `experiment` 자체 수정
+- 연구 workflow 일부를 agent가 직접 수행하며, 설정 탐색을 넘어 `code`, `module`, `experiment` 자체 수정
 - AutoML의 `fixed search space` 바깥으로 확장
 - 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 등으로 빠르게 확장
 
