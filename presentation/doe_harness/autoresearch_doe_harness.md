@@ -12,7 +12,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 # AutoML, Autoresearch, MLOps +@
 
-26.4.7
+26.4.8
 
 서민교
 
@@ -197,8 +197,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 실행 조건
 - agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
+- `50-run` block마다 새 subagent를 붙여 context를 reset
 - validation-only `500` runs를 먼저 누적하고 hidden test는 마지막 `finalize-agent`에서만 공개
-- 이번 batch는 이전 curated `8` knobs가 아니라 넓어진 MLP search surface를 사용
+- 이번 batch는 넓어진 MLP search surface를 사용
 
 열려 있는 주요 축
 - preprocessing: `normalization`, `outlier`, `projection`, `resampling`
@@ -211,78 +212,78 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 16. CIFAR-10 결과: validation 탐색과 hidden test
 
-조건: `cifar10_real` / `mlp` / broad search surface / validation `500` runs + hidden finalize
+조건: `cifar10_real` / `mlp` / block-reset execution / validation `500` runs + hidden finalize
 
 | Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
 | --- | --- | --- | --- | --- | --- |
-| `01 Ratchet` | `0.4300` | `0.3850` | `0.0450` | `8` | `3` |
-| `02 Screening DoE` | `0.4183` | `0.3700` | `0.0483` | `16` | `7` |
-| `03 Advanced DoE` | `0.4700` | `0.4300` | `0.0400` | `475` | `12` |
+| `01 Ratchet` | `0.4450` | `0.3933` | `0.0517` | `224` | `14` |
+| `02 Screening DoE` | `0.4417` | `0.3900` | `0.0517` | `349` | `13` |
+| `03 Advanced DoE` | `0.4117` | `0.3817` | `0.0300` | `394` | `8` |
 
 대표 config
-- `01 Ratchet`: `standard + [128,128] + relu + adam + batchnorm + wd=1e-5 + lr=0.002 + bs=64`
-- `02 Screening DoE`: `standard + clip_percentile + [128,64] + relu + adamw + batchnorm + cosine + residual`
-- `03 Advanced DoE`: `maxabs + pca32 + [128,64] + leaky_relu + adamw + batchnorm + dropout`
+- `01 Ratchet`: `maxabs + [128,128,64] + relu + sgd(adaptive,nesterov) + wd=5e-4 + lr=0.021 + bs=64`
+- `02 Screening DoE`: `maxabs + clip_percentile + [64,32] + relu + adam + batchnorm + wd=5e-3 + lr=6.3e-5 + bs=128`
+- `03 Advanced DoE`: `maxabs + [128,128,64] + relu + adam + wd=2e-4 + lr=0.0018 + bs=128`
 
 ---
 <!-- footer: "탐색 궤적" -->
 
 ## 17. CIFAR-10 결과: 탐색 궤적
 
-![w:690](./assets/cifar10_mlp_500_fresh_best_so_far.svg)
+![w:690](./assets/cifar10_mlp_500_blockreset_v1_best_so_far.svg)
 
-- `Ratchet`은 `run 8`에 좋은 basin을 찾았지만 그 뒤 장기 개선은 거의 없었다.
-- `Screening DoE`는 `run 16`까지 빠르게 올라갔지만 ceiling이 낮았다.
-- `Advanced DoE`는 `run 475`까지 improvement를 이어가며 가장 높은 validation과 hidden을 모두 만들었다.
+- `Ratchet`은 중반까지 개선을 이어가며 가장 높은 CIFAR validation과 hidden을 남겼다.
+- `Screening DoE`는 늦게까지 개선했지만 Ratchet을 넘지는 못했다.
+- `Advanced DoE`는 이전 batch보다 일찍 plateau에 들어가 이번 설정에선 우세를 만들지 못했다.
 
 ---
 <!-- footer: "CIFAR 해석" -->
 
 ## 18. CIFAR-10 해석
 
-- 넓어진 search space에서는 late-stage staged DoE payoff가 확실했다.
-- image 쪽에서는 projection, AdamW, dropout, batchnorm 조합이 실제로 도움이 됐다.
-- `Ratchet`은 빠른 basin discovery에는 강했지만 interaction-heavy region으로는 잘 못 넘어갔다.
-- `Screening DoE`는 main effect 파악은 빨랐지만, 후반 refinement depth는 `Advanced DoE`보다 약했다.
+- block reset과 stricter loop hygiene를 넣자 CIFAR winner는 `Ratchet`으로 바뀌었다.
+- 이번 search space에선 staged DOE보다 강한 local exploitation이 더 유리했다.
+- `Screening DoE`는 좋은 basin까지는 갔지만 후반 ceiling이 낮았다.
+- `Advanced DoE`는 gap은 가장 작았지만 absolute performance는 가장 낮았다.
 
 ---
 <!-- footer: "Text 결과" -->
 
 ## 19. 20 Newsgroups 결과: validation 탐색과 hidden test
 
-조건: `twenty_newsgroups_real` / `mlp` / broad search surface / validation `500` runs + hidden finalize
+조건: `twenty_newsgroups_real` / `mlp` / block-reset execution / validation `500` runs + hidden finalize
 
 | Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
 | --- | --- | --- | --- | --- | --- |
-| `01 Ratchet` | `0.5267` | `0.5092` | `0.0175` | `78` | `10` |
-| `02 Screening DoE` | `0.5575` | `0.5475` | `0.0100` | `47` | `11` |
-| `03 Advanced DoE` | `0.5325` | `0.5308` | `0.0017` | `315` | `9` |
+| `01 Ratchet` | `0.5375` | `0.4967` | `0.0408` | `235` | `15` |
+| `02 Screening DoE` | `0.5717` | `0.5508` | `0.0208` | `299` | `19` |
+| `03 Advanced DoE` | `0.5442` | `0.5275` | `0.0167` | `240` | `16` |
 
 대표 config
-- `01 Ratchet`: `signed_log1p + svd256 + [64,32] + gelu + adam + input_noise`
-- `02 Screening DoE`: `robust + no projection + [64,64] + relu + adam + linear_decay + dropout`
-- `03 Advanced DoE`: `standard + no projection + [128,128] + tanh + adam + wd=1e-4`
+- `01 Ratchet`: `maxabs + [64,64] + tanh + adamw + layernorm + xavier_uniform + wd=5.86e-4 + lr=0.00119 + bs=64`
+- `02 Screening DoE`: `robust + oversample_minority + [128,64] + leaky_relu + adam + xavier_normal + dropout + residual + warmup=16`
+- `03 Advanced DoE`: `robust + [32] + relu + adam + wd=5e-5 + lr=7.85e-4 + bs=145`
 
 ---
 <!-- footer: "Text 궤적" -->
 
 ## 20. 20 Newsgroups 결과: 탐색 궤적
 
-![w:690](./assets/twenty_newsgroups_mlp_500_fresh_best_so_far.svg)
+![w:690](./assets/twenty_newsgroups_mlp_500_blockreset_v1_best_so_far.svg)
 
-- `Screening DoE`는 `run 47`에 winner를 찾고 끝까지 유지했다.
-- `Advanced DoE`는 `run 315`까지 늦게 개선했지만 text에서는 screening을 넘지 못했다.
-- `Ratchet`도 개선은 했지만, 500-run budget을 모두 가치 있게 쓰지는 못했다.
+- `Screening DoE`는 중반에 winner를 확정하고 끝까지 hidden에서도 유지했다.
+- `Advanced DoE`는 꾸준히 개선했지만 screening을 넘지 못했다.
+- `Ratchet`은 val은 올렸지만 hidden gap이 가장 컸다.
 
 ---
 <!-- footer: "Text 해석" -->
 
 ## 21. 20 Newsgroups 해석
 
-- sparse TF-IDF text 공간에서는 first-order screening payoff가 interaction 탐색보다 컸다.
-- best text config는 projection 없이도 충분히 강했고, robust scaling과 중간 폭 MLP가 안정적이었다.
-- `Advanced DoE`는 late improvement는 있었지만, 그 budget이 screening의 early win을 뒤집지는 못했다.
-- `Ratchet`은 좋은 region은 찾았지만 후반 loop discipline이 약했다.
+- text에서는 이번에도 `Screening DoE`가 가장 강했다.
+- robust scaling, oversampling, 중간 폭 MLP, 작은 warmup이 강한 prior로 남았다.
+- `Advanced DoE`는 안정적이었지만 screening의 early win을 뒤집지는 못했다.
+- `Ratchet`은 hidden gap이 가장 커서 generalization 측면에서 불리했다.
 
 ---
 <!-- footer: "지식 추출" -->
@@ -290,19 +291,19 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ## 22. 히스토리에서 남는 지식
 
 `01 Ratchet`
-- 빠른 basin discovery에는 여전히 유용하다.
-- CIFAR에선 early width/normalization search, text에선 noise/SVD 조합을 빨리 찾았다.
-- 대신 plateau 뒤 reset discipline이 약하면 긴 예산을 낭비하기 쉽다.
+- CIFAR에서는 강한 incumbent basin을 붙잡고 끝까지 미는 전략이 실제로 가장 강했다.
+- text에서는 좋은 basin은 찾았지만 hidden gap이 커서 confirmation quality가 약했다.
+- reset을 넣어도 local exploitation 편향은 여전히 강하다.
 
 `02 Screening DoE`
-- text prior: `robust/no projection/relu/adam` 계열이 강하다.
-- CIFAR에서는 early screens로 상위 basin은 찾지만, late interaction payoff는 제한적이다.
-- 두 dataset 모두 best를 비교적 이른 round에 찾는 경향이 강했다.
+- text prior: `robust + oversampling + leaky_relu/adam + small warmup` 계열이 강하다.
+- CIFAR에서는 `clip_percentile`와 작은 MLP branch가 끝까지 살아남았다.
+- 두 dataset 모두 hidden에서도 비교적 안정적이었다.
 
 `03 Advanced DoE`
-- CIFAR prior: `projection + AdamW + stronger regularization` 조합이 late-stage에서 실제 payoff를 냈다.
-- text에서는 late staged refinement가 improvement는 만들었지만 winner를 바꾸지는 못했다.
-- 넓은 search space일수록 staged DoE 가치가 커지고, 단순한 space일수록 screening이 더 싸고 강하다.
+- CIFAR에서는 이번 batch에서 payoff가 크지 않았다.
+- text에서는 꾸준한 개선은 만들었지만 screening의 top basin은 못 넘었다.
+- staged refinement가 항상 최고점으로 이어지지는 않는다는 반례로 읽힌다.
 
 ---
 <!-- footer: "히스토리 진단" -->
@@ -311,23 +312,23 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 | Agent | CIFAR trace | Text trace | 읽을 점 |
 | --- | --- | --- | --- |
-| `Ratchet` | best `run 8`, updates `3` | best `run 78`, updates `10` | 초반엔 빠르지만 후반 탐색 품질이 급격히 떨어짐 |
-| `Screening DoE` | best `run 16`, updates `7` | best `run 47`, updates `11` | main-effect 중심 탐색이 가장 효율적일 때가 분명히 있음 |
-| `Advanced DoE` | best `run 475`, updates `12` | best `run 315`, updates `9` | budget이 충분하면 late interaction/refinement가 실제 payoff를 낼 수 있음 |
+| `Ratchet` | best `run 224`, updates `14` | best `run 235`, updates `15` | block reset 뒤에는 긴 예산도 실제 개선으로 연결됐다 |
+| `Screening DoE` | best `run 349`, updates `13` | best `run 299`, updates `19` | screening이 생각보다 오래 유효했고 hidden도 가장 안정적이었다 |
+| `Advanced DoE` | best `run 394`, updates `8` | best `run 240`, updates `16` | 이번 batch에선 staged design이 winner를 만들지는 못했다 |
 
-- 이번 batch에서는 예전처럼 `run 1 trap`이 핵심 문제는 아니었다.
-- 대신 dataset마다 `어떤 탐색 구조가 budget을 가장 잘 쓰는가`가 갈렸다.
-- CIFAR는 staged search가, text는 early screening이 더 유효했다.
+- 이번 batch에서는 초기 trap보다 `후반 예산을 누가 더 잘 쓰는가`가 더 중요했다.
+- block reset을 넣자 세 agent 모두 장기 탐색 품질은 개선됐다.
+- 하지만 dataset별 winner는 달랐다. CIFAR는 ratchet, text는 screening이었다.
 
 ---
 <!-- footer: "요약" -->
 
 ## 24. 요약
 
-- CIFAR winner: `03 Advanced DoE`, val `0.4700`, test `0.4300`
-- Text winner: `02 Screening DoE`, val `0.5575`, test `0.5475`
+- CIFAR winner: `01 Ratchet`, val `0.4450`, test `0.3933`
+- Text winner: `02 Screening DoE`, val `0.5717`, test `0.5508`
+- block reset을 넣은 이번 batch에서는 이전 결론이 일부 뒤집혔다.
 - 같은 `mlp`라도 dataset이 바뀌면 좋은 harness가 달라졌다.
-- 넓은 image-like space는 staged DOE에 보상이 있었고, sparse text space는 screening이 더 효율적이었다.
 
 ---
 <!-- footer: "한계" -->
@@ -338,7 +339,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - hidden test도 agent당 한 번만 열었으므로 replication이나 confidence interval은 없다.
 - fixed subset 위 실험이라 dataset 전체 분포를 대표한다고 보기는 어렵다.
 - text는 여전히 fixed TF-IDF representation 위 실험이라 representation search까지 포함한 결론은 아니다.
-- 500-run budget은 충분히 길지만, budget 자체가 전략의 일부이므로 cost-aware 비교는 따로 봐야 한다.
+- `twenty_newsgroups_01_ratchet`은 최종 count가 `501`로 `+1` overshoot했다.
 
 ---
 <!-- _class: tinytext -->

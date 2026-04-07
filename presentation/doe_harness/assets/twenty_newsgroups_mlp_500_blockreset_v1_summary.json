@@ -1,0 +1,47 @@
+{
+  "summary_rows": [
+    {
+      "agent": "01 Ratchet",
+      "runs": 501,
+      "best_validation": 0.5375,
+      "hidden_test": 0.496667,
+      "generalization_gap": 0.04083299999999995,
+      "run_of_best": 235,
+      "gain_vs_run1": 0.06083299999999997,
+      "mean_best_so_far": 0.5245592714570858,
+      "incumbent_changes": 15,
+      "plateau_tail": 266,
+      "best_candidate": "mlp_anchor_r485_a",
+      "best_config": "norm=maxabs, outlier=none, proj=none, hidden=[64, 64], activation=tanh, solver=adamw, norm_layer=layernorm, wd=0.000586, lr=0.001186, bs=64"
+    },
+    {
+      "agent": "02 Screening DoE",
+      "runs": 500,
+      "best_validation": 0.571667,
+      "hidden_test": 0.550833,
+      "generalization_gap": 0.02083400000000002,
+      "run_of_best": 299,
+      "gain_vs_run1": 0.08000000000000002,
+      "mean_best_so_far": 0.554426788,
+      "incumbent_changes": 19,
+      "plateau_tail": 201,
+      "best_candidate": "r487_anchor_local_control",
+      "best_config": "norm=robust, outlier=none, proj=none, hidden=[128, 64], activation=leaky_relu, solver=adam, norm_layer=none, wd=0, lr=0.0001, bs=64"
+    },
+    {
+      "agent": "03 Advanced DoE",
+      "runs": 500,
+      "best_validation": 0.544167,
+      "hidden_test": 0.5275,
+      "generalization_gap": 0.016666999999999987,
+      "run_of_best": 240,
+      "gain_vs_run1": 0.06749999999999995,
+      "mean_best_so_far": 0.53923682,
+      "incumbent_changes": 16,
+      "plateau_tail": 260,
+      "best_candidate": "mlp_32_lr000785_bs145_wd00005",
+      "best_config": "norm=robust, outlier=none, proj=none, hidden=[32], activation=relu, solver=adam, norm_layer=none, wd=0.00005, lr=0.000785, bs=145"
+    }
+  ],
+  "tictacto_counts": {}
+}
