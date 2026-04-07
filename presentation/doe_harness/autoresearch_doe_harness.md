@@ -208,6 +208,7 @@ MLP에서 바꿀 수 있는 요소
 - regularization / norm: `normalization_layer`, `weight_decay`
 
 ---
+<!-- _class: tinytext -->
 <!-- footer: "결과 테이블" -->
 
 ## 16. 결과: 성능, 효율, 안정성
@@ -220,24 +221,17 @@ MLP에서 바꿀 수 있는 요소
 | `02 Simple DoE` | `0.3850` | `8` | `+0.0133` | `0.3846` | `3` |
 | `03 Advanced DoE + Tic-Tac-To` | `0.4033` | `51` | `+0.0450` | `0.4012` | `5` |
 
----
-<!-- footer: "best config" -->
-
-## 17. 결과: 대표 Config
-
-- `01 Sequential`
-  `maxabs + svd(32) + [64,32] + relu + adam + batchnorm + wd=0.001 + lr=0.0005 + bs=32`
-- `02 Simple DoE`
-  `standard + no projection + [64,32] + relu + adam + no internal norm + wd=0.0005 + lr=0.0003 + bs=128`
-- `03 Advanced DoE + Tic-Tac-To`
-  `maxabs + svd(32) + [64,32] + relu + adam + no internal norm + wd=0.001 + lr=0.0005 + bs=64`
+대표 config
+- `01 Sequential`: `maxabs + svd(32) + [64,32] + relu + adam + batchnorm + wd=0.001 + lr=0.0005 + bs=32`
+- `02 Simple DoE`: `standard + no projection + [64,32] + relu + adam + no internal norm + wd=0.0005 + lr=0.0003 + bs=128`
+- `03 Advanced DoE + Tic-Tac-To`: `maxabs + svd(32) + [64,32] + relu + adam + no internal norm + wd=0.001 + lr=0.0005 + bs=64`
 
 ---
 <!-- footer: "탐색 궤적" -->
 
-## 18. 결과: 탐색 궤적
+## 17. 결과: 탐색 궤적
 
-![w:1080](./assets/cifar10_curated10_mlp_best_so_far.svg)
+![w:860](./assets/cifar10_curated10_mlp_best_so_far.svg)
 
 - `01 Sequential`: `run 37`에 최고점 도달 후 긴 plateau 유지
 - `02 Simple DoE`: `run 8`에 빠르게 best를 찾았지만 ceiling 상승은 약함
@@ -247,7 +241,7 @@ MLP에서 바꿀 수 있는 요소
 ---
 <!-- footer: "히스토리 해석" -->
 
-## 19. 히스토리에서 읽히는 결론
+## 18. 히스토리에서 읽히는 결론
 
 - `Sequential`은 좁은 surface에서 가장 강했다.
 - `Simple DoE`는 early screening은 빨랐지만 ceiling을 많이 못 올렸다.
@@ -258,7 +252,7 @@ MLP에서 바꿀 수 있는 요소
 ---
 <!-- footer: "지식 추출 1" -->
 
-## 20. 히스토리와 피드백에서 추출한 튜닝 지식
+## 19. 히스토리와 피드백에서 추출한 튜닝 지식
 
 `01 Sequential`
 - 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam`
@@ -273,7 +267,7 @@ MLP에서 바꿀 수 있는 요소
 ---
 <!-- footer: "지식 추출 2" -->
 
-## 21. 히스토리와 피드백에서 추출한 튜닝 지식
+## 20. 히스토리와 피드백에서 추출한 튜닝 지식
 
 `03 Advanced DoE + Tic-Tac-To`
 - 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam + batch_size=64`
@@ -288,7 +282,7 @@ MLP에서 바꿀 수 있는 요소
 ---
 <!-- footer: "한계" -->
 
-## 22. 한계
+## 21. 한계
 
 - 문헌 조사나 가설 생성 자체를 대체하진 못함
 - 완전히 open-ended한 구조 탐색은 factorization이 어려움
@@ -300,7 +294,7 @@ MLP에서 바꿀 수 있는 요소
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 23. References
+## 22. References
 
 | 구분 | 예시 |
 | --- | --- |
