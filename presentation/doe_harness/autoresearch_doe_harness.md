@@ -198,26 +198,23 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | --- | --- |
 | `01 Sequential` | 최신 기록에 맞춰 작은 변경을 순차 적용 |
 | `02 Simple DoE` | factor와 level을 두고 screening 중심 비교 |
-| `03 Advanced DoE Tic-Tac-To` | staged DoE + `Tic:Tac:To = 1:2:4` 운영 규칙 |
+| `03 Advanced DoE Tic-Tac-To` | staged DoE + 실험 타입 예산 분배 |
 
 - 비교 포인트: 성능만이 아니라 탐색의 질과 실험 구조
+- `Tic`: 둘 이상 모듈 동시 변경
+- `Tac`: 한 모듈 교체
+- `To`: 같은 구조 안 수치 조정
+- 운영 규칙: `Tic:Tac:To = 1:2:4`
 
 ---
 <!-- footer: "실험 설정" -->
 
 ## 16. 실험 설정
 
-공통
-- backend: `sklearn`
-- metric: `accuracy`
-- seed: `42`
-- validation / test split: `0.15 / 0.15`
-- submission당 후보 수: 최대 `2`
-
-| Benchmark | 데이터 / 제약 | 허용 model family | 현재 시작점 |
+| Benchmark | 데이터 / 제약 | 실제 사용 model | 현재 시작점 |
 | --- | --- | --- | --- |
-| `cifar10_real` | `max_samples=4000` | `tree`, `svm`, `mlp` | 세 agent 모두 `mlp_anchor` control에서 시작 |
-| `twenty_newsgroups_real` | `max_samples=8000`, `max_features=2000`, `ngram_max=2`, `min_df=2` | `svm`, `mlp` | benchmark 전환 시 같은 loop 적용 |
+| `cifar10_real` | `max_samples=4000` | `mlp` | 세 agent 모두 `mlp_anchor` control에서 시작 |
+| `twenty_newsgroups_real` | `max_samples=8000`, `max_features=2000`, `ngram_max=2`, `min_df=2` | `mlp` | 같은 loop로 benchmark만 전환 |
 
 - 실행 방식: agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
 - 이번 결과: 각 agent가 같은 start control에서 출발해 validation-only `200` runs를 누적
@@ -269,9 +266,36 @@ Best configs
 - 반대로 `Advanced DoE + Tic-Tac-To`가 `Simple DoE`를 확실히 앞선 것은 중요하다. screening-only 프레임은 early orientation에는 좋지만, long-horizon search에는 staged refinement와 budget allocation이 필요하다는 뜻이다.
 
 ---
+<!-- footer: "지식 추출" -->
+
+## 20. 히스토리와 피드백에서 추출한 튜닝 지식
+
+`01 Sequential`
+- 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam`
+- 추가 prior: `batchnorm`, `batch_size=32`, `learning_rate_init=0.0005`, `weight_decay=0.001` 쪽이 ceiling을 높였다.
+- 실패 prior: `sgd` 전환은 반복적으로 약했다.
+- 프로세스 지식: projection → internal normalization → learning rate → batch size 순으로 한 축씩 줄여 가는 local refinement가 효과적이었다.
+
+`02 Simple DoE`
+- 강한 basin: `standard + no projection + [64,32] + relu + adam + batch_size=128`
+- 추가 prior: screening 초기엔 `normalization`, `learning_rate_init`, `batch_size`를 먼저 보는 편이 효율적이었다.
+- 한계 지식: 빠른 orientation에는 좋았지만, 이후에도 screening 프레임이 길어지면 ceiling이 잘 안 오른다.
+- 프로세스 지식: simple DOE는 `early factor ranking`에는 좋지만 `late-stage refinement policy`를 별도로 가져가야 한다.
+
+`03 Advanced DoE + Tic-Tac-To`
+- 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam + batch_size=64`
+- 추가 prior: `learning_rate_init=0.0005`, `weight_decay=0.001` 근처가 반복적으로 살아남았다.
+- 실패 prior: `32x32`, `tanh`, `std+pca32` branch는 interaction check 단계에서 자주 약했다.
+- 프로세스 지식: `screening → interaction_checks → local_refinement` 단계 구분과 `Tic:Tac:To ≈ 1:2:4` 예산 분배가 long-horizon search를 더 건강하게 만들었다.
+
+메타 지식
+- `history.md`와 `feedback.md`는 단순 로그가 아니라, 다음 benchmark에서 재사용 가능한 `configuration prior`와 `search policy prior`를 추출하는 지식 원천이 될 수 있다.
+- 특히 DOE 계열은 `hypothesis / factors / levels / conclusion`이 notes에 구조화되어 있어, agent별 지식 추출이 더 쉽다.
+
+---
 <!-- footer: "한계" -->
 
-## 20. 한계
+## 21. 한계
 
 - 문헌 조사나 가설 생성 자체를 대체하진 못함
 - 완전히 open-ended한 구조 탐색은 factorization이 어려움
@@ -283,7 +307,7 @@ Best configs
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 20. References
+## 22. References
 
 | 구분 | 예시 |
 | --- | --- |
