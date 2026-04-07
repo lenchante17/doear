@@ -53,9 +53,9 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 - 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 등으로 빠르게 확장
 
 ---
-<!-- footer: "실제로 한 일" -->
+<!-- footer: "작업 흐름" -->
 
-## 4. 실제로 agent는 이런 일을 했다
+## 4. Agent 작업 흐름
 
 - 코드 읽기, baseline 파악
 - 작은 가설 하나 선택
@@ -67,32 +67,38 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 `Question → Read → Edit → Run → Analyze → Next experiment`
 
 ---
-<!-- footer: "질문의 이동" -->
+<!-- footer: "핵심 차이" -->
 
-## 5. 그래서 질문이 바뀐다
+## 5. AutoML vs. Autoresearch
 
-| AutoML에서의 질문 | Autoresearch에서의 질문 |
-| --- | --- |
-| 어떤 설정이 가장 좋은가? | 다음에 어떤 실험을 해야 하는가? |
-| 정해진 공간 안에서 어떻게 최적화할까? | search space 자체를 바꿔도 되는가? |
-| 최고 점수는 무엇인가? | 어떤 결과를 믿고 승격할 것인가? |
+| 항목 | AutoML | Autoresearch |
+| --- | --- | --- |
+| 탐색 대상 | config, pipeline, architecture | hypothesis, code, module, experiment |
+| 핵심 질문 | 어떤 설정이 가장 좋은가 | 다음에 어떤 실험을 해야 하는가 |
+| edit 단위 | parameter / architecture | code / module / pipeline / experiment |
+| 평가 방식 | objective 중심 | objective + reasoning + iteration |
+| 위험 | 비효율적 탐색 | incoherent search, metric hacking |
+| 필요한 인프라 | experiment infra | experiment + memory + harness |
 
 ---
 <!-- footer: "사용례와 확장" -->
 
-## 6. 사용례와 확장은 함께 커지고 있다
+## 6. 사용례와 확장
 
-| 현재 보이는 사용례 | 지금 커지는 확장 |
-| --- | --- |
-| 문헌 조사 / deep research: [GPT Researcher](https://github.com/assafelovic/gpt-researcher) | end-to-end 연구 자동화: [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) |
-| 코드 수정 + 실험 반복: [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent) | benchmark / evaluation: [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench) |
-| 보고서 / 초안 생성 | plugin / skill 생태계: [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools) |
-| domain-specific workflow | memory, reusable modules, hardware fork |
+사용례
+- 문헌 조사 / deep research: [GPT Researcher](https://github.com/assafelovic/gpt-researcher)
+- 코드 수정 + 실험 반복: [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent)
+- end-to-end 연구 자동화: [AI-Scientist](https://github.com/SakanaAI/AI-Scientist)
+
+확장
+- benchmark / evaluation: [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench)
+- plugin / skill 생태계: [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools)
+- memory, reusable modules, hardware fork
 
 ---
-<!-- footer: "왜 MLOps가 중요한가" -->
+<!-- footer: "실험 관리 필요" -->
 
-## 7. 왜 MLOps가 공통 기반이 되는가?
+## 7. 체계적인 실험 관리의 필요
 
 - 공통 문제: `많은 run` 비교와 누적
 - 필수 요소: `tracking`, `lineage`, `orchestration`
