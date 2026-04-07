@@ -196,9 +196,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 | Agent | 설명 |
 | --- | --- |
-| Vanilla Agent | 기본 autoresearch loop |
-| DoE Agent | DoE 기반 실험 설계와 단계화 |
-| DoE + X Agent | DoE + 추가 전략 모듈 |
+| `01 Sequential` | 최신 기록에 맞춰 작은 변경을 순차 적용 |
+| `02 Simple DoE` | factor와 level을 두고 screening 중심 비교 |
+| `03 Advanced DoE Tic-Tac-To` | staged DoE + `Tic:Tac:To = 1:2:4` 운영 규칙 |
 
 - 비교 포인트: 성능만이 아니라 탐색의 질과 실험 구조
 
@@ -207,52 +207,66 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 16. 실험 설정
 
-| 항목 | 설정 |
-| --- | --- |
-| Task | TBD |
-| Budget | TBD |
-| Metric | TBD |
-| Common base model | TBD |
-| Common runtime rule | TBD |
-| Agent-specific difference | TBD |
+공통
+- backend: `sklearn`
+- metric: `accuracy`
+- seed: `42`
+- validation / test split: `0.15 / 0.15`
+- submission당 후보 수: 최대 `2`
 
-- 라운드 예시: screening → interaction / module refinement → local tuning → robustness
+| Benchmark | 데이터 / 제약 | 허용 model family | 현재 시작점 |
+| --- | --- | --- | --- |
+| `cifar10_real` | `max_samples=4000` | `tree`, `svm`, `mlp` | 세 agent 모두 `mlp_anchor` control에서 시작 |
+| `twenty_newsgroups_real` | `max_samples=8000`, `max_features=2000`, `ngram_max=2`, `min_df=2` | `svm`, `mlp` | benchmark 전환 시 같은 loop 적용 |
+
+- 실행 방식: agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
+- 이번 결과: 각 agent가 같은 start control에서 출발해 validation-only `200` runs를 누적
 
 ---
 <!-- footer: "결과 테이블" -->
 
 ## 17. 결과: 성능, 효율, 안정성
 
-`실험 후 채움`
+실험 조건
+- benchmark: `cifar10_real`
+- model family: `mlp`
+- search surface: curated `10` knobs only
+- 공개 지표: validation only, hidden test는 열지 않음
 
-| Agent | Best Score | Avg Gain | Runs Used | Cost | Robustness Pass |
+| Agent | Best Val | Run of Best | Gain vs Run 1 | Mean Best-so-Far | Incumbent Updates |
 | --- | --- | --- | --- | --- | --- |
-| Vanilla | TBD | TBD | TBD | TBD | TBD |
-| DoE | TBD | TBD | TBD | TBD | TBD |
-| DoE + X | TBD | TBD | TBD | TBD | TBD |
+| `01 Sequential` | `0.4333` | `37` | `+0.0750` | `0.4282` | `10` |
+| `02 Simple DoE` | `0.3850` | `8` | `+0.0133` | `0.3846` | `3` |
+| `03 Advanced DoE + Tic-Tac-To` | `0.4033` | `51` | `+0.0450` | `0.4012` | `5` |
+
+Best configs
+- `01 Sequential`: `maxabs + svd(32) + [64,32] + relu + adam + batchnorm + wd=0.001 + lr=0.0005 + bs=32`
+- `02 Simple DoE`: `standard + no projection + [64,32] + relu + adam + no internal norm + wd=0.0005 + lr=0.0003 + bs=128`
+- `03 Advanced DoE + Tic-Tac-To`: `maxabs + svd(32) + [64,32] + relu + adam + no internal norm + wd=0.001 + lr=0.0005 + bs=64`
 
 ---
 <!-- footer: "탐색 궤적" -->
 
 ## 18. 결과: 탐색 궤적
 
-- `실험 후 채움`
-- `x-axis`: run budget
-- `y-axis`: best-so-far metric
-- 비교 포인트: 수렴 속도, run 효율, plateau 형태
-- 추가 후보: 실패 유형 분포 / `Tic-Tac-Toe` 비율 / robustness pass rate
+![w:1080](./assets/cifar10_curated10_mlp_best_so_far.svg)
+
+- `x-axis`: run budget, `y-axis`: best-so-far validation accuracy
+- `01 Sequential`는 `run 37`에 최고점 도달 후 긴 plateau를 유지
+- `02 Simple DoE`는 `run 8`에 빠르게 best를 찾았지만 이후 ceiling이 거의 오르지 않음
+- `03 Advanced DoE + Tic-Tac-To`는 `run 51`까지 improvement를 이어가며 `Simple DoE`보다 높은 ceiling 확보
+- 관측된 `Tic:Tac:To = 29:57:114 ≈ 1:1.97:3.93`, 즉 목표 `1:2:4`에 거의 수렴
 
 ---
-<!-- footer: "해석" -->
+<!-- footer: "히스토리 해석" -->
 
-## 19. 왜 DoE가 도움됐나
+## 19. 히스토리에서 읽히는 결론
 
-- 실험 우선순위 구조화
-- 무의미한 탐색 폭 축소
-- interaction을 더 의식적으로 다룸
-- tuning과 validation 분리
-- robustness를 과정 안에 포함
-- 결과가 다음 라운드 지식으로 축적
+- `Sequential`은 좁은 search space에서 가장 강했다. projection, normalization layer, learning rate, batch size를 한 축씩 밀어 보며 강한 incumbent를 빠르게 만들었고, 이후 그 basin을 오래 지켰다.
+- `Simple DoE`는 screening efficiency는 높았지만, factor re-screening이 길어지면서 search diversification이 약해졌다. 좋은 baseline은 빨리 찾았지만 그 이후 ceiling을 거의 못 올렸다.
+- `Advanced DoE + Tic-Tac-To`는 `Simple DoE`보다 훨씬 건강한 중후반 탐색을 보였다. `Tac`과 `To`를 많이 쓰면서도 `Tic`을 완전히 버리지 않아, plateau 이후에도 구조적 escape 시도를 유지했다.
+- 다만 현재 curated surface에서는 `Sequential`이 여전히 최고였다. 즉 factor space가 충분히 작고 convention이 안정적이면, 복잡한 design보다 strong local refinement가 더 효율적일 수 있다.
+- 반대로 `Advanced DoE + Tic-Tac-To`가 `Simple DoE`를 확실히 앞선 것은 중요하다. screening-only 프레임은 early orientation에는 좋지만, long-horizon search에는 staged refinement와 budget allocation이 필요하다는 뜻이다.
 
 ---
 <!-- footer: "한계" -->
@@ -266,21 +280,10 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 평가 함수가 빈약하면 DoE도 잘못된 목표를 최적화할 수 있음
 
 ---
-<!-- footer: "결론" -->
-
-## 21. 결론
-
-- autoresearch는 유망하지만 실험 규율이 약함
-- DoE는 autoresearch의 experimentation harness 후보
-- 앞으로의 과제는 더 좋은 agent뿐 아니라 더 좋은 harness
-
-> 더 큰 agent보다 더 강한 experimental harness
-
----
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 23. References
+## 20. References
 
 | 구분 | 예시 |
 | --- | --- |
