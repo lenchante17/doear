@@ -133,7 +133,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "부족한 점" -->
 
-## 10. Autoresearch는 어디서 흔들리나
+## 10. Autoresearch의 단점
 
 - 실험이 즉흥적으로 이어지기 쉬움
 - 왜 이 실험을 했는지 attribution이 약함
@@ -156,7 +156,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "DoE 개념" -->
 
-## 12. DoE란 무엇인가
+## 12. Design of Experiments(DoE)란 무엇인가
 
 - 여러 요인을 한 번에 바꿔 보며 effect를 읽는 실험 설계
 - 한 번의 최고점보다 `요인`, `상호작용`, `안정성` 파악에 강점
@@ -178,21 +178,14 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - `mixture / allocation`: 예산과 비율 배분
 
 ---
-<!-- footer: "DoE-guided loop" -->
-
-## 14. Vanilla Agent와 DoE-Guided Agent
-
-| Vanilla autoresearch | DoE-guided autoresearch |
-| --- | --- |
-| edit → run → score 반복 | factor 정의 → screening → interaction → refinement → robustness |
-| 실험 성격 혼재 | 실험 타입 분리 |
-| best score 중심 | effect / interaction / stability 축적 |
-| 장기 구조 약함 | 라운드 기반 운영 |
-
----
 <!-- footer: "비교 agents" -->
 
-## 15. 비교한 Agents
+## 14. DoE-guided 운영과 비교한 Agents
+
+| 운영 방식 | 특징 |
+| --- | --- |
+| Vanilla autoresearch | `edit → run → score` 반복, 실험 성격 혼재 |
+| DoE-guided autoresearch | factor 정의, 단계 분리, effect / interaction 축적 |
 
 | Agent | 설명 |
 | --- | --- |
@@ -200,7 +193,6 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | `02 Simple DoE` | factor와 level을 두고 screening 중심 비교 |
 | `03 Advanced DoE Tic-Tac-To` | staged DoE + 실험 타입 예산 분배 |
 
-- 비교 포인트: 성능만이 아니라 탐색의 질과 실험 구조
 - `Tic`: 둘 이상 모듈 동시 변경
 - `Tac`: 한 모듈 교체
 - `To`: 같은 구조 안 수치 조정
@@ -209,7 +201,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "실험 설정" -->
 
-## 16. 실험 설정
+## 15. 실험 설정
 
 | Benchmark | 데이터 / 제약 | 실제 사용 model | 현재 시작점 |
 | --- | --- | --- | --- |
@@ -222,7 +214,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "결과 테이블" -->
 
-## 17. 결과: 성능, 효율, 안정성
+## 16. 결과: 성능, 효율, 안정성
 
 조건: `cifar10_real` / `mlp` / curated `10` knobs / validation only
 
@@ -235,7 +227,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "best config" -->
 
-## 18. 결과: 대표 Config
+## 17. 결과: 대표 Config
 
 - `01 Sequential`
   `maxabs + svd(32) + [64,32] + relu + adam + batchnorm + wd=0.001 + lr=0.0005 + bs=32`
@@ -247,7 +239,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "탐색 궤적" -->
 
-## 19. 결과: 탐색 궤적
+## 18. 결과: 탐색 궤적
 
 ![w:1080](./assets/cifar10_curated10_mlp_best_so_far.svg)
 
@@ -259,7 +251,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "히스토리 해석" -->
 
-## 20. 히스토리에서 읽히는 결론
+## 19. 히스토리에서 읽히는 결론
 
 - `Sequential`은 좁은 surface에서 가장 강했다.
 - `Simple DoE`는 early screening은 빨랐지만 ceiling을 많이 못 올렸다.
@@ -270,7 +262,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "지식 추출 1" -->
 
-## 21. 히스토리와 피드백에서 추출한 튜닝 지식
+## 20. 히스토리와 피드백에서 추출한 튜닝 지식
 
 `01 Sequential`
 - 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam`
@@ -285,7 +277,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "지식 추출 2" -->
 
-## 22. 히스토리와 피드백에서 추출한 튜닝 지식
+## 21. 히스토리와 피드백에서 추출한 튜닝 지식
 
 `03 Advanced DoE + Tic-Tac-To`
 - 강한 basin: `maxabs + svd(32) + [64,32] + relu + adam + batch_size=64`
@@ -300,7 +292,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "한계" -->
 
-## 23. 한계
+## 22. 한계
 
 - 문헌 조사나 가설 생성 자체를 대체하진 못함
 - 완전히 open-ended한 구조 탐색은 factorization이 어려움
@@ -312,7 +304,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 24. References
+## 23. References
 
 | 구분 | 예시 |
 | --- | --- |
