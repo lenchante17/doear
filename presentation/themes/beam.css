@@ -1,125 +1,184 @@
-@charset "UTF-8";
-
 /* @theme beam */
+/* Source: rnd195/my-marp-themes (live/beam.css), accessed 2026-04-07 */
+/* Author: rnd195 github.com/rnd195 */
+/* beam license: GNU GPLv3 */
+/* beamer-derived parts: GNU GPLv2 option */
+
+@import "default";
+
+:root {
+  font-family:
+    "CMU Sans Serif",
+    "Apple SD Gothic Neo",
+    "Pretendard",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Segoe UI",
+    Helvetica,
+    sans-serif;
+  --main: #1f38c5;
+  --secondary: #141414;
+  --font-size: 0.6em;
+}
 
 section {
-  font-family: "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;
-  background:
-    linear-gradient(180deg, #0f2942 0 68px, #f7f4ea 68px 100%);
-  color: #122033;
-  padding: 92px 84px 70px 84px;
-  font-size: 28px;
-  line-height: 1.38;
+  background-color: #ffffff;
+  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjUwbW0iIGhlaWdodD0iNS4zNTQ2bW0iIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDI1MCA1LjM1NDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMC4zNDcgLTkxLjAyOCkiPgo8cmVjdCB4PSIyMC4zNDciIHk9IjkxLjAyOCIgd2lkdGg9IjEyNSIgaGVpZ2h0PSI1LjM1NDYiIGZpbGw9IiMxNDE0MTQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLXdpZHRoPSIwIi8+CjxwYXRoIGQ9Im0xNDUuMzUgOTMuNzA1di0yLjY3NzNoMTI1djUuMzU0NmgtMTI1eiIgZmlsbD0iIzFmMzhjNSIgc3Ryb2tlLXdpZHRoPSIwIi8+CjwvZz4KPC9zdmc+);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 150% 1em;
+  color: #1a1a1a;
+  font-size: 31px;
+  line-height: 1.26;
+  padding: 2.2em 2.05em 2.45em 2.05em;
+}
+
+header {
+  font-size: 0.42em;
+  text-align: right;
+  position: absolute;
+  top: 95.9%;
+  width: 100%;
+  right: 0;
+  left: -51%;
+  color: white;
+}
+
+footer {
+  font-size: 0.42em;
+  position: absolute;
+  text-align: left;
+  top: 95.9%;
+  width: 62%;
+  left: 1.7em;
+  color: white;
+  opacity: 0.95;
 }
 
 section::after {
-  color: #5b6470;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 0.42em;
+  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total);
+  position: absolute;
+  text-align: right;
+  top: 95.9%;
+  right: 1.7em;
+  left: auto;
+  width: auto;
+  color: white;
 }
 
 h1,
 h2,
-h3 {
-  color: #10233a;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.45em 0;
+h3,
+h4,
+h5,
+h6 {
+  color: #141414;
 }
 
-h1 {
-  font-size: 1.65em;
-  line-height: 1.05;
-}
-
-h2 {
-  font-size: 1.16em;
-  color: #174166;
-}
-
-h3 {
-  font-size: 0.82em;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #7d4e00;
-}
-
-p,
-ul,
-ol {
-  margin-top: 0.2em;
-  margin-bottom: 0.55em;
-}
-
-ul,
-ol {
-  padding-left: 1.1em;
-}
-
-li {
-  margin: 0.18em 0;
-}
-
-strong {
-  color: #7a3b00;
-  font-weight: 800;
-}
-
-blockquote {
-  margin: 0.9em 0;
-  padding: 0.55em 0.8em;
-  border-left: 7px solid #d5922e;
-  background: rgba(255, 255, 255, 0.58);
-  color: #17314c;
-  font-weight: 700;
+h1:nth-of-type(1) {
+  font-family:
+    "CMU Bright",
+    "Apple SD Gothic Neo",
+    "Pretendard",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Segoe UI Semibold",
+    sans-serif;
+  color: #ffffff;
+  background-color: var(--main);
+  border-top: 0.3em solid var(--main);
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 1.5em;
+  text-indent: 0.5em;
 }
 
 code {
-  font-family: "SFMono-Regular", "Menlo", "Consolas", monospace;
-  font-size: 0.9em;
-  background: rgba(18, 32, 51, 0.08);
-  padding: 0.08em 0.3em;
-  border-radius: 0.2em;
+  background-color: rgba(100, 100, 100, 0.12);
+}
+
+mark {
+  background-color: #f5db7e;
+}
+
+.katex {
+  font:
+    normal 1.05em KaTeX_Main,
+    "Times New Roman",
+    serif;
+}
+
+section.title > h1 {
+  font-family:
+    "CMU Bright",
+    "Apple SD Gothic Neo",
+    "Pretendard",
+    "Noto Sans KR",
+    "Malgun Gothic",
+    "Segoe UI Semibold",
+    sans-serif;
+  color: #ffffff;
+  background-color: var(--main);
+  border-radius: 25px;
+  text-align: center;
+  top: 24%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 82%;
+  padding: 0.15em 0.6em 0.25em;
+  height: auto;
+  text-indent: 0;
+}
+
+section.title > p {
+  position: relative;
+  text-align: center;
+  top: 54px;
+}
+
+section.tinytext > p,
+section.tinytext > ul,
+section.tinytext > ol,
+section.tinytext > blockquote,
+section.tinytext > table {
+  font-size: 0.68em;
+}
+
+img[alt~="center"] {
+  display: block;
+  margin: 0 auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.78em;
-  margin-top: 0.4em;
+  margin-top: 0.35em;
+  font-size: 0.8em;
+}
+
+th,
+td {
+  border: 1px solid #d8d8d8;
+  padding: 0.32em 0.45em;
+  vertical-align: top;
 }
 
 th {
-  background: #173b5d;
-  color: #fffaf0;
-  padding: 0.42em 0.5em;
-  text-align: left;
+  background: rgba(31, 56, 197, 0.08);
 }
 
-td {
-  background: rgba(255, 255, 255, 0.72);
-  border-bottom: 1px solid rgba(23, 59, 93, 0.12);
-  padding: 0.4em 0.5em;
+blockquote {
+  border-left: 0.22em solid var(--main);
+  padding-left: 0.6em;
+  color: #303030;
 }
 
-a {
-  color: #174166;
+strong {
+  color: #0f2ba5;
 }
-
-section.lead {
-  background:
-    radial-gradient(circle at top right, rgba(213, 146, 46, 0.22), transparent 26%),
-    linear-gradient(180deg, #0f2942 0 82px, #f3efe3 82px 100%);
-}
-
-section.lead h1 {
-  font-size: 1.8em;
-  max-width: 11.5em;
-}
-
-section.lead h2 {
-  color: #9b6405;
-  font-size: 1.02em;
-  max-width: 14em;
-}
-

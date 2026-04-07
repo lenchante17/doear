@@ -1,0 +1,12 @@
+{
+  "name": "toy_research",
+  "private": true,
+  "scripts": {
+    "marp:pdf": "node scripts/render_marp_pdf.mjs",
+    "slides:doe-harness:pdf": "npm run marp:pdf -- --theme-set presentation/themes/beam.css --allow-local-files --pdf presentation/doe_harness/autoresearch_doe_harness.md -o presentation/doe_harness/autoresearch_doe_harness.pdf"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.3.1",
+    "playwright": "^1.59.1"
+  }
+}
