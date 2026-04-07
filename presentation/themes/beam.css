@@ -28,7 +28,7 @@ section {
   background-position: center bottom;
   background-size: 150% 1em;
   color: #1a1a1a;
-  font-size: 31px;
+  font-size: 29px;
   line-height: 1.26;
   padding: 2.2em 2.05em 2.45em 2.05em;
 }
@@ -162,7 +162,7 @@ table {
   max-width: 100%;
   border-collapse: collapse;
   margin: 0.35em auto 0 !important;
-  font-size: 0.8em;
+  font-size: 0.76em;
 }
 
 th,
