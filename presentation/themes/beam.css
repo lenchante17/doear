@@ -23,48 +23,23 @@
 
 section {
   background-color: #ffffff;
-  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjUwbW0iIGhlaWdodD0iNS4zNTQ2bW0iIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDI1MCA1LjM1NDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMC4zNDcgLTkxLjAyOCkiPgo8cmVjdCB4PSIyMC4zNDciIHk9IjkxLjAyOCIgd2lkdGg9IjEyNSIgaGVpZ2h0PSI1LjM1NDYiIGZpbGw9IiMxNDE0MTQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLXdpZHRoPSIwIi8+CjxwYXRoIGQ9Im0xNDUuMzUgOTMuNzA1di0yLjY3NzNoMTI1djUuMzU0NmgtMTI1eiIgZmlsbD0iIzFmMzhjNSIgc3Ryb2tlLXdpZHRoPSIwIi8+CjwvZz4KPC9zdmc+);
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: 150% 1em;
   color: #1a1a1a;
   font-size: 26px;
   line-height: 1.26;
-  padding: 2.2em 2.05em 2.45em 2.05em;
+  padding: 2.2em 2.05em 1.8em 2.05em;
 }
 
 header {
-  font-size: 0.42em;
-  text-align: right;
-  position: absolute;
-  top: 95.9%;
-  width: 100%;
-  right: 0;
-  left: -51%;
-  color: white;
+  display: none;
 }
 
 footer {
-  font-size: 0.42em;
-  position: absolute;
-  text-align: left;
-  top: 95.9%;
-  width: 62%;
-  left: 1.7em;
-  color: white;
-  opacity: 0.95;
+  display: none;
 }
 
 section::after {
-  font-size: 0.42em;
-  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total);
-  position: absolute;
-  text-align: right;
-  top: 95.9%;
-  right: 1.7em;
-  left: auto;
-  width: auto;
-  color: white;
+  display: none;
+  content: "";
 }
 
 h1,
