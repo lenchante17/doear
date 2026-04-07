@@ -131,160 +131,150 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 [출처 이미지](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg)
 
 ---
-<!-- _class: title -->
-<!-- footer: "본론 시작" -->
+<!-- footer: "부족한 점" -->
 
-# 10. Prelim 정리
+## 10. Autoresearch는 어디서 흔들리나
 
-배경은 여기까지.
-
-이제 질문은
-`Research Agent에 어떤 harness가 필요한가?`
+- 실험이 즉흥적으로 이어지기 쉬움
+- 왜 이 실험을 했는지 attribution이 약함
+- 큰 수정, 작은 튜닝, 검증 실험이 섞이기 쉬움
+- robustness, replication, interaction 확인이 뒤로 밀림
+- 잘 정리된 random search로 퇴화할 위험
 
 ---
-<!-- footer: "harness 공백" -->
+<!-- footer: "필요한 harness" -->
 
-## 11. Harness gap
+## 11. 어떤 Harness가 필요한가
 
-| Coding Agent 쪽에서 이미 흔한 것 | Research Agent 쪽에서 아직 약한 것 |
+- 무엇을 먼저 볼지 정하는 우선순위
+- 어떤 조합을 함께 볼지 정하는 규율
+- 탐색 단계와 검증 단계 분리
+- 작은 수정과 큰 수정을 다르게 다루는 운영 규칙
+- 실패도 정보로 남기는 구조
+- 다음 라운드를 설계하는 순차 실험 체계
+
+---
+<!-- footer: "DoE 후보성" -->
+
+## 12. DoE가 그 Harness가 될 수 있을까
+
+| autoresearch need | DoE concept |
 | --- | --- |
-| `TDD` | hypothesis discipline |
-| `CI` | factor definition |
-| regression test | robustness / replication |
-| deploy guardrail | experiment promotion rule |
-
-- 높은 점수만으로는 좋은 연구 탐색인지 판단 어려움
+| 무엇부터 실험할까 | screening |
+| 어떤 조합을 함께 볼까 | factorial design |
+| 언제 정밀 탐색할까 | sequential design |
+| 안정적인가 | robust design |
+| 비율은 어떻게 나눌까 | mixture / allocation |
 
 ---
-<!-- footer: "DOE를 harness로 보기" -->
+<!-- footer: "빌려오는 DoE 개념" -->
 
-## 12. DOE를 Harness 후보로 보기
+## 13. DoE에서 빌려오는 개념
 
-| DOE primitive | Agent loop에서의 역할 |
+- `screening`: 중요한 요인부터 좁히기
+- `factorial thinking`: interaction 보기
+- `sequential design`: 라운드별 정교화
+- `robust design`: 평균이 아니라 안정성까지 확인
+- `mixture / allocation`: 예산과 비율 배분
+
+---
+<!-- footer: "DoE-guided loop" -->
+
+## 14. Vanilla Agent와 DoE-Guided Agent
+
+| Vanilla autoresearch | DoE-guided autoresearch |
 | --- | --- |
-| screening | 중요한 factor를 초기에 좁힘 |
-| factorial thinking | interaction을 구조적으로 확인 |
-| sequential refinement | 유망 구간을 단계적으로 세밀화 |
-| robustness / confirmation | 우연한 win과 재현 가능한 win을 분리 |
-
-- DOE는 실험 순서와 비교 규칙 제공
+| edit → run → score 반복 | factor 정의 → screening → interaction → refinement → robustness |
+| 실험 성격 혼재 | 실험 타입 분리 |
+| best score 중심 | effect / interaction / stability 축적 |
+| 장기 구조 약함 | 라운드 기반 운영 |
 
 ---
-<!-- footer: "loop 변화" -->
+<!-- footer: "비교 agents" -->
 
-## 13. Agent loop에 무엇이 달라지는가?
+## 15. 비교한 Agents
 
-| 단계 | Vanilla Agent | DOE-guided Agent |
-| --- | --- | --- |
-| 초기 | idea → edit → run | factor 정의 → screening |
-| 중반 | gain 추적 | interaction check |
-| 후반 | best-so-far 갱신 | refinement |
-| 승격 | high score 채택 | robustness 후 promote |
+| Agent | 설명 |
+| --- | --- |
+| Vanilla Agent | 기본 autoresearch loop |
+| DoE Agent | DoE 기반 실험 설계와 단계화 |
+| DoE + X Agent | DoE + 추가 전략 모듈 |
+
+- 비교 포인트: 성능만이 아니라 탐색의 질과 실험 구조
 
 ---
 <!-- footer: "실험 설정" -->
 
-## 14. 실험 설정
+## 16. 실험 설정
 
-| Variant | 설명 | 비교 목적 |
-| --- | --- | --- |
-| Vanilla Agent | unconstrained iterative experiments | 기본 baseline |
-| DOE Agent | DOE 기반 planning과 staging | harness 효과 측정 |
-| DOE + X Agent | DOE + 추가 전략 모듈 | harness와 추가 전략의 결합 효과 |
+| 항목 | 설정 |
+| --- | --- |
+| Task | TBD |
+| Budget | TBD |
+| Metric | TBD |
+| Common base model | TBD |
+| Common runtime rule | TBD |
+| Agent-specific difference | TBD |
 
-- 비교 축: `score`, `cost`, `robustness`, `portfolio behavior`
+- 라운드 예시: screening → interaction / module refinement → local tuning → robustness
 
 ---
-<!-- footer: "결과 placeholder" -->
+<!-- footer: "결과 테이블" -->
 
-## 15. 결과 요약
+## 17. 결과: 성능, 효율, 안정성
 
 `실험 후 채움`
 
-| Variant | Best score | Avg improvement | Runs | Cost | Robustness pass |
+| Agent | Best Score | Avg Gain | Runs Used | Cost | Robustness Pass |
 | --- | --- | --- | --- | --- | --- |
 | Vanilla | TBD | TBD | TBD | TBD | TBD |
-| DOE | TBD | TBD | TBD | TBD | TBD |
-| DOE + X | TBD | TBD | TBD | TBD | TBD |
+| DoE | TBD | TBD | TBD | TBD | TBD |
+| DoE + X | TBD | TBD | TBD | TBD | TBD |
 
 ---
-<!-- footer: "추이 placeholder" -->
+<!-- footer: "탐색 궤적" -->
 
-## 16. 성능 향상 추이
-
-- `실험 후 채움`
-- `experiment budget` 또는 `run count` 대비 `best-so-far metric`
-- 수렴 속도, plateau, sample efficiency 비교
-
-`x-axis = budget / run count`
-
-`y-axis = best-so-far metric`
-
----
-<!-- footer: "포트폴리오 placeholder" -->
-
-## 17. 실험 포트폴리오 또는 실패 구조
+## 18. 결과: 탐색 궤적
 
 - `실험 후 채움`
-- `Tic / Tac / To` 비율
-- 또는 실패 분류
-- 또는 `information gain vs. performance gain`
+- `x-axis`: run budget
+- `y-axis`: best-so-far metric
+- 비교 포인트: 수렴 속도, run 효율, plateau 형태
+- 추가 후보: 실패 유형 분포 / `Tic-Tac-Toe` 비율 / robustness pass rate
 
 ---
 <!-- footer: "해석" -->
 
-## 18. 왜 DOE-guided Agent는 다를 수 있는가?
+## 19. 왜 DoE가 도움됐나
 
-- `search space` 구조화
-- 중복되거나 정보량 낮은 실험 감소
-- 상호작용을 우연이 아니라 의도적으로 확인
-- robustness 단계 분리
-
----
-<!-- footer: "연구 루프" -->
-
-## 19. 대학원 연구 루프는 더 넓다
-
-- 문헌 조사
-- 가설 수립
-- 실험 설계
-- 구현 및 실행
-- 분석과 토론
-- 다음 실험 선택
-
----
-<!-- footer: "DOE의 범위" -->
-
-## 20. DOE가 주로 커버하는 구간
-
-| 구간 | DOE의 역할 |
-| --- | --- |
-| 강함 | 실험 설계, 비교, refinement, 다음 실험 선택 |
-| 부분적 | 구현 및 실행, 결과 분석 |
-| 약함 | 문헌 조사, 가설 생성 |
-
-- DOE는 `research loop` 전체보다 experimentation layer 규율에 강함
+- 실험 우선순위 구조화
+- 무의미한 탐색 폭 축소
+- interaction을 더 의식적으로 다룸
+- tuning과 validation 분리
+- robustness를 과정 안에 포함
+- 결과가 다음 라운드 지식으로 축적
 
 ---
 <!-- footer: "한계" -->
 
-## 21. 한계
+## 20. 한계
 
-- `literature review`, `hypothesis generation` 자체 대체는 어려움
-- open-ended research space는 factorization이 어려움
-- large-scale training은 replication 비용 큼
-- evaluation harness가 약하면 DOE도 쉽게 흔들림
+- 문헌 조사나 가설 생성 자체를 대체하진 못함
+- 완전히 open-ended한 구조 탐색은 factorization이 어려움
+- classical DoE는 코드 중심 search space에 바로 맞지 않을 수 있음
+- large-scale 학습에서는 replication 비용이 큼
+- 평가 함수가 빈약하면 DoE도 잘못된 목표를 최적화할 수 있음
 
 ---
 <!-- footer: "결론" -->
 
-## 22. 결론
+## 21. 결론
 
-- AutoML에서 Autoresearch로 갈수록 `search space` 확장
-- 넓어진 space만큼 더 강한 `harness` 필요
-- DOE는 Research Agent의 experimentation harness 후보
+- autoresearch는 유망하지만 실험 규율이 약함
+- DoE는 autoresearch의 experimentation harness 후보
+- 앞으로의 과제는 더 좋은 agent뿐 아니라 더 좋은 harness
 
-> 다음 단계는 더 좋은 agent 자체보다 더 좋은 harness
+> 더 큰 agent보다 더 강한 experimental harness
 
 ---
 <!-- _class: tinytext -->
