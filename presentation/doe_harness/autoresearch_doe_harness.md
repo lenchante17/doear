@@ -12,9 +12,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 # AutoML, Autoresearch, MLOps +@
 
-DOE는 Research Agent의 Harness가 될 수 있는가?
-
-배경 정리 + harness 제안
+26.4.7 // 서민교
 
 ---
 <!-- footer: "AutoML 시작" -->
@@ -154,17 +152,17 @@ DOE는 Research Agent의 Harness가 될 수 있는가?
 - 다음 라운드를 설계하는 순차 실험 체계
 
 ---
-<!-- footer: "DoE 후보성" -->
+<!-- footer: "DoE 개념" -->
 
-## 12. DoE가 그 Harness가 될 수 있을까
+## 12. DoE란 무엇인가
 
-| autoresearch need | DoE concept |
-| --- | --- |
-| 무엇부터 실험할까 | screening |
-| 어떤 조합을 함께 볼까 | factorial design |
-| 언제 정밀 탐색할까 | sequential design |
-| 안정적인가 | robust design |
-| 비율은 어떻게 나눌까 | mixture / allocation |
+- 여러 요인을 한 번에 바꿔 보며 effect를 읽는 실험 설계
+- 한 번의 최고점보다 `요인`, `상호작용`, `안정성` 파악에 강점
+- 핵심 질문: 무엇을 바꿨고, 무엇이 실제로 영향을 줬는가
+
+![w:920](./assets/doe_cake.png)
+
+[출처 이미지](https://i0.wp.com/michelbaudin.com/wp-content/uploads/2020/10/AstakhovVisualizationOfDOEOnCake.png?resize=691%2C406&ssl=1)
 
 ---
 <!-- footer: "빌려오는 DoE 개념" -->
