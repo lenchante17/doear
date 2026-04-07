@@ -1,0 +1,4 @@
+agent,runs,best_validation,hidden_test,generalization_gap,run_of_best,gain_vs_run1,mean_best_so_far,incumbent_changes,plateau_tail,best_candidate,best_config
+01 Sequential,50,0.371667,0.341667,0.030000000000000027,1,0.0,0.3716670000000001,1,49,probe_01_normalization_standard,"norm=standard, hidden=[64, 32], activation=relu, solver=adam, norm_layer=none, wd=0.0005, lr=0.001, bs=64"
+02 Simple DoE,50,0.393333,0.391667,0.0016660000000000008,26,0.034999999999999976,0.38923327999999996,5,24,mlp_batchnorm_wd_001_lr_001_bs_32,"norm=standard, hidden=[64, 64, 64], activation=relu, solver=adam, norm_layer=batchnorm, wd=0.001, lr=0.001, bs=32"
+03 Advanced DoE + Tic-Tac-To,50,0.396667,0.385,0.011666999999999983,41,0.03833399999999998,0.37916678,5,9,mlp_anchor,"norm=maxabs, hidden=[32, 64], activation=leaky_relu, solver=adam, norm_layer=layernorm, wd=0.0008, lr=0.0012, bs=128"
