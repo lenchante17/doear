@@ -1,0 +1,47 @@
+{
+  "summary_rows": [
+    {
+      "agent": "01 Ratchet",
+      "runs": 100,
+      "best_validation": 0.371667,
+      "hidden_test": 0.341667,
+      "generalization_gap": 0.030000000000000027,
+      "run_of_best": 2,
+      "gain_vs_run1": 0.013334000000000013,
+      "mean_best_so_far": 0.37153366000000004,
+      "incumbent_changes": 2,
+      "plateau_tail": 98,
+      "best_candidate": "round100_a_larger_network",
+      "best_config": "norm=standard, outlier=none, proj=none, hidden=[64, 32], activation=relu, solver=adam, norm_layer=none, wd=0.0005, lr=0.001, bs=64"
+    },
+    {
+      "agent": "02 Screening DoE",
+      "runs": 100,
+      "best_validation": 0.371667,
+      "hidden_test": 0.341667,
+      "generalization_gap": 0.030000000000000027,
+      "run_of_best": 2,
+      "gain_vs_run1": 0.013334000000000013,
+      "mean_best_so_far": 0.37153366000000004,
+      "incumbent_changes": 2,
+      "plateau_tail": 98,
+      "best_candidate": "round100_a_larger_network",
+      "best_config": "norm=standard, outlier=none, proj=none, hidden=[64, 32], activation=relu, solver=adam, norm_layer=none, wd=0.0005, lr=0.001, bs=64"
+    },
+    {
+      "agent": "03 Advanced DoE",
+      "runs": 100,
+      "best_validation": 0.371667,
+      "hidden_test": 0.341667,
+      "generalization_gap": 0.030000000000000027,
+      "run_of_best": 2,
+      "gain_vs_run1": 0.013334000000000013,
+      "mean_best_so_far": 0.37153366000000004,
+      "incumbent_changes": 2,
+      "plateau_tail": 98,
+      "best_candidate": "round100_a_larger_network",
+      "best_config": "norm=standard, outlier=none, proj=none, hidden=[64, 32], activation=relu, solver=adam, norm_layer=none, wd=0.0005, lr=0.001, bs=64"
+    }
+  ],
+  "tictacto_counts": {}
+}
