@@ -21,6 +21,25 @@ def load_build_batch_assets_module():
 
 
 class BuildBatchAssetsTests(unittest.TestCase):
+    def test_score_bounds_ignore_extreme_low_outlier(self) -> None:
+        module = load_build_batch_assets_module()
+
+        series = [
+            {
+                "agent": "01 Ratchet",
+                "best_validation": 0.55,
+                "hidden_test": None,
+                "best_so_far": [0.52, 0.54, 0.55],
+                "run_validation": [0.20] + [0.51] * 10 + [0.52] * 10 + [0.53] * 10 + [0.54] * 10,
+            }
+        ]
+
+        min_score, max_score = module._compute_score_bounds(series)
+
+        self.assertGreater(min_score, 0.20)
+        self.assertLessEqual(min_score, 0.52)
+        self.assertGreater(max_score, 0.55)
+
     def test_build_svg_overlays_raw_validation_scatter(self) -> None:
         module = load_build_batch_assets_module()
 

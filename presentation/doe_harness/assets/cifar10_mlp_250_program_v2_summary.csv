@@ -1,4 +1,0 @@
-agent,runs,best_validation,hidden_test,generalization_gap,run_of_best,gain_vs_run1,mean_best_so_far,incumbent_changes,plateau_tail,best_candidate,best_config
-01 Ratchet,250,0.435,,,29,0.086667,0.432559968,7,221,round077_a_clip_iqr,"norm=standard, outlier=clip_iqr, proj=none, hidden=[128, 64], activation=elu, solver=adamw, norm_layer=none, wd=0.0001, lr=0.0001, bs=64"
-02 Screening DoE,250,0.428333,,,52,0.040000000000000036,0.42524636000000005,6,198,round052_a_wd_0p0025,"norm=standard, outlier=clip_percentile, proj=none, hidden=[128, 64], activation=gelu, solver=adam, norm_layer=none, wd=0.0025, lr=0.0001, bs=64"
-03 Advanced DoE,250,0.426667,,,94,0.068334,0.417726836,12,156,round094_a_clip_grad,"norm=standard, outlier=clip_iqr, proj=none, hidden=[128, 64], activation=gelu, solver=adam, norm_layer=none, wd=0.0025, lr=0.0001, bs=64"

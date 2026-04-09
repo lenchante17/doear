@@ -53,6 +53,33 @@ def _format_optional(value: float | None) -> str:
     return _format_float(value)
 
 
+def _quantile(values: list[float], q: float) -> float:
+    if not values:
+        raise ValueError("quantile requires at least one value")
+    if len(values) == 1:
+        return values[0]
+    position = max(0.0, min(1.0, q)) * (len(values) - 1)
+    lower_index = int(position)
+    upper_index = min(len(values) - 1, lower_index + 1)
+    lower_value = values[lower_index]
+    upper_value = values[upper_index]
+    weight = position - lower_index
+    return lower_value + (upper_value - lower_value) * weight
+
+
+def _compute_score_bounds(series: list[dict[str, object]]) -> tuple[float, float]:
+    best_scores = [point for row in series for point in row["best_so_far"]]
+    run_scores = sorted(point for row in series for point in row["run_validation"])
+    floor_anchor = min(best_scores)
+    if run_scores:
+        floor_anchor = min(floor_anchor, _quantile(run_scores, 0.02))
+        ceiling_anchor = max(max(best_scores), run_scores[-1])
+    else:
+        ceiling_anchor = max(best_scores)
+    span = max(ceiling_anchor - floor_anchor, 0.01)
+    return floor_anchor - max(span * 0.12, 0.01), ceiling_anchor + max(span * 0.08, 0.01)
+
+
 def _load_rounds(history_path: Path, report_path: Path) -> list[RoundPoint]:
     rows = load_history_rows(history_path)
     report_entries = load_report_entries(report_path)
@@ -108,17 +135,7 @@ def _build_svg(series: list[dict[str, object]], out_path: Path, title: str, roun
     plot_width = width - margin_left - margin_right
     plot_height = height - margin_top - margin_bottom
 
-    scores = [
-        point
-        for row in series
-        for values in (row["best_so_far"], row["run_validation"])
-        for point in values
-    ]
-    min_score = min(scores)
-    max_score = max(scores)
-    padding = max((max_score - min_score) * 0.12, 0.01)
-    min_score -= padding
-    max_score += padding
+    min_score, max_score = _compute_score_bounds(series)
     max_rounds = max(len(row["best_so_far"]) for row in series)
 
     def scale_x(round_index: int) -> float:
@@ -127,7 +144,8 @@ def _build_svg(series: list[dict[str, object]], out_path: Path, title: str, roun
         return margin_left + ((round_index - 1) / (max_rounds - 1)) * plot_width
 
     def scale_y(score: float) -> float:
-        return margin_top + (max_score - score) / (max_score - min_score) * plot_height
+        bounded_score = min(max(score, min_score), max_score)
+        return margin_top + (max_score - bounded_score) / (max_score - min_score) * plot_height
 
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
