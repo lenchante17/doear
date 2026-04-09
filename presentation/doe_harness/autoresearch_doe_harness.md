@@ -190,18 +190,16 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | 항목 | 설정 |
 | --- | --- |
 | benchmarks | `cifar10_real`, `twenty_newsgroups_real` |
-| data budget | CIFAR-10 `max_samples=4000`, 20 Newsgroups `max_samples=8000` |
+| data budget | CIFAR-10 `4k`, 20 Newsgroups `8k` |
 | model | `mlp` |
 | agents | `01 Ratchet`, `02 Screening DoE`, `03 Advanced DoE` |
-| execution | dataset × agent별 isolated root `6`개에서 validation `100` runs 후 hidden finalize |
+| execution | dataset × agent isolated root `6`, validation-only `250` runs |
 
-실행 조건
-- agent별 isolated root를 따로 만들어 context leakage 없이 독립 실행
-- `50-run` block마다 새 subagent를 붙여 context를 reset
-- `program.md` 기준 전략을 사용
-- validation-only `100` runs를 먼저 누적하고 hidden test는 마지막 `finalize-agent`에서만 공개
+실행 메모
+- root별 독립 실행 + subagent 분리, 최신 `program.md`와 refactored runner 기준
+- 이번 비교는 전처리·MLP 구조·최적화 축을 보는 bounded `AutoML` test이며, `AutoAgent`처럼 코드 전체를 다루는 실험은 아니다
 
-열려 있는 주요 축
+탐색 축
 - preprocessing: `normalization`, `outlier`, `projection`, `resampling`
 - architecture: `hidden_dims`, `activation`, `normalization_layer`
 - optimization: `solver`, `learning_rate`, `batch_size`, `max_iter`
@@ -210,76 +208,79 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "결과 테이블" -->
 
-## 16. CIFAR-10 결과: validation 탐색과 hidden test
+## 16. CIFAR-10 결과: validation 탐색
 
-조건: `cifar10_real` / `mlp` / `program.md` batch / validation `100` runs + hidden finalize
+조건: `cifar10_real` / `mlp` / `program.md` batch / validation `250` runs
 
-| Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
+| Agent | Best Val | Run of Best | Gain vs Run1 | Incumbent Updates | Plateau Tail |
 | --- | --- | --- | --- | --- | --- |
-| `01 Ratchet` | `0.3717` | `0.3417` | `0.0300` | `2` | `2` |
-| `02 Screening DoE` | `0.3717` | `0.3417` | `0.0300` | `2` | `2` |
-| `03 Advanced DoE` | `0.3717` | `0.3417` | `0.0300` | `2` | `2` |
+| `01 Ratchet` | `0.4350` | `29` | `+0.0867` | `7` | `221` |
+| `02 Screening DoE` | `0.4283` | `52` | `+0.0400` | `6` | `198` |
+| `03 Advanced DoE` | `0.4267` | `94` | `+0.0683` | `12` | `156` |
 
-대표 config
-- 세 agent 모두 `standard + [64,32] + relu + adam + wd=5e-4 + lr=1e-3 + bs=64`
-- `run 2` 이후 더 좋은 incumbent가 나오지 않았다
+대표 incumbent
+- `01 Ratchet`: `standard + clip_iqr + [128,64] + elu + adamw + wd=1e-4 + lr=1e-4 + bs=64`
+- `02 Screening DoE`: `standard + clip_percentile + [128,64] + gelu + adam + wd=2.5e-3 + lr=1e-4 + bs=64`
+- `03 Advanced DoE`: `standard + clip_iqr + [128,64] + gelu + adam + wd=2.5e-3 + lr=1e-4 + bs=64`
 
 ---
 <!-- footer: "탐색 궤적" -->
 
 ## 17. CIFAR-10 결과: 탐색 궤적
 
-![w:690](./assets/cifar10_mlp_100_program_v1_best_so_far.svg)
+![w:690](./assets/cifar10_mlp_250_program_v2_best_so_far.svg)
 
-- 세 궤적이 사실상 겹친다.
-- 초반 `2` rounds 안에서 같은 basin에 수렴했고, 이후 plateau가 길었다.
-- 이번 batch의 차이는 탐색 전략보다 실행 loop와 default prior의 영향이 더 커 보인다.
+- `Ratchet`이 가장 높은 ceiling을 만들었다.
+- `Screening DoE`는 중반까지 꾸준히 오르지만 최종 최고점은 낮다.
+- `Advanced DoE`는 가장 늦게 best를 갱신했지만, `run 94` 이후 추가 이득은 없었다.
 
 ---
 <!-- footer: "CIFAR 해석" -->
 
 ## 18. CIFAR-10 해석
 
-- 이번 batch만 보면 전략 차이가 거의 드러나지 않았다.
-- 세 agent 모두 같은 config와 같은 score로 수렴했다.
-- 따라서 CIFAR에서는 `program.md` 차이보다 executor behavior나 starting prior가 더 지배적이었다.
+- CIFAR에선 `Ratchet`이 가장 높은 최고점을 냈다.
+- `Advanced DoE`는 최고점은 약간 낮지만 가장 긴 탐색 수명을 보였다.
+- 추가 `150` runs가 새 best를 만들지는 못했다.
 
 ---
 <!-- footer: "Text 결과" -->
 
-## 19. 20 Newsgroups 결과: validation 탐색과 hidden test
+## 19. 20 Newsgroups 결과: validation 탐색
 
-조건: `twenty_newsgroups_real` / `mlp` / `program.md` batch / validation `100` runs + hidden finalize
+조건: `twenty_newsgroups_real` / `mlp` / `program.md` batch / validation `250` runs
 
-| Agent | Best Val | Hidden Test | Gap | Run of Best | Incumbent Updates |
+| Agent | Best Val | Run of Best | Gain vs Run1 | Incumbent Updates | Plateau Tail |
 | --- | --- | --- | --- | --- | --- |
-| `01 Ratchet` | `0.5142` | `0.4925` | `0.0217` | `3` | `3` |
-| `02 Screening DoE` | `0.5017` | `0.4800` | `0.0217` | `4` | `3` |
-| `03 Advanced DoE` | `0.5142` | `0.4925` | `0.0217` | `3` | `3` |
+| `01 Ratchet` | `0.5508` | `43` | `+0.0367` | `10` | `207` |
+| `02 Screening DoE` | `0.5500` | `30` | `+0.0358` | `5` | `220` |
+| `03 Advanced DoE` | `0.5642` | `81` | `+0.0875` | `15` | `169` |
 
-대표 config
-- `01 Ratchet`, `03 Advanced DoE`: `standard + [64,32] + tanh + adam + wd=5e-4 + lr=1e-3 + bs=64`
-- `02 Screening DoE`: `standard + [64,32] + tanh + lbfgs + wd=5e-4 + lr=1e-3 + bs=64`
+대표 incumbent
+- `01 Ratchet`: `maxabs + [64,32] + leaky_relu + adamw + wd=5e-4 + lr=1e-4 + bs=32`
+- `02 Screening DoE`: `standard + [128,64] + tanh + adamw + wd=1e-3 + lr=1e-3 + bs=64`
+- `03 Advanced DoE`: `robust + [128,64] + relu + adamw + wd=0 + lr=1e-4 + bs=64`
 
 ---
 <!-- footer: "Text 궤적" -->
 
 ## 20. 20 Newsgroups 결과: 탐색 궤적
 
-![w:690](./assets/twenty_newsgroups_mlp_100_program_v1_best_so_far.svg)
+![w:690](./assets/twenty_newsgroups_mlp_250_program_v2_best_so_far.svg)
 
-- text도 대부분 초반 `3~4` rounds 안에서 best를 찾았다.
-- `Screening DoE`만 `lbfgs` branch로 갈라졌지만 점수는 더 낮았다.
-- 결과적으로 text에서도 장기 탐색의 흔적은 약했다.
+- text에선 `Advanced DoE`가 후반까지 꾸준히 incumbent를 갱신했다.
+- `Ratchet`도 중반까지는 강했지만 late gain은 작았다.
+- `Screening DoE`는 초반 screen 이후 매우 긴 plateau로 들어갔다.
 
 ---
 <!-- footer: "Text 해석" -->
 
 ## 21. 20 Newsgroups 해석
 
-- text에선 `Ratchet`과 `Advanced DoE`가 같은 basin으로 수렴했다.
-- `Screening DoE`만 solver를 바꿨지만 hidden에서도 이득이 없었다.
-- 이번 batch는 agent 계약 차이보다 shared default trajectory가 더 강했다.
+- text에선 `Advanced DoE`가 가장 높은 최고점과 가장 많은 incumbent update를 만들었다.
+- `Ratchet`은 strong local search로는 충분했지만 late exploration은 약했다.
+- `Screening DoE`는 초반 우선순위화에는 유용했지만 full-budget owner로는 약했다.
+- 여기서도 추가 `150` runs는 기존 best를 뒤집지 못했다.
 
 ---
 <!-- footer: "지식 추출" -->
@@ -287,16 +288,16 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ## 22. 히스토리에서 남는 지식
 
 `01 Ratchet`
-- CIFAR와 text 둘 다 매우 빠르게 baseline 근처 basin으로 수렴했다.
-- 이번 batch에서 남는 지식은 “좋은 basin”보다 “어떤 전략이 거의 차이를 못 만들었는가” 쪽이다.
+- 강한 incumbent가 보이면 빠르게 붙잡는다.
+- local exploit에는 강하지만 late reset 효율은 낮다.
 
 `02 Screening DoE`
-- text에서만 `lbfgs` 분기가 나왔지만 hidden 기준 우세는 만들지 못했다.
-- screening question 자체가 남았다기보다, shared default를 넘지 못했다는 정보가 남는다.
+- factor 우선순위화에는 유용하다.
+- screening 이후 refine로 못 넘어가면 plateau가 길어진다.
 
 `03 Advanced DoE`
-- staged notes를 갖고도 결과는 ratchet과 거의 같았다.
-- strategy richness가 실제 후보 다양성으로 translate되지 않을 수 있다는 사례다.
+- staged search가 실제 candidate diversity로 이어질 수 있었다.
+- 특히 text에서 late-stage refinement 효과가 가장 컸다.
 
 ---
 <!-- footer: "히스토리 진단" -->
@@ -305,34 +306,33 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 | Agent | CIFAR trace | Text trace | 읽을 점 |
 | --- | --- | --- | --- |
-| `Ratchet` | best `run 2`, updates `2` | best `run 3`, updates `3` | 빠른 수렴 후 plateau |
-| `Screening DoE` | best `run 2`, updates `2` | best `run 4`, updates `3` | text에서만 solver branch 분화 |
-| `Advanced DoE` | best `run 2`, updates `2` | best `run 3`, updates `3` | 풍부한 notes 대비 실제 경로는 거의 동일 |
+| `Ratchet` | best `run 29`, updates `7` | best `run 43`, updates `10` | local ratchet은 유지됐지만 late jump는 약함 |
+| `Screening DoE` | best `run 52`, updates `6` | best `run 30`, updates `5` | one-factor screen은 있으나 refine 전환이 약함 |
+| `Advanced DoE` | best `run 94`, updates `12` | best `run 81`, updates `15` | staged program이 실제 late improvement로 연결됨 |
 
-- 이번 batch의 핵심 관찰은 `전략 차이의 부재`다.
-- `100` rounds를 열어도 실제 유효 탐색은 초반 몇 round에 몰렸다.
-- 따라서 문제는 예산 부족보다 executor나 prompt interpretation의 수렴 편향일 가능성이 크다.
+- 이번 batch에선 세 전략 차이가 실제 trace에 남았다.
+- 다만 `250`까지 늘려도 모든 최고점은 `100` 이전에 이미 결정됐다.
 
 ---
 <!-- footer: "요약" -->
 
 ## 24. 요약
 
-- CIFAR: 세 agent 모두 `val 0.3717 / test 0.3417`
-- Text: `Ratchet`, `Advanced DoE`는 `val 0.5142 / test 0.4925`, `Screening DoE`는 더 낮았다
-- 이번 batch는 “어떤 전략이 이겼는가”보다 “왜 세 전략이 거의 같은 곳으로 갔는가”를 묻는 결과다.
+- CIFAR best: `01 Ratchet`, `val 0.4350`
+- Text best: `03 Advanced DoE`, `val 0.5642`
+- `Screening DoE`는 front-end screening으로는 유효했지만 full-budget owner로는 약했다.
+- 이번 `250-run` batch는 전략 차이를 보여주되, 추가 예산의 한계도 같이 보여준다.
 
 ---
 <!-- footer: "한계" -->
 
 ## 25. 한계
 
-- 이번 결과는 single split 기준이라 분산 추정이 약하다.
-- hidden test도 agent당 한 번만 열었으므로 replication이나 confidence interval은 없다.
-- fixed subset 위 실험이라 dataset 전체 분포를 대표한다고 보기는 어렵다.
-- text는 여전히 fixed TF-IDF representation 위 실험이라 representation search까지 포함한 결론은 아니다.
-- 이번 batch에선 세 agent가 거의 같은 최종 config로 수렴해 strategy contrast가 약했다.
-- 따라서 `program.md` 차이를 평가하기 전에 executor가 실제로 서로 다른 후보를 충분히 생성하는지부터 다시 검증해야 한다.
+- 이번 정리는 validation-only batch다. hidden finalize는 아직 안 했다.
+- single split 기준이라 분산 추정이 약하다.
+- fixed subset 위 실험이라 전체 분포 대표성은 제한적이다.
+- text는 fixed TF-IDF representation 위 실험이다.
+- `program.md` 차이를 더 강하게 보려면 multi-seed confirmation이나 hidden test까지 이어야 한다.
 
 ---
 <!-- _class: tinytext -->

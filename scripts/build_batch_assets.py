@@ -14,7 +14,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from autoresearch.agent_report import load_report_entries
+from autoresearch.artifacts import load_public_artifacts
 from autoresearch.history_report import load_history_rows
+from autoresearch.runtime_paths import finalized_artifact_path, history_path, report_path
 
 
 AGENT_LABELS = {
@@ -36,7 +39,7 @@ class RoundPoint:
     run_id: str
     best_candidate: str
     best_validation: float
-    review: str
+    report_text: str
 
 
 def _format_float(value: float) -> str:
@@ -44,8 +47,15 @@ def _format_float(value: float) -> str:
     return text.rstrip("0").rstrip(".") if "." in text else text
 
 
-def _load_rounds(history_path: Path) -> list[RoundPoint]:
+def _format_optional(value: float | None) -> str:
+    if value is None:
+        return "n/a"
+    return _format_float(value)
+
+
+def _load_rounds(history_path: Path, report_path: Path) -> list[RoundPoint]:
     rows = load_history_rows(history_path)
+    report_entries = load_report_entries(report_path)
     grouped: dict[str, list] = {}
     run_order: list[str] = []
     for row in rows:
@@ -64,7 +74,7 @@ def _load_rounds(history_path: Path) -> list[RoundPoint]:
                 run_id=run_id,
                 best_candidate=best_row.candidate,
                 best_validation=max(item.validation_score for item in run_rows),
-                review=best_row.review,
+                report_text=report_entries[run_id].text if run_id in report_entries else "",
             )
         )
     return rounds
@@ -98,7 +108,12 @@ def _build_svg(series: list[dict[str, object]], out_path: Path, title: str, roun
     plot_width = width - margin_left - margin_right
     plot_height = height - margin_top - margin_bottom
 
-    scores = [point for row in series for point in row["best_so_far"]]
+    scores = [
+        point
+        for row in series
+        for values in (row["best_so_far"], row["run_validation"])
+        for point in values
+    ]
     min_score = min(scores)
     max_score = max(scores)
     padding = max((max_score - min_score) * 0.12, 0.01)
@@ -156,22 +171,34 @@ def _build_svg(series: list[dict[str, object]], out_path: Path, title: str, roun
     for index, row in enumerate(series):
         label = row["agent"]
         color = COLORS[label]
+        for round_index, score in enumerate(row["run_validation"], start=1):
+            x = scale_x(round_index)
+            y = scale_y(score)
+            parts.append(
+                f'<circle class="raw-point" cx="{x:.2f}" cy="{y:.2f}" r="5.2" fill="{color}" fill-opacity="0.28" stroke="{color}" stroke-opacity="0.55" stroke-width="1.4"/>'
+            )
         points = [
             f"{scale_x(round_index):.2f},{scale_y(score):.2f}"
             for round_index, score in enumerate(row["best_so_far"], start=1)
         ]
-        parts.append(f'<polyline fill="none" stroke="{color}" stroke-width="4" points="{" ".join(points)}"/>')
-        for round_index, score in enumerate(row["best_so_far"], start=1):
-            x = scale_x(round_index)
-            y = scale_y(score)
-            parts.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="3.2" fill="{color}"/>')
+        parts.append(
+            f'<polyline class="best-line" fill="none" stroke="{color}" stroke-width="4" points="{" ".join(points)}"/>'
+        )
         y = legend_y + index * 54
         parts.append(f'<line x1="{legend_x}" y1="{y}" x2="{legend_x + 22}" y2="{y}" stroke="{color}" stroke-width="4"/>')
         parts.append(
-            f'<text x="{legend_x + 32}" y="{y + 5}" font-size="17" font-family="Helvetica, Arial, sans-serif" fill="#222">{label}</text>'
+            f'<circle cx="{legend_x + 11}" cy="{y}" r="5.2" fill="{color}" fill-opacity="0.28" stroke="{color}" stroke-opacity="0.55" stroke-width="1.4"/>'
         )
         parts.append(
-            f'<text x="{legend_x + 32}" y="{y + 26}" font-size="14" font-family="Helvetica, Arial, sans-serif" fill="#555">best val {row["best_validation"]:.3f} / hidden {row["hidden_test"]:.3f}</text>'
+            f'<text x="{legend_x + 32}" y="{y + 5}" font-size="17" font-family="Helvetica, Arial, sans-serif" fill="#222">{label}</text>'
+        )
+        hidden = row["hidden_test"]
+        if hidden is None:
+            subtitle = f'best val {row["best_validation"]:.3f} / validation only'
+        else:
+            subtitle = f'best val {row["best_validation"]:.3f} / hidden {hidden:.3f}'
+        parts.append(
+            f'<text x="{legend_x + 32}" y="{y + 26}" font-size="14" font-family="Helvetica, Arial, sans-serif" fill="#555">{subtitle}</text>'
         )
 
     parts.append("</svg>")
@@ -192,7 +219,10 @@ def build_assets(
     for root in sorted(batch_root.glob(root_glob)):
         agent_dir = next((root / "agents").iterdir())
         agent_label = AGENT_LABELS.get(agent_dir.name, agent_dir.name)
-        rounds = _load_rounds(agent_dir / "history.md")
+        rounds = _load_rounds(
+            history_path(root, agent_dir),
+            report_path(root, agent_dir),
+        )
         best_so_far: list[float] = []
         incumbent = float("-inf")
         incumbent_changes = 0
@@ -209,13 +239,29 @@ def build_assets(
                 run_of_best = round_.round_index
             best_so_far.append(incumbent)
 
-        final_artifact = json.loads((root / "finalized" / f"{agent_dir.name}.json").read_text(encoding="utf-8"))
-        final_best = final_artifact["best_result"]
-        hidden_test = float(final_best["test_score"])
+        final_path = finalized_artifact_path(root, agent_dir.name)
+        hidden_test: float | None = None
+        if final_path.exists():
+            final_artifact = json.loads(final_path.read_text(encoding="utf-8"))
+            final_best = final_artifact["best_result"]
+            hidden_test = float(final_best["test_score"])
+        else:
+            best_artifact = max(
+                (
+                    artifact
+                    for artifact in load_public_artifacts(root)
+                    if artifact["agent_name"] == agent_dir.name
+                ),
+                key=lambda artifact: (
+                    float(artifact["best_result"]["validation_score"]),
+                    str(artifact["run_id"]),
+                ),
+            )
+            final_best = best_artifact["best_result"]
 
         if agent_dir.name == "03_advanced_doe":
             for round_ in rounds:
-                match = re.search(r"move_class=(Tic|Tac|To)", round_.review)
+                match = re.search(r"move_class=(Tic|Tac|To)", round_.report_text)
                 if match:
                     tictacto_counts[match.group(1)] += 1
 
@@ -225,7 +271,7 @@ def build_assets(
                 "runs": len(rounds),
                 "best_validation": best_validation,
                 "hidden_test": hidden_test,
-                "generalization_gap": best_validation - hidden_test,
+                "generalization_gap": None if hidden_test is None else best_validation - hidden_test,
                 "run_of_best": run_of_best,
                 "gain_vs_run1": best_validation - first_score,
                 "mean_best_so_far": sum(best_so_far) / len(best_so_far),
@@ -234,6 +280,7 @@ def build_assets(
                 "best_candidate": str(final_best["candidate_name"]),
                 "best_config": _candidate_config_text(final_best),
                 "best_so_far": best_so_far,
+                "run_validation": [round_.best_validation for round_ in rounds],
             }
         )
 
@@ -260,13 +307,24 @@ def build_assets(
         )
         writer.writeheader()
         for row in summary_rows:
-            writer.writerow({key: value for key, value in row.items() if key != "best_so_far"})
+            writer.writerow({key: value for key, value in row.items() if key not in {"best_so_far", "run_validation"}})
 
     json_path = output_dir / f"{output_prefix}_summary.json"
     json_path.write_text(
         json.dumps(
             {
-                "summary_rows": [{key: value for key, value in row.items() if key != "best_so_far"} for row in summary_rows],
+                "summary_rows": [
+                    {key: value for key, value in row.items() if key not in {"best_so_far", "run_validation"}}
+                    for row in summary_rows
+                ],
+                "series": [
+                    {
+                        "agent": row["agent"],
+                        "best_so_far": row["best_so_far"],
+                        "run_validation": row["run_validation"],
+                    }
+                    for row in summary_rows
+                ],
                 "tictacto_counts": dict(tictacto_counts),
             },
             indent=2,
