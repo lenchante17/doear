@@ -222,43 +222,88 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - `TPE`는 validation ceiling을 자주 올렸지만 hidden winner는 `SMAC` 쪽에서 나왔다.
 - 이번 budget `100`에선 `TPE+SMAC` 조합이 단일 advisor를 안정적으로 이기지 못했다.
+- 아래 히스토리 plot은 가독성을 위해 `profile별 3개`와 `advisor mode별 3개`로 나눴다.
 
 ---
-<!-- footer: "Plain + Direct Trace" -->
+<!-- footer: "Ratchet Variants" -->
 
-## 17. Plain + Direct 조건의 탐색 히스토리
+## 17. Ratchet 계열 비교
 
-![w:1460](./assets/plain_direct_best_and_nonbest.svg)
+![w:1460](./assets/ratchet_variants_best_and_nonbest.svg)
 
-- 선은 run별 cumulative best validation, 점은 같은 run의 non-best 후보다.
-- `screening_plain`이 가장 높은 validation ceiling `0.4433`을 만들었다.
-- `tpe_direct`는 빠르게 `0.4383`까지 올라왔지만 plain agent를 명확히 넘어서진 못했다.
+- `ratchet_tpe`가 validation ceiling `0.4383`으로 가장 높다.
+- hidden test는 `ratchet_smac`이 `0.4100`으로 family 최고다.
+- `ratchet_tpe_smac`은 점 분산이 크고 best-line도 낮아 coordination cost가 보인다.
 
 ---
-<!-- footer: "Agent-Mediated Trace" -->
+<!-- footer: "Screening Variants" -->
 
-## 18. Agent-mediated 12개 조건의 탐색 히스토리
+## 18. Screening 계열 비교
 
-![w:1460](./assets/all_agent_best_and_nonbest.svg)
+![w:1460](./assets/screening_variants_best_and_nonbest.svg)
 
-- `plain` 위에 `TPE`, `SMAC`, `TPE+SMAC` advisor를 얹은 12개 root를 비교했다.
-- `Ratchet + SMAC`은 validation ceiling은 낮아도 hidden test `0.4100`으로 최종 일반화 최고였다.
-- dual-advisor 조건은 점 분산이 컸고, 이번 batch에선 best-line 우위로 이어지지 않았다.
+- `screening_plain`이 전체 validation 최고 `0.4433`을 만들었다.
+- `screening_tpe`는 ceiling이 근접하지만 plain을 넘지는 못했다.
+- hidden 쪽에선 `screening_tpe_smac`이 `0.3867`로 family 최고다.
+
+---
+<!-- footer: "Advanced Variants" -->
+
+## 19. Advanced 계열 비교
+
+![w:1460](./assets/advanced_variants_best_and_nonbest.svg)
+
+- `advanced_tpe`가 validation ceiling `0.4300`으로 가장 높다.
+- hidden은 `advanced_tpe_smac`이 `0.3850`으로 family 최고다.
+- Advanced profile은 advisor 도움 없이는 ceiling이 낮고, advisor 의존성이 상대적으로 크다.
+
+---
+<!-- footer: "Plain Agents" -->
+
+## 20. Plain agent간 비교
+
+![w:1460](./assets/plain_agents_best_and_nonbest.svg)
+
+- advisor 없이도 `screening_plain`이 validation 1등이다.
+- hidden에선 `ratchet_plain`이 `0.3883`으로 plain family 최고다.
+- base policy 자체가 이미 다른 탐색 성격을 만든다.
+
+---
+<!-- footer: "TPE Agents" -->
+
+## 21. TPE agent간 비교
+
+![w:1460](./assets/tpe_agents_best_and_nonbest.svg)
+
+- `ratchet_tpe`와 `screening_tpe`가 같은 validation ceiling `0.4383`에 도달했다.
+- `advanced_tpe`도 좋아졌지만 상위 둘을 뒤집지는 못했다.
+- `TPE`는 agent 차이를 줄이며 강한 incumbent 근처로 수렴시키는 경향이 보인다.
+
+---
+<!-- footer: "SMAC Agents" -->
+
+## 22. SMAC agent간 비교
+
+![w:1460](./assets/smac_agents_best_and_nonbest.svg)
+
+- validation ceiling은 `screening_smac`이 가장 높다.
+- hidden winner는 `ratchet_smac` `0.4100`이다.
+- 같은 `SMAC` advice라도 agent policy가 finalize generalization을 크게 바꾼다.
 
 ---
 <!-- footer: "읽을 점" -->
 
-## 19. 이번 batch에서 읽을 점
+## 23. 이번 batch에서 읽을 점
 
-- `Screening DoE` plain이 validation 1등이었다. structured screening 자체가 약하지 않았다.
-- `Ratchet + SMAC`이 hidden test 1등이었다. validation trace만으로 final winner를 정하면 miss가 생긴다.
-- `TPE`는 여러 profile에서 같은 강한 incumbent로 수렴하며 ceiling lift 역할을 했다.
-- advisor combination은 후보 다양성은 늘렸지만, 이번 budget에선 coordination cost가 더 컸다.
+- `profile별 3개`는 advisor가 같은 agent 안에서 무엇을 바꾸는지 보여준다.
+- `mode별 3개`는 같은 advisor 아래에서 agent policy 차이를 보여준다.
+- `dual-advisor`는 per-profile plot에만 남겼다. cross-agent까지 겹치면 비교 이득보다 시각적 잡음이 커진다.
+- 핵심 mismatch는 유지된다: validation 최고는 `screening_plain`, hidden 최고는 `ratchet_smac`.
 
 ---
 <!-- footer: "Harness Lesson" -->
 
-## 20. Harness 관점에서 남는 교훈
+## 24. Harness 관점에서 남는 교훈
 
 - `best val`, `hidden finalize`, `artifact completeness`를 같이 봐야 한다.
 - run count와 history row count를 혼동하면 early finalize가 생긴다.
@@ -268,7 +313,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "한계" -->
 
-## 21. 한계
+## 25. 한계
 
 - 단일 benchmark, single split batch라 분산 추정이 약하다.
 - run budget `100`은 dual-advisor의 late gain을 보기엔 짧을 수 있다.
@@ -279,7 +324,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 22. References
+## 26. References
 
 | 구분 | 예시 |
 | --- | --- |
