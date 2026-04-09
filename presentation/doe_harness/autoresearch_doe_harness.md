@@ -189,15 +189,17 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 | 항목 | 설정 |
 | --- | --- |
-| benchmarks | `cifar10_real`, `twenty_newsgroups_real` |
-| data budget | CIFAR-10 `4k`, 20 Newsgroups `8k` |
+| benchmark | `cifar10_real` |
 | model | `mlp` |
-| agents | `01 Ratchet`, `02 Screening DoE`, `03 Advanced DoE` |
-| execution | dataset × agent isolated root `6`, validation-only `250` runs |
+| agent profiles | `Ratchet`, `Screening DoE`, `Advanced DoE` |
+| advisor modes | `plain`, `TPE`, `SMAC`, `TPE+SMAC`, `TPE direct`, `SMAC direct` |
+| isolated conditions | `14` |
+| execution | root당 validation-history `100` runs + hidden finalize `1`회 |
 
 실행 메모
-- root별 독립 실행 + subagent 분리, 최신 `program.md`와 refactored runner 기준
-- 이번 비교는 전처리·MLP 구조·최적화 축을 보는 bounded `AutoML` test이며, `AutoAgent`처럼 코드 전체를 다루는 실험은 아니다
+- 각 condition은 subagent로 별도 root에서 독립 실행
+- 최종 검산: finalized manifest `14`, run artifact `100 x 14`
+- 이번 비교는 code-edit autoresearch가 아니라 bounded `AutoML + advisory harness` 비교다
 
 탐색 축
 - preprocessing: `normalization`, `outlier`, `projection`, `resampling`
@@ -206,139 +208,78 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - regularization / stability: `weight_decay`, `dropout`, `noise`, `label_smoothing`, `residual_connections`
 
 ---
-<!-- footer: "결과 테이블" -->
+<!-- footer: "결과 요약" -->
 
-## 16. CIFAR-10 결과: validation 탐색
+## 16. 최종 요약: validation 1등과 hidden 1등은 달랐다
 
-조건: `cifar10_real` / `mlp` / `program.md` batch / validation `250` runs
-
-| Agent | Best Val | Run of Best | Gain vs Run1 | Incumbent Updates | Plateau Tail |
-| --- | --- | --- | --- | --- | --- |
-| `01 Ratchet` | `0.4350` | `29` | `+0.0867` | `7` | `221` |
-| `02 Screening DoE` | `0.4283` | `52` | `+0.0400` | `6` | `198` |
-| `03 Advanced DoE` | `0.4267` | `94` | `+0.0683` | `12` | `156` |
-
-대표 incumbent
-- `01 Ratchet`: `standard + clip_iqr + [128,64] + elu + adamw + wd=1e-4 + lr=1e-4 + bs=64`
-- `02 Screening DoE`: `standard + clip_percentile + [128,64] + gelu + adam + wd=2.5e-3 + lr=1e-4 + bs=64`
-- `03 Advanced DoE`: `standard + clip_iqr + [128,64] + gelu + adam + wd=2.5e-3 + lr=1e-4 + bs=64`
-
----
-<!-- footer: "탐색 궤적" -->
-
-## 17. CIFAR-10 결과: 탐색 궤적
-
-![w:690](./assets/cifar10_mlp_250_program_v2_best_so_far.svg)
-
-- `Ratchet`이 가장 높은 ceiling을 만들었다.
-- `Screening DoE`는 중반까지 꾸준히 오르지만 최종 최고점은 낮다.
-- `Advanced DoE`는 가장 늦게 best를 갱신했지만, `run 94` 이후 추가 이득은 없었다.
-
----
-<!-- footer: "CIFAR 해석" -->
-
-## 18. CIFAR-10 해석
-
-- CIFAR에선 `Ratchet`이 가장 높은 최고점을 냈다.
-- `Advanced DoE`는 최고점은 약간 낮지만 가장 긴 탐색 수명을 보였다.
-- 추가 `150` runs가 새 best를 만들지는 못했다.
-
----
-<!-- footer: "Text 결과" -->
-
-## 19. 20 Newsgroups 결과: validation 탐색
-
-조건: `twenty_newsgroups_real` / `mlp` / `program.md` batch / validation `250` runs
-
-| Agent | Best Val | Run of Best | Gain vs Run1 | Incumbent Updates | Plateau Tail |
-| --- | --- | --- | --- | --- | --- |
-| `01 Ratchet` | `0.5508` | `43` | `+0.0367` | `10` | `207` |
-| `02 Screening DoE` | `0.5500` | `30` | `+0.0358` | `5` | `220` |
-| `03 Advanced DoE` | `0.5642` | `81` | `+0.0875` | `15` | `169` |
-
-대표 incumbent
-- `01 Ratchet`: `maxabs + [64,32] + leaky_relu + adamw + wd=5e-4 + lr=1e-4 + bs=32`
-- `02 Screening DoE`: `standard + [128,64] + tanh + adamw + wd=1e-3 + lr=1e-3 + bs=64`
-- `03 Advanced DoE`: `robust + [128,64] + relu + adamw + wd=0 + lr=1e-4 + bs=64`
-
----
-<!-- footer: "Text 궤적" -->
-
-## 20. 20 Newsgroups 결과: 탐색 궤적
-
-![w:690](./assets/twenty_newsgroups_mlp_250_program_v2_best_so_far.svg)
-
-- text에선 `Advanced DoE`가 후반까지 꾸준히 incumbent를 갱신했다.
-- `Ratchet`도 중반까지는 강했지만 late gain은 작았다.
-- `Screening DoE`는 초반 screen 이후 매우 긴 plateau로 들어갔다.
-
----
-<!-- footer: "Text 해석" -->
-
-## 21. 20 Newsgroups 해석
-
-- text에선 `Advanced DoE`가 가장 높은 최고점과 가장 많은 incumbent update를 만들었다.
-- `Ratchet`은 strong local search로는 충분했지만 late exploration은 약했다.
-- `Screening DoE`는 초반 우선순위화에는 유용했지만 full-budget owner로는 약했다.
-- 여기서도 추가 `150` runs는 기존 best를 뒤집지 못했다.
-
----
-<!-- footer: "지식 추출" -->
-
-## 22. 히스토리에서 남는 지식
-
-`01 Ratchet`
-- 강한 incumbent가 보이면 빠르게 붙잡는다.
-- local exploit에는 강하지만 late reset 효율은 낮다.
-
-`02 Screening DoE`
-- factor 우선순위화에는 유용하다.
-- screening 이후 refine로 못 넘어가면 plateau가 길어진다.
-
-`03 Advanced DoE`
-- staged search가 실제 candidate diversity로 이어질 수 있었다.
-- 특히 text에서 late-stage refinement 효과가 가장 컸다.
-
----
-<!-- footer: "히스토리 진단" -->
-
-## 23. 히스토리 진단
-
-| Agent | CIFAR trace | Text trace | 읽을 점 |
+| 관점 | 조건 | Best Val | Hidden Test |
 | --- | --- | --- | --- |
-| `Ratchet` | best `run 29`, updates `7` | best `run 43`, updates `10` | local ratchet은 유지됐지만 late jump는 약함 |
-| `Screening DoE` | best `run 52`, updates `6` | best `run 30`, updates `5` | one-factor screen은 있으나 refine 전환이 약함 |
-| `Advanced DoE` | best `run 94`, updates `12` | best `run 81`, updates `15` | staged program이 실제 late improvement로 연결됨 |
+| validation 최고 | `screening_plain` | `0.4433` | `0.3700` |
+| hidden test 최고 | `ratchet_smac` | `0.4017` | `0.4100` |
+| plain 조건 최고 hidden | `ratchet_plain` | `0.4350` | `0.3883` |
+| direct 조건 최고 | `tpe_direct` | `0.4383` | `0.3733` |
+| dual-advisor 최고 | `screening_tpe_smac` | `0.4200` | `0.3867` |
 
-- 이번 batch에선 세 전략 차이가 실제 trace에 남았다.
-- 다만 `250`까지 늘려도 모든 최고점은 `100` 이전에 이미 결정됐다.
+- `TPE`는 validation ceiling을 자주 올렸지만 hidden winner는 `SMAC` 쪽에서 나왔다.
+- 이번 budget `100`에선 `TPE+SMAC` 조합이 단일 advisor를 안정적으로 이기지 못했다.
 
 ---
-<!-- footer: "요약" -->
+<!-- footer: "Plain + Direct Trace" -->
 
-## 24. 요약
+## 17. Plain + Direct 조건의 탐색 히스토리
 
-- CIFAR best: `01 Ratchet`, `val 0.4350`
-- Text best: `03 Advanced DoE`, `val 0.5642`
-- `Screening DoE`는 front-end screening으로는 유효했지만 full-budget owner로는 약했다.
-- 이번 `250-run` batch는 전략 차이를 보여주되, 추가 예산의 한계도 같이 보여준다.
+![w:1460](./assets/plain_direct_best_and_nonbest.svg)
+
+- 선은 run별 cumulative best validation, 점은 같은 run의 non-best 후보다.
+- `screening_plain`이 가장 높은 validation ceiling `0.4433`을 만들었다.
+- `tpe_direct`는 빠르게 `0.4383`까지 올라왔지만 plain agent를 명확히 넘어서진 못했다.
+
+---
+<!-- footer: "Agent-Mediated Trace" -->
+
+## 18. Agent-mediated 12개 조건의 탐색 히스토리
+
+![w:1460](./assets/all_agent_best_and_nonbest.svg)
+
+- `plain` 위에 `TPE`, `SMAC`, `TPE+SMAC` advisor를 얹은 12개 root를 비교했다.
+- `Ratchet + SMAC`은 validation ceiling은 낮아도 hidden test `0.4100`으로 최종 일반화 최고였다.
+- dual-advisor 조건은 점 분산이 컸고, 이번 batch에선 best-line 우위로 이어지지 않았다.
+
+---
+<!-- footer: "읽을 점" -->
+
+## 19. 이번 batch에서 읽을 점
+
+- `Screening DoE` plain이 validation 1등이었다. structured screening 자체가 약하지 않았다.
+- `Ratchet + SMAC`이 hidden test 1등이었다. validation trace만으로 final winner를 정하면 miss가 생긴다.
+- `TPE`는 여러 profile에서 같은 강한 incumbent로 수렴하며 ceiling lift 역할을 했다.
+- advisor combination은 후보 다양성은 늘렸지만, 이번 budget에선 coordination cost가 더 컸다.
+
+---
+<!-- footer: "Harness Lesson" -->
+
+## 20. Harness 관점에서 남는 교훈
+
+- `best val`, `hidden finalize`, `artifact completeness`를 같이 봐야 한다.
+- run count와 history row count를 혼동하면 early finalize가 생긴다.
+- advisor trace에는 invalid proposal이 섞일 수 있어 log-domain과 search-space guard가 필요하다.
+- isolate / finalize / history를 분리해야 mid-run best와 final winner를 동시에 읽을 수 있다.
 
 ---
 <!-- footer: "한계" -->
 
-## 25. 한계
+## 21. 한계
 
-- 이번 정리는 validation-only batch다. hidden finalize는 아직 안 했다.
-- single split 기준이라 분산 추정이 약하다.
-- fixed subset 위 실험이라 전체 분포 대표성은 제한적이다.
-- text는 fixed TF-IDF representation 위 실험이다.
-- `program.md` 차이를 더 강하게 보려면 multi-seed confirmation이나 hidden test까지 이어야 한다.
+- 단일 benchmark, single split batch라 분산 추정이 약하다.
+- run budget `100`은 dual-advisor의 late gain을 보기엔 짧을 수 있다.
+- hidden finalize는 final incumbent `1`회 기준이라 top-k reseeding은 아직 없다.
+- code-edit autoresearch loop까지는 포함하지 않았다.
 
 ---
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 26. References
+## 22. References
 
 | 구분 | 예시 |
 | --- | --- |
