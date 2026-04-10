@@ -460,6 +460,23 @@ def _score_window(series: list[GroupSeries]) -> tuple[float, float, int]:
     return display_low, display_high, clipped_count
 
 
+def _x_tick_steps(max_steps: int) -> list[int]:
+    if max_steps <= 1:
+        return [1]
+    ticks = [
+        1,
+        max(1, round(max_steps * 0.25)),
+        max(1, round(max_steps * 0.50)),
+        max(1, round(max_steps * 0.75)),
+        max_steps,
+    ]
+    ordered: list[int] = []
+    for tick in ticks:
+        if tick not in ordered:
+            ordered.append(tick)
+    return ordered
+
+
 def _build_history_panel_svg(
     out_path: Path,
     title: str,
@@ -537,8 +554,7 @@ def _build_history_panel_svg(
                 f'<text class="subtle" x="{plot_left - 10:.1f}" y="{y + 5:.1f}" text-anchor="end" font-size="13">{_xml(label)}</text>'
             )
 
-        for tick in range(5):
-            step = 1 if max_steps <= 1 else 1 + round((max_steps - 1) * tick / 4)
+        for step in _x_tick_steps(max_steps):
             x = scale_x(step)
             parts.append(f'<line class="grid" x1="{x:.1f}" y1="{plot_top}" x2="{x:.1f}" y2="{plot_top + plot_height}"/>')
             parts.append(
@@ -556,7 +572,7 @@ def _build_history_panel_svg(
         for row in series:
             for step_index, score in row.scatter_points:
                 parts.append(
-                    f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.4" fill="{row.color}" opacity="0.18"/>'
+                    f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.4" fill="{row.color}" opacity="0.10"/>'
                 )
         draw_rows = list(zip(groups.keys(), series))
         draw_rows.sort(key=lambda item: 1 if item[0].endswith("_direct") else 0)
@@ -581,6 +597,19 @@ def _build_history_panel_svg(
                 end_x = scale_x(len(row.best_so_far))
                 end_y = scale_y(row.best_so_far[-1])
                 parts.append(f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="{marker_radius}" fill="{row.color}" stroke="{WHITE}" stroke-width="1.6"/>')
+                if is_direct:
+                    label = str(groups[group_key]["label"])
+                    label_width = len(label) * 7.1 + 18
+                    label_height = 22
+                    label_x = plot_left + plot_width - label_width - 10
+                    y_offset = -16 if group_key == "tpe_direct" else 18
+                    label_y = max(plot_top + 12, min(plot_top + plot_height - label_height - 8, end_y + y_offset))
+                    parts.append(
+                        f'<rect x="{label_x:.2f}" y="{label_y:.2f}" width="{label_width:.2f}" height="{label_height}" rx="11" fill="{WHITE}" stroke="{row.color}" stroke-width="1.4"/>'
+                    )
+                    parts.append(
+                        f'<text x="{label_x + label_width / 2:.2f}" y="{label_y + 15:.2f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12.5" font-weight="700" fill="{row.color}">{_xml(label)}</text>'
+                    )
 
     parts.append("</svg>")
     out_path.write_text("\n".join(parts), encoding="utf-8")
