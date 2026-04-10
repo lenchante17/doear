@@ -117,38 +117,31 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 결국 운영 문제
 
 ---
-<!-- footer: "Harness 요구" -->
+<!-- footer: "Kubeflow lifecycle" -->
 
-## 8. Harness Requirements
+## 8. MLOps는 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업이다
 
-비교
-- 어떤 변경이 효과를 냈는지 run 단위로 읽어야 한다
+![w:880](./assets/mlops_kubeflow.svg)
 
-격리
-- candidate와 artifact를 분리해 오염 없는 비교가 가능해야 한다
+- Autoresearch loop는 이 큰 ML lifecycle 안의 일부
 
-기억
-- 이전 시도와 실패 이유가 다음 round 설계에 남아야 한다
+실제 시스템
+- `data`, `experiment`, `model registry`, `deployment`, `monitoring`
 
-판정
-- mid-run 최고점과 final hidden 성능을 따로 읽어야 한다
+핵심 역할
+- `지속 운영`, `추적`, `승격`, `유지관리`
 
 ---
-<!-- footer: "DOE 연결" -->
+<!-- footer: "핵심 MLOps 요소" -->
 
-## 9. DOE As Harness
+## 9. AutoML과 Autoresearch가 공통으로 요구하는 MLOps 요소
 
-질문
-- 어떤 factor를 바꿨는지 명시할 수 있어야 한다
-
-방법
-- DOE는 factor, round, interaction을 구조적으로 기록하게 만든다
-
-효과
-- agent policy 차이와 advisor 효과를 같은 틀에서 비교할 수 있다
-
-의미
-- 그래서 `Autoresearch` 운영 문제를 실험 설계 문제로 다시 읽을 수 있다
+| 요소 | AutoML에서의 역할 | Autoresearch에서의 역할 |
+| --- | --- | --- |
+| tracking | sweep 비교 | hypothesis / code edit history 비교 |
+| orchestration | search job 실행 | agent + eval job 실행 |
+| registry / lineage | best model 승격 | experiment / prompt / code provenance 보존 |
+| monitoring / cost | retrain trigger, SLO | budget, drift, unsafe promotion guardrail |
 
 ---
 <!-- footer: "두 질문" -->
