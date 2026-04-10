@@ -66,8 +66,17 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 `Question → Read → Edit → Run → Analyze → Next experiment`
 
-- agent의 출력은 단일 답보다 `다음 실험 제안`에 가깝다
-- 성능은 한 번의 edit보다 `짧은 loop의 누적`에서 나온다
+`Read`
+- baseline, failure mode, 제약을 파악한다
+
+`Edit`
+- 작은 가설 하나를 코드나 설정에 반영한다
+
+`Run`
+- 짧은 실험으로 metric과 artifact를 확인한다
+
+`Analyze`
+- keep, revert, 다음 실험 제안으로 이어진다
 
 ---
 <!-- footer: "핵심 차이" -->
@@ -109,9 +118,6 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 agent 특유 문제
 - `artifact`, `promotion`, `monitoring`, `cost control`까지 함께 관리해야 한다
 
-결론
-- 이 운영 문제를 보통 `MLOps`로 다룬다
-
 ---
 <!-- footer: "MLOps" -->
 
@@ -119,7 +125,11 @@ agent 특유 문제
 
 ![w:880](./assets/mlops_kubeflow.svg)
 
+정의
 - 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업
+
+필요성
+- 앞 슬라이드의 실험 운영 문제를 시스템 수준에서 다룰 틀이 필요하다
 - Autoresearch loop는 이 큰 ML lifecycle 안의 일부
 
 핵심 역할
