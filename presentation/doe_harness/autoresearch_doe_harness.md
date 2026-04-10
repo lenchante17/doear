@@ -267,27 +267,45 @@ agent 특유 문제
 - `spam`은 조기 포화, `cifar`는 긴 plateau 뒤 late jump가 반복됐다. 같은 budget이어도 좋은 비교군이 달라지는 이유다.
 
 ---
-<!-- footer: "질문 2 표" -->
+<!-- footer: "질문 2 셋업" -->
 
-## 18. 질문 2 표
+## 18. 질문 2 셋업
+
+비교 축
+
+| Harness | loop | 초점 |
+| --- | --- | --- |
+| `Ratchet` | incumbent 중심 exploit | 빠른 local climb |
+| `Screening` | factor screening | main effect 분리 |
+| `Advanced` | staged DOE | 다음 round 설계 |
+
+실험 환경
+- datasets: `fashion`, `twenty`, `spam`, `cifar`
+- variants: 각 harness 안에서 `plain`, `TPE`, `SMAC`, `TPE+SMAC`
+- readout: `best val`, `best hidden`, frontier trajectory
+
+---
+<!-- footer: "질문 2 요약" -->
+
+## 19. 질문 2 요약
 
 ![w:1300](./assets/question2_comparison_table.svg)
 
 - harness 비교도 dataset마다 달랐다. 즉 `무슨 advisor를 붙였나`만으로는 결과를 설명할 수 없고, `어떤 search loop를 돌렸나`가 별도 요인이다.
 
 ---
-<!-- footer: "질문 2 추적 A" -->
+<!-- footer: "Fashion, Twenty" -->
 
-## 19. 질문 2 추적 A
+## 20. Fashion, Twenty
 
 ![w:1300](./assets/question2_history_panel_a.svg)
 
 - `fashion`에선 `screening/advanced`가 frontier를 올렸고, `twenty`에선 `ratchet`가 초반 exploit 우위를 유지했다.
 
 ---
-<!-- footer: "질문 2 추적 B" -->
+<!-- footer: "Spam, CIFAR" -->
 
-## 20. 질문 2 추적 B
+## 21. Spam, CIFAR
 
 ![w:1300](./assets/question2_history_panel_b.svg)
 
@@ -296,7 +314,7 @@ agent 특유 문제
 ---
 <!-- footer: "공통 패턴" -->
 
-## 21. 공통 패턴
+## 22. 공통 패턴
 
 - winner는 dataset마다 달랐다.
 - `best val`과 `best hidden`은 `fashion`, `spam`, `cifar`에서 갈렸다.
@@ -306,7 +324,7 @@ agent 특유 문제
 ---
 <!-- footer: "운영 교훈" -->
 
-## 22. 운영 교훈
+## 23. 운영 교훈
 
 - subagent isolation 없이는 dataset 간 context가 섞인다.
 - run당 `1` candidate 제한이 없으면 비교 단위가 흐려진다.
@@ -316,7 +334,7 @@ agent 특유 문제
 ---
 <!-- footer: "핵심 함의" -->
 
-## 23. 핵심 함의
+## 24. 핵심 함의
 
 - harness effect는 advisor effect만큼 컸다.
 - validation 최적화와 finalize 최적화는 다른 문제였다.
@@ -326,7 +344,7 @@ agent 특유 문제
 ---
 <!-- footer: "추천" -->
 
-## 24. 추천
+## 25. 추천
 
 추천
 - default winner 하나를 고정하지 말고 dataset별 shortlist를 운영한다.
@@ -336,7 +354,7 @@ agent 특유 문제
 ---
 <!-- footer: "한계" -->
 
-## 25. 한계
+## 26. 한계
 
 - single split, repeated seed 평균 없음
 - model family는 `mlp` 하나만 사용했다
@@ -347,7 +365,7 @@ agent 특유 문제
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 26. References
+## 27. References
 
 | 구분 | 예시 |
 | --- | --- |
