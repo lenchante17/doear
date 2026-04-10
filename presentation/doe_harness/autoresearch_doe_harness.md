@@ -294,36 +294,9 @@ agent 특유 문제
 - `spam`은 `screening`, `cifar`는 `ratchet`가 상단 frontier를 만들었다. harness는 해석 틀이 아니라 실제 search policy다.
 
 ---
-<!-- footer: "질문 2 분해 표" -->
-
-## 21. 질문 2 분해 표
-
-![w:1300](./assets/question2_variant_table.svg)
-
-- 이 표의 반복은 렌더 오류가 아니다. `single-advisor` 경로에선 family가 달라도 같은 최고점이 나왔다.
-
----
-<!-- footer: "질문 2 분해 A" -->
-
-## 22. 질문 2 분해 A
-
-![w:1300](./assets/question2_variant_history_panel_a.svg)
-
-- `fashion`과 `twenty`에선 같은 advisor 내부에서 선이 거의 완전히 겹친다. 이 구간은 family보다 advisor가 결과를 지배했다는 뜻이다.
-
----
-<!-- footer: "질문 2 분해 B" -->
-
-## 23. 질문 2 분해 B
-
-![w:1300](./assets/question2_variant_history_panel_b.svg)
-
-- `spam`과 `cifar`도 같은 패턴이다. `TPE`와 `SMAC` 차이는 남지만, 같은 advisor 안의 family 차이는 거의 사라졌다.
-
----
 <!-- footer: "공통 패턴" -->
 
-## 24. 공통 패턴
+## 21. 공통 패턴
 
 - winner는 dataset마다 달랐다.
 - `best val`과 `best hidden`은 `fashion`, `spam`, `cifar`에서 갈렸다.
@@ -333,7 +306,7 @@ agent 특유 문제
 ---
 <!-- footer: "운영 교훈" -->
 
-## 25. 운영 교훈
+## 22. 운영 교훈
 
 - subagent isolation 없이는 dataset 간 context가 섞인다.
 - run당 `1` candidate 제한이 없으면 비교 단위가 흐려진다.
@@ -343,7 +316,7 @@ agent 특유 문제
 ---
 <!-- footer: "핵심 함의" -->
 
-## 26. 핵심 함의
+## 23. 핵심 함의
 
 - harness effect는 advisor effect만큼 컸다.
 - validation 최적화와 finalize 최적화는 다른 문제였다.
@@ -353,7 +326,7 @@ agent 특유 문제
 ---
 <!-- footer: "추천" -->
 
-## 27. 추천
+## 24. 추천
 
 추천
 - default winner 하나를 고정하지 말고 dataset별 shortlist를 운영한다.
@@ -363,7 +336,7 @@ agent 특유 문제
 ---
 <!-- footer: "한계" -->
 
-## 28. 한계
+## 25. 한계
 
 - single split, repeated seed 평균 없음
 - model family는 `mlp` 하나만 사용했다
@@ -374,7 +347,7 @@ agent 특유 문제
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 29. References
+## 26. References
 
 | 구분 | 예시 |
 | --- | --- |

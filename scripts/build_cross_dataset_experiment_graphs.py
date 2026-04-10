@@ -627,13 +627,11 @@ def _write_summary_json(
     out_path: Path,
     q1_summaries: dict[str, dict[str, GroupSeries]],
     q2_summaries: dict[str, dict[str, GroupSeries]],
-    q2_variant_summaries: dict[str, dict[str, GroupSeries]],
 ) -> None:
-    payload: dict[str, object] = {"question1": {}, "question2": {}, "question2_variants": {}}
+    payload: dict[str, object] = {"question1": {}, "question2": {}}
     for section_name, groups, summaries in (
         ("question1", Q1_GROUPS, q1_summaries),
         ("question2", Q2_GROUPS, q2_summaries),
-        ("question2_variants", Q2_TPE_SMAC_GROUPS, q2_variant_summaries),
     ):
         section_payload: dict[str, object] = {}
         for dataset_key, dataset_label, _ in DATASETS:
@@ -657,7 +655,6 @@ def main() -> int:
     ASSET_DIR.mkdir(parents=True, exist_ok=True)
     q1_summaries = _summaries_for_groups(Q1_GROUPS)
     q2_summaries = _summaries_for_groups(Q2_GROUPS)
-    q2_variant_summaries = _summaries_for_groups(Q2_TPE_SMAC_GROUPS)
 
     _build_table_svg(
         ASSET_DIR / "question1_comparison_table.svg",
@@ -672,13 +669,6 @@ def main() -> int:
         subtitle="",
         groups=Q2_GROUPS,
         summaries=q2_summaries,
-    )
-    _build_table_svg(
-        ASSET_DIR / "question2_variant_table.svg",
-        title="Question 2: Group + Advisor x Datasets",
-        subtitle="",
-        groups=Q2_TPE_SMAC_GROUPS,
-        summaries=q2_variant_summaries,
     )
     _build_history_panel_svg(
         ASSET_DIR / "question1_history_panel_a.svg",
@@ -712,27 +702,10 @@ def main() -> int:
         summaries=q2_summaries,
         dataset_keys=("sms_spam", "cifar10"),
     )
-    _build_history_panel_svg(
-        ASSET_DIR / "question2_variant_history_panel_a.svg",
-        title="Question 2: Group + Advisor History",
-        subtitle="",
-        groups=Q2_TPE_SMAC_GROUPS,
-        summaries=q2_variant_summaries,
-        dataset_keys=("fashion_mnist", "twenty_newsgroups"),
-    )
-    _build_history_panel_svg(
-        ASSET_DIR / "question2_variant_history_panel_b.svg",
-        title="Question 2: Group + Advisor History",
-        subtitle="",
-        groups=Q2_TPE_SMAC_GROUPS,
-        summaries=q2_variant_summaries,
-        dataset_keys=("sms_spam", "cifar10"),
-    )
     _write_summary_json(
         ASSET_DIR / "cross_dataset_experiment_summary.json",
         q1_summaries=q1_summaries,
         q2_summaries=q2_summaries,
-        q2_variant_summaries=q2_variant_summaries,
     )
     return 0
 
