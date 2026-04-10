@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path
 import json
@@ -31,130 +32,205 @@ DATASETS = (
     ),
 )
 
-PROFILE_ORDER = ("ratchet", "screening", "advanced", "direct")
-PROFILE_LABELS = {
-    "ratchet": "Ratchet",
-    "screening": "Screening",
-    "advanced": "Advanced",
-    "direct": "Direct",
+Q1_GROUPS = OrderedDict(
+    (
+        (
+            "plain_agent",
+            {
+                "label": "Plain Agent",
+                "conditions": ("ratchet_plain", "screening_plain", "advanced_plain"),
+                "color": "#2563eb",
+            },
+        ),
+        (
+            "agent_tpe",
+            {
+                "label": "Agent + TPE",
+                "conditions": ("ratchet_tpe", "screening_tpe", "advanced_tpe"),
+                "color": "#f59e0b",
+            },
+        ),
+        (
+            "agent_smac",
+            {
+                "label": "Agent + SMAC",
+                "conditions": ("ratchet_smac", "screening_smac", "advanced_smac"),
+                "color": "#16a34a",
+            },
+        ),
+        (
+            "agent_tpe_smac",
+            {
+                "label": "Agent + TPE+SMAC",
+                "conditions": ("ratchet_tpe_smac", "screening_tpe_smac", "advanced_tpe_smac"),
+                "color": "#dc2626",
+            },
+        ),
+        (
+            "direct",
+            {
+                "label": "Direct",
+                "conditions": ("tpe_direct", "smac_direct"),
+                "color": "#64748b",
+            },
+        ),
+    )
+)
+
+Q2_GROUPS = OrderedDict(
+    (
+        (
+            "ratchet",
+            {
+                "label": "Ratchet",
+                "conditions": ("ratchet_plain", "ratchet_tpe", "ratchet_smac", "ratchet_tpe_smac"),
+                "color": "#2563eb",
+            },
+        ),
+        (
+            "screening",
+            {
+                "label": "Screening",
+                "conditions": ("screening_plain", "screening_tpe", "screening_smac", "screening_tpe_smac"),
+                "color": "#f59e0b",
+            },
+        ),
+        (
+            "advanced",
+            {
+                "label": "Advanced",
+                "conditions": ("advanced_plain", "advanced_tpe", "advanced_smac", "advanced_tpe_smac"),
+                "color": "#16a34a",
+            },
+        ),
+    )
+)
+
+CONDITION_SHORT = {
+    "ratchet_plain": "Rat Plain",
+    "screening_plain": "Scr Plain",
+    "advanced_plain": "Adv Plain",
+    "tpe_direct": "TPE Dir",
+    "smac_direct": "SMAC Dir",
+    "ratchet_tpe": "Rat TPE",
+    "screening_tpe": "Scr TPE",
+    "advanced_tpe": "Adv TPE",
+    "ratchet_smac": "Rat SMAC",
+    "screening_smac": "Scr SMAC",
+    "advanced_smac": "Adv SMAC",
+    "ratchet_tpe_smac": "Rat T+S",
+    "screening_tpe_smac": "Scr T+S",
+    "advanced_tpe_smac": "Adv T+S",
 }
 
-VAL_COLOR = "#2f6fed"
-HIDDEN_COLOR = "#e4572e"
 TEXT = "#1f2328"
 SUBTLE = "#5b6470"
 GRID = "#e8ebf0"
 BG = "#fffdf8"
+WHITE = "#ffffff"
 
 
 @dataclass(frozen=True)
-class FinalizedResult:
-    agent_name: str
+class EvalPoint:
+    run_id: str
+    condition_name: str
+    candidate_name: str
     validation_score: float
-    test_score: float
 
 
 @dataclass(frozen=True)
-class DatasetSummary:
-    key: str
+class TableCell:
+    best_validation: float
+    winner_text: str
+    winner_count: int
+    conditions: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class GroupSeries:
     label: str
-    best_val: FinalizedResult
-    best_hidden: FinalizedResult
-    best_val_ties: tuple[FinalizedResult, ...]
-    best_hidden_ties: tuple[FinalizedResult, ...]
-    profile_best_hidden: dict[str, FinalizedResult]
+    color: str
+    evaluations: tuple[EvalPoint, ...]
+    best_so_far: tuple[float, ...]
+    scatter_points: tuple[tuple[int, float], ...]
+    cell: TableCell
 
 
-def _load_finalized_results(root: Path) -> list[FinalizedResult]:
-    files = sorted(root.glob("*/.work/finalized/*.json"))
-    if not files:
-        raise FileNotFoundError(f"no finalized artifacts found under {root}")
-    rows: list[FinalizedResult] = []
-    for path in files:
+def _load_run_evaluations(condition_root: Path, condition_name: str) -> list[EvalPoint]:
+    runs_dir = condition_root / ".work" / "runs"
+    rows: list[EvalPoint] = []
+    for path in sorted(runs_dir.glob("*.json")):
         payload = json.loads(path.read_text(encoding="utf-8"))
-        best = payload["best_result"]
+        result = payload["best_result"]
         rows.append(
-            FinalizedResult(
-                agent_name=str(payload["agent_name"]),
-                validation_score=float(best["validation_score"]),
-                test_score=float(best["test_score"]),
+            EvalPoint(
+                run_id=str(payload["run_id"]),
+                condition_name=condition_name,
+                candidate_name=str(result["candidate_name"]),
+                validation_score=float(result["validation_score"]),
             )
         )
+    rows.sort(key=lambda row: row.run_id)
     return rows
 
 
-def _profile_of(agent_name: str) -> str:
-    if agent_name.startswith("ratchet_"):
-        return "ratchet"
-    if agent_name.startswith("screening_"):
-        return "screening"
-    if agent_name.startswith("advanced_"):
-        return "advanced"
-    return "direct"
+def _load_finalized_best(condition_root: Path, condition_name: str) -> tuple[float, float]:
+    path = condition_root / ".work" / "finalized" / f"{condition_name}.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    best = payload["best_result"]
+    return float(best["validation_score"]), float(best["test_score"])
 
 
-def _short_label(agent_name: str) -> str:
-    mapping = {
-        "ratchet_plain": "Rat Plain",
-        "screening_plain": "Scr Plain",
-        "advanced_plain": "Adv Plain",
-        "tpe_direct": "TPE Dir",
-        "smac_direct": "SMAC Dir",
-        "ratchet_tpe": "Rat TPE",
-        "screening_tpe": "Scr TPE",
-        "advanced_tpe": "Adv TPE",
-        "ratchet_smac": "Rat SMAC",
-        "screening_smac": "Scr SMAC",
-        "advanced_smac": "Adv SMAC",
-        "ratchet_tpe_smac": "Rat T+S",
-        "screening_tpe_smac": "Scr T+S",
-        "advanced_tpe_smac": "Adv T+S",
-    }
-    return mapping.get(agent_name, agent_name)
+def _winner_text(conditions: list[str]) -> str:
+    if len(conditions) == 1:
+        return CONDITION_SHORT.get(conditions[0], conditions[0])
+    return f"tie x{len(conditions)}"
 
 
-def _best_by(rows: list[FinalizedResult], score_key: str) -> FinalizedResult:
-    if score_key == "validation":
-        return max(rows, key=lambda row: (row.validation_score, row.test_score, row.agent_name))
-    return max(rows, key=lambda row: (row.test_score, row.validation_score, row.agent_name))
+def _build_group_series(dataset_root: Path, group_spec: dict[str, object]) -> GroupSeries:
+    condition_names = tuple(group_spec["conditions"])
+    evaluations: list[EvalPoint] = []
+    best_rows: list[tuple[str, float, float]] = []
+    for condition_name in condition_names:
+        condition_root = dataset_root / condition_name
+        evaluations.extend(_load_run_evaluations(condition_root, condition_name))
+        best_rows.append((condition_name, *_load_finalized_best(condition_root, condition_name)))
+    evaluations.sort(key=lambda row: row.run_id)
+
+    best_so_far: list[float] = []
+    scatter_points: list[tuple[int, float]] = []
+    incumbent = float("-inf")
+    for index, row in enumerate(evaluations, start=1):
+        if row.validation_score > incumbent:
+            incumbent = row.validation_score
+        else:
+            scatter_points.append((index, row.validation_score))
+        best_so_far.append(incumbent)
+
+    winner_value = max(row[1] for row in best_rows)
+    winners = sorted([row[0] for row in best_rows if row[1] == winner_value])
+    return GroupSeries(
+        label=str(group_spec["label"]),
+        color=str(group_spec["color"]),
+        evaluations=tuple(evaluations),
+        best_so_far=tuple(best_so_far),
+        scatter_points=tuple(scatter_points),
+        cell=TableCell(
+            best_validation=winner_value,
+            winner_text=_winner_text(winners),
+            winner_count=len(winners),
+            conditions=tuple(winners),
+        ),
+    )
 
 
-def _ties_for(rows: list[FinalizedResult], score_key: str) -> tuple[FinalizedResult, ...]:
-    if score_key == "validation":
-        top = max(row.validation_score for row in rows)
-        tied = [row for row in rows if row.validation_score == top]
-    else:
-        top = max(row.test_score for row in rows)
-        tied = [row for row in rows if row.test_score == top]
-    return tuple(sorted(tied, key=lambda row: row.agent_name))
-
-
-def _winner_text(rows: tuple[FinalizedResult, ...]) -> str:
-    if len(rows) == 1:
-        return _short_label(rows[0].agent_name)
-    return f"tie x{len(rows)}"
-
-
-def _summaries() -> list[DatasetSummary]:
-    rows: list[DatasetSummary] = []
-    for key, label, root in DATASETS:
-        finalized = _load_finalized_results(root)
-        profile_best: dict[str, FinalizedResult] = {}
-        for profile in PROFILE_ORDER:
-            profile_rows = [row for row in finalized if _profile_of(row.agent_name) == profile]
-            profile_best[profile] = _best_by(profile_rows, "hidden")
-        rows.append(
-            DatasetSummary(
-                key=key,
-                label=label,
-                best_val=_best_by(finalized, "validation"),
-                best_hidden=_best_by(finalized, "hidden"),
-                best_val_ties=_ties_for(finalized, "validation"),
-                best_hidden_ties=_ties_for(finalized, "hidden"),
-                profile_best_hidden=profile_best,
-            )
-        )
-    return rows
+def _summaries_for_groups(group_specs: OrderedDict[str, dict[str, object]]) -> dict[str, dict[str, GroupSeries]]:
+    dataset_groups: dict[str, dict[str, GroupSeries]] = {}
+    for dataset_key, _, dataset_root in DATASETS:
+        dataset_groups[dataset_key] = {}
+        for group_key, group_spec in group_specs.items():
+            dataset_groups[dataset_key][group_key] = _build_group_series(dataset_root, group_spec)
+    return dataset_groups
 
 
 def _svg_header(width: int, height: int, title: str, subtitle: str) -> list[str]:
@@ -174,207 +250,268 @@ def _svg_header(width: int, height: int, title: str, subtitle: str) -> list[str]
     ]
 
 
-def _build_winner_chart(summaries: list[DatasetSummary], out_path: Path) -> None:
+def _build_table_svg(
+    out_path: Path,
+    title: str,
+    subtitle: str,
+    groups: OrderedDict[str, dict[str, object]],
+    summaries: dict[str, dict[str, GroupSeries]],
+) -> None:
+    width = 1460
+    header_height = 74
+    row_height = 92
+    label_width = 250
+    col_width = 288
+    total_rows = len(groups) + 1
+    height = 120 + header_height + row_height * total_rows + 30
+    parts = _svg_header(width, height, title, subtitle)
+    table_x = 54
+    table_y = 96
+
+    parts.append(
+        f'<rect x="{table_x}" y="{table_y}" width="{label_width + col_width * len(DATASETS)}" height="{header_height + row_height * len(groups)}" rx="20" fill="{WHITE}" stroke="#d7dce3" stroke-width="1.2"/>'
+    )
+
+    for index, (_, label, _) in enumerate(DATASETS):
+        x = table_x + label_width + col_width * index
+        parts.append(
+            f'<rect x="{x}" y="{table_y}" width="{col_width}" height="{header_height}" fill="#f8fafc"/>'
+        )
+        parts.append(
+            f'<text class="label" x="{x + col_width / 2:.1f}" y="{table_y + 44:.1f}" text-anchor="middle" font-size="20" font-weight="700">{label}</text>'
+        )
+    parts.append(
+        f'<rect x="{table_x}" y="{table_y}" width="{label_width}" height="{header_height}" fill="#f8fafc"/>'
+    )
+    parts.append(
+        f'<text class="label" x="{table_x + 22}" y="{table_y + 44:.1f}" font-size="20" font-weight="700">Comparison Group</text>'
+    )
+
+    for row_index, (group_key, group_spec) in enumerate(groups.items()):
+        y = table_y + header_height + row_height * row_index
+        fill = "#ffffff" if row_index % 2 == 0 else "#fcfcfd"
+        parts.append(
+            f'<rect x="{table_x}" y="{y}" width="{label_width + col_width * len(DATASETS)}" height="{row_height}" fill="{fill}"/>'
+        )
+        parts.append(
+            f'<line class="grid" x1="{table_x}" y1="{y}" x2="{table_x + label_width + col_width * len(DATASETS)}" y2="{y}"/>'
+        )
+        parts.append(
+            f'<text x="{table_x + 22}" y="{y + 40:.1f}" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="{group_spec["color"]}">{group_spec["label"]}</text>'
+        )
+        parts.append(
+            f'<text class="subtle" x="{table_x + 22}" y="{y + 64:.1f}" font-size="13">best val among group conditions</text>'
+        )
+
+        for col_index, (dataset_key, _, _) in enumerate(DATASETS):
+            x = table_x + label_width + col_width * col_index
+            cell = summaries[dataset_key][group_key].cell
+            parts.append(
+                f'<line class="grid" x1="{x}" y1="{table_y}" x2="{x}" y2="{table_y + header_height + row_height * len(groups)}"/>'
+            )
+            parts.append(
+                f'<text class="label" x="{x + col_width / 2:.1f}" y="{y + 38:.1f}" text-anchor="middle" font-size="24" font-weight="700">{cell.best_validation:.3f}</text>'
+            )
+            parts.append(
+                f'<text class="subtle" x="{x + col_width / 2:.1f}" y="{y + 62:.1f}" text-anchor="middle" font-size="14">{cell.winner_text}</text>'
+            )
+
+    bottom_y = table_y + header_height + row_height * len(groups)
+    parts.append(f'<line class="grid" x1="{table_x}" y1="{bottom_y}" x2="{table_x + label_width + col_width * len(DATASETS)}" y2="{bottom_y}"/>')
+    parts.append("</svg>")
+    out_path.write_text("\n".join(parts), encoding="utf-8")
+
+
+def _score_bounds(series: list[GroupSeries]) -> tuple[float, float]:
+    values: list[float] = []
+    for row in series:
+        values.extend(row.best_so_far)
+        values.extend(score for _, score in row.scatter_points)
+    low = min(values)
+    high = max(values)
+    span = max(high - low, 0.01)
+    return low - max(span * 0.15, 0.01), high + max(span * 0.08, 0.01)
+
+
+def _build_history_panel_svg(
+    out_path: Path,
+    title: str,
+    subtitle: str,
+    groups: OrderedDict[str, dict[str, object]],
+    summaries: dict[str, dict[str, GroupSeries]],
+    dataset_keys: tuple[str, str],
+) -> None:
     width = 1460
     height = 820
-    margin_left = 78
-    margin_right = 56
-    margin_top = 96
-    margin_bottom = 150
-    plot_width = width - margin_left - margin_right
-    plot_height = height - margin_top - margin_bottom
-    baseline_y = margin_top + plot_height
-    max_score = 1.0
+    header_h = 92
+    legend_h = 70
+    panel_gap = 32
+    outer_margin = 54
+    panel_width = (width - outer_margin * 2 - panel_gap) / 2
+    panel_height = height - header_h - legend_h - 40
 
-    def scale_y(score: float) -> float:
-        return margin_top + (max_score - score) / max_score * plot_height
+    parts = _svg_header(width, height, title, subtitle)
 
-    def dataset_center(index: int) -> float:
-        step = plot_width / len(summaries)
-        return margin_left + step * index + step / 2
+    for legend_index, (_, group_spec) in enumerate(groups.items()):
+        lx = 54 + legend_index * 260
+        ly = 86
+        color = group_spec["color"]
+        parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx + 24}" y2="{ly}" stroke="{color}" stroke-width="3.5"/>')
+        parts.append(f'<circle cx="{lx + 12}" cy="{ly + 18}" r="4" fill="{color}" opacity="0.28"/>')
+        parts.append(f'<text class="label" x="{lx + 34}" y="{ly + 5}" font-size="16">{group_spec["label"]}</text>')
+        parts.append(f'<text class="subtle" x="{lx + 34}" y="{ly + 23}" font-size="13">line=best val, scatter=other evals</text>')
 
-    bar_width = min(92, plot_width / (len(summaries) * 3.2))
-    gap = 28
-
-    parts = _svg_header(
-        width,
-        height,
-        title="Experiment 1: Dataset Winners",
-        subtitle="Best validation vs best hidden among 14 isolated conditions per dataset.",
-    )
-
-    for tick in range(6):
-        score = tick / 5
-        y = scale_y(score)
-        parts.append(f'<line class="grid" x1="{margin_left}" y1="{y:.1f}" x2="{margin_left + plot_width}" y2="{y:.1f}"/>')
-        parts.append(
-            f'<text class="subtle" x="{margin_left - 10}" y="{y + 5:.1f}" text-anchor="end" font-size="15">{score:.1f}</text>'
-        )
-
-    parts.append(f'<line x1="{margin_left}" y1="{baseline_y}" x2="{margin_left + plot_width}" y2="{baseline_y}" stroke="{TEXT}" stroke-width="1.5"/>')
-
-    for index, summary in enumerate(summaries):
-        center = dataset_center(index)
-        val_x = center - bar_width - gap / 2
-        hidden_x = center + gap / 2
-        val_y = scale_y(summary.best_val.validation_score)
-        hidden_y = scale_y(summary.best_hidden.test_score)
-        val_height = baseline_y - val_y
-        hidden_height = baseline_y - hidden_y
+    for panel_index, dataset_key in enumerate(dataset_keys):
+        dataset_label = next(label for key, label, _ in DATASETS if key == dataset_key)
+        panel_x = outer_margin + panel_index * (panel_width + panel_gap)
+        panel_y = header_h + 10
+        plot_left = panel_x + 62
+        plot_top = panel_y + 34
+        plot_width = panel_width - 86
+        plot_height = panel_height - 72
+        series = [summaries[dataset_key][group_key] for group_key in groups.keys()]
+        min_score, max_score = _score_bounds(series)
+        max_steps = max(len(row.evaluations) for row in series)
 
         parts.append(
-            f'<rect x="{val_x:.1f}" y="{val_y:.1f}" width="{bar_width:.1f}" height="{val_height:.1f}" rx="12" fill="{VAL_COLOR}"/>'
+            f'<rect x="{panel_x}" y="{panel_y}" width="{panel_width}" height="{panel_height}" rx="24" fill="{WHITE}" stroke="#d7dce3" stroke-width="1.1"/>'
         )
         parts.append(
-            f'<rect x="{hidden_x:.1f}" y="{hidden_y:.1f}" width="{bar_width:.1f}" height="{hidden_height:.1f}" rx="12" fill="{HIDDEN_COLOR}"/>'
+            f'<text class="label" x="{panel_x + 18}" y="{panel_y + 22}" font-size="20" font-weight="700">{dataset_label}</text>'
         )
 
+        def scale_x(step_index: int) -> float:
+            if max_steps <= 1:
+                return plot_left + plot_width / 2
+            return plot_left + ((step_index - 1) / (max_steps - 1)) * plot_width
+
+        def scale_y(score: float) -> float:
+            return plot_top + (max_score - score) / (max_score - min_score) * plot_height
+
+        for tick in range(5):
+            ratio = tick / 4
+            score = max_score - ratio * (max_score - min_score)
+            y = plot_top + ratio * plot_height
+            parts.append(f'<line class="grid" x1="{plot_left}" y1="{y:.1f}" x2="{plot_left + plot_width}" y2="{y:.1f}"/>')
+            parts.append(
+                f'<text class="subtle" x="{plot_left - 10:.1f}" y="{y + 5:.1f}" text-anchor="end" font-size="13">{score:.3f}</text>'
+            )
+
+        for tick in range(5):
+            step = 1 if max_steps <= 1 else 1 + round((max_steps - 1) * tick / 4)
+            x = scale_x(step)
+            parts.append(f'<line class="grid" x1="{x:.1f}" y1="{plot_top}" x2="{x:.1f}" y2="{plot_top + plot_height}"/>')
+            parts.append(
+                f'<text class="subtle" x="{x:.1f}" y="{plot_top + plot_height + 22:.1f}" text-anchor="middle" font-size="13">{step}</text>'
+            )
+
+        parts.append(f'<line x1="{plot_left}" y1="{plot_top}" x2="{plot_left}" y2="{plot_top + plot_height}" stroke="{TEXT}" stroke-width="1.2"/>')
         parts.append(
-            f'<text class="label" x="{val_x + bar_width / 2:.1f}" y="{val_y - 10:.1f}" text-anchor="middle" font-size="18" font-weight="700">{summary.best_val.validation_score:.3f}</text>'
+            f'<line x1="{plot_left}" y1="{plot_top + plot_height}" x2="{plot_left + plot_width}" y2="{plot_top + plot_height}" stroke="{TEXT}" stroke-width="1.2"/>'
         )
         parts.append(
-            f'<text class="label" x="{hidden_x + bar_width / 2:.1f}" y="{hidden_y - 10:.1f}" text-anchor="middle" font-size="18" font-weight="700">{summary.best_hidden.test_score:.3f}</text>'
+            f'<text class="subtle" x="{plot_left + plot_width / 2:.1f}" y="{plot_top + plot_height + 46:.1f}" text-anchor="middle" font-size="14">Evaluation index within comparison group</text>'
         )
 
-        parts.append(
-            f'<text class="subtle" x="{val_x + bar_width / 2:.1f}" y="{baseline_y + 24:.1f}" text-anchor="middle" font-size="14">best val</text>'
-        )
-        parts.append(
-            f'<text class="subtle" x="{hidden_x + bar_width / 2:.1f}" y="{baseline_y + 24:.1f}" text-anchor="middle" font-size="14">best hidden</text>'
-        )
-        parts.append(
-            f'<text class="subtle" x="{val_x + bar_width / 2:.1f}" y="{baseline_y + 44:.1f}" text-anchor="middle" font-size="13">{_winner_text(summary.best_val_ties)}</text>'
-        )
-        parts.append(
-            f'<text class="subtle" x="{hidden_x + bar_width / 2:.1f}" y="{baseline_y + 44:.1f}" text-anchor="middle" font-size="13">{_winner_text(summary.best_hidden_ties)}</text>'
-        )
-        parts.append(
-            f'<text class="label" x="{center:.1f}" y="{baseline_y + 78:.1f}" text-anchor="middle" font-size="18" font-weight="700">{summary.label}</text>'
-        )
+        for row in series:
+            for step_index, score in row.scatter_points:
+                parts.append(
+                    f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.8" fill="{row.color}" opacity="0.28"/>'
+                )
+            polyline = " ".join(
+                f"{scale_x(step_index):.2f},{scale_y(score):.2f}"
+                for step_index, score in enumerate(row.best_so_far, start=1)
+            )
+            parts.append(f'<polyline fill="none" stroke="{row.color}" stroke-width="3.2" points="{polyline}"/>')
 
-    legend_y = height - 28
-    parts.append(f'<rect x="{margin_left}" y="{legend_y - 12}" width="22" height="12" rx="4" fill="{VAL_COLOR}"/>')
-    parts.append(f'<text class="subtle" x="{margin_left + 30}" y="{legend_y - 1}" font-size="14">Best validation found in the run history</text>')
-    parts.append(f'<rect x="{margin_left + 360}" y="{legend_y - 12}" width="22" height="12" rx="4" fill="{HIDDEN_COLOR}"/>')
-    parts.append(f'<text class="subtle" x="{margin_left + 390}" y="{legend_y - 1}" font-size="14">Best hidden-test score after finalize</text>')
-    parts.append(f'<text class="subtle" x="{margin_left + 790}" y="{legend_y - 1}" font-size="14">labels show winner name or tie count</text>')
     parts.append("</svg>")
     out_path.write_text("\n".join(parts), encoding="utf-8")
 
 
-def _mix_color(low: str, high: str, ratio: float) -> str:
-    ratio = max(0.0, min(1.0, ratio))
-    low_rgb = tuple(int(low[index : index + 2], 16) for index in (1, 3, 5))
-    high_rgb = tuple(int(high[index : index + 2], 16) for index in (1, 3, 5))
-    mixed = tuple(int(round(lo + (hi - lo) * ratio)) for lo, hi in zip(low_rgb, high_rgb))
-    return "#" + "".join(f"{value:02x}" for value in mixed)
-
-
-def _build_profile_heatmap(summaries: list[DatasetSummary], out_path: Path) -> None:
-    width = 1460
-    height = 760
-    margin_left = 180
-    margin_right = 120
-    margin_top = 118
-    margin_bottom = 76
-    plot_width = width - margin_left - margin_right
-    plot_height = height - margin_top - margin_bottom
-    cell_width = plot_width / len(PROFILE_ORDER)
-    cell_height = plot_height / len(summaries)
-    gap_floor = -0.03
-    best_fill = "#1d8f6a"
-    weak_fill = "#f4e6cf"
-
-    parts = _svg_header(
-        width,
-        height,
-        title="Experiment 2: Hidden-Test Gap By Harness Profile",
-        subtitle="Cell fill is the gap to the row-best hidden score. Text is the best hidden score reached by that profile.",
-    )
-
-    for col_index, profile in enumerate(PROFILE_ORDER):
-        x = margin_left + col_index * cell_width + cell_width / 2
-        parts.append(
-            f'<text class="label" x="{x:.1f}" y="{margin_top - 24:.1f}" text-anchor="middle" font-size="19" font-weight="700">{PROFILE_LABELS[profile]}</text>'
-        )
-
-    for row_index, summary in enumerate(summaries):
-        y_top = margin_top + row_index * cell_height
-        y_center = y_top + cell_height / 2
-        row_best = max(item.test_score for item in summary.profile_best_hidden.values())
-        parts.append(
-            f'<text class="label" x="{margin_left - 18:.1f}" y="{y_center + 6:.1f}" text-anchor="end" font-size="18" font-weight="700">{summary.label}</text>'
-        )
-        for col_index, profile in enumerate(PROFILE_ORDER):
-            x = margin_left + col_index * cell_width
-            result = summary.profile_best_hidden[profile]
-            gap = result.test_score - row_best
-            ratio = (gap - gap_floor) / (0 - gap_floor)
-            fill = _mix_color(weak_fill, best_fill, ratio)
-            parts.append(
-                f'<rect x="{x + 8:.1f}" y="{y_top + 8:.1f}" width="{cell_width - 16:.1f}" height="{cell_height - 16:.1f}" rx="18" fill="{fill}" stroke="#d7dce3" stroke-width="1"/>'
-            )
-            text_fill = "#ffffff" if ratio > 0.65 else TEXT
-            subtle_fill = "#eef8f4" if ratio > 0.65 else SUBTLE
-            parts.append(
-                f'<text x="{x + cell_width / 2:.1f}" y="{y_top + cell_height / 2 - 6:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="{text_fill}">{result.test_score:.3f}</text>'
-            )
-            parts.append(
-                f'<text x="{x + cell_width / 2:.1f}" y="{y_top + cell_height / 2 + 18:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="{subtle_fill}">{_short_label(result.agent_name)}</text>'
-            )
-            parts.append(
-                f'<text x="{x + cell_width / 2:.1f}" y="{y_top + cell_height - 18:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="{subtle_fill}">{gap:+.3f} vs row best</text>'
-            )
-
-    legend_x = margin_left
-    legend_y = height - 28
-    for index, ratio in enumerate((0.0, 0.33, 0.66, 1.0)):
-        fill = _mix_color(weak_fill, best_fill, ratio)
-        x = legend_x + index * 68
-        parts.append(f'<rect x="{x:.1f}" y="{legend_y - 14:.1f}" width="52" height="14" rx="4" fill="{fill}" stroke="#d7dce3" stroke-width="0.8"/>')
-    parts.append(f'<text class="subtle" x="{legend_x + 288:.1f}" y="{legend_y - 2:.1f}" font-size="14">lighter = farther from the dataset-best hidden score</text>')
-    parts.append("</svg>")
-    out_path.write_text("\n".join(parts), encoding="utf-8")
-
-
-def _write_summary_json(summaries: list[DatasetSummary], out_path: Path) -> None:
-    payload = []
-    for summary in summaries:
-        payload.append(
-            {
-                "dataset": summary.key,
-                "label": summary.label,
-                "best_val": {
-                    "agent_name": summary.best_val.agent_name,
-                    "validation_score": summary.best_val.validation_score,
-                    "test_score": summary.best_val.test_score,
-                    "ties": [row.agent_name for row in summary.best_val_ties],
-                },
-                "best_hidden": {
-                    "agent_name": summary.best_hidden.agent_name,
-                    "validation_score": summary.best_hidden.validation_score,
-                    "test_score": summary.best_hidden.test_score,
-                    "ties": [row.agent_name for row in summary.best_hidden_ties],
-                },
-                "profile_best_hidden": {
-                    profile: {
-                        "agent_name": result.agent_name,
-                        "validation_score": result.validation_score,
-                        "test_score": result.test_score,
+def _write_summary_json(
+    out_path: Path,
+    q1_summaries: dict[str, dict[str, GroupSeries]],
+    q2_summaries: dict[str, dict[str, GroupSeries]],
+) -> None:
+    payload: dict[str, object] = {"question1": {}, "question2": {}}
+    for section_name, groups, summaries in (
+        ("question1", Q1_GROUPS, q1_summaries),
+        ("question2", Q2_GROUPS, q2_summaries),
+    ):
+        section_payload: dict[str, object] = {}
+        for dataset_key, dataset_label, _ in DATASETS:
+            section_payload[dataset_key] = {
+                "label": dataset_label,
+                "groups": {
+                    group_key: {
+                        "label": groups[group_key]["label"],
+                        "best_validation": summaries[dataset_key][group_key].cell.best_validation,
+                        "winner_text": summaries[dataset_key][group_key].cell.winner_text,
+                        "winner_conditions": list(summaries[dataset_key][group_key].cell.conditions),
                     }
-                    for profile, result in summary.profile_best_hidden.items()
+                    for group_key in groups.keys()
                 },
             }
-        )
+        payload[section_name] = section_payload
     out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def main() -> int:
     ASSET_DIR.mkdir(parents=True, exist_ok=True)
-    summaries = _summaries()
-    _build_winner_chart(summaries, ASSET_DIR / "cross_dataset_winners.svg")
-    _build_profile_heatmap(summaries, ASSET_DIR / "profile_hidden_gap_heatmap.svg")
-    _write_summary_json(summaries, ASSET_DIR / "cross_dataset_experiment_summary.json")
+    q1_summaries = _summaries_for_groups(Q1_GROUPS)
+    q2_summaries = _summaries_for_groups(Q2_GROUPS)
+
+    _build_table_svg(
+        ASSET_DIR / "question1_comparison_table.svg",
+        title="Question 1: Comparison Groups x Datasets",
+        subtitle="Cell value is the best validation reached by that comparison group on the dataset.",
+        groups=Q1_GROUPS,
+        summaries=q1_summaries,
+    )
+    _build_table_svg(
+        ASSET_DIR / "question2_comparison_table.svg",
+        title="Question 2: Harness x Datasets",
+        subtitle="Each cell summarizes the best validation reached by that harness family.",
+        groups=Q2_GROUPS,
+        summaries=q2_summaries,
+    )
+    _build_history_panel_svg(
+        ASSET_DIR / "question1_history_panel_a.svg",
+        title="Question 1: Best-Val History",
+        subtitle="Line is cumulative best validation inside each comparison group. Scatter marks evaluations that did not move the frontier.",
+        groups=Q1_GROUPS,
+        summaries=q1_summaries,
+        dataset_keys=("fashion_mnist", "twenty_newsgroups"),
+    )
+    _build_history_panel_svg(
+        ASSET_DIR / "question1_history_panel_b.svg",
+        title="Question 1: Best-Val History",
+        subtitle="Line is cumulative best validation inside each comparison group. Scatter marks evaluations that did not move the frontier.",
+        groups=Q1_GROUPS,
+        summaries=q1_summaries,
+        dataset_keys=("sms_spam", "cifar10"),
+    )
+    _build_history_panel_svg(
+        ASSET_DIR / "question2_history_panel_a.svg",
+        title="Question 2: Best-Val History",
+        subtitle="Line is cumulative best validation inside each harness family. Scatter marks evaluations that did not move the frontier.",
+        groups=Q2_GROUPS,
+        summaries=q2_summaries,
+        dataset_keys=("fashion_mnist", "twenty_newsgroups"),
+    )
+    _build_history_panel_svg(
+        ASSET_DIR / "question2_history_panel_b.svg",
+        title="Question 2: Best-Val History",
+        subtitle="Line is cumulative best validation inside each harness family. Scatter marks evaluations that did not move the frontier.",
+        groups=Q2_GROUPS,
+        summaries=q2_summaries,
+        dataset_keys=("sms_spam", "cifar10"),
+    )
+    _write_summary_json(
+        ASSET_DIR / "cross_dataset_experiment_summary.json",
+        q1_summaries=q1_summaries,
+        q2_summaries=q2_summaries,
+    )
     return 0
 
 

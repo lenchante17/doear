@@ -134,7 +134,6 @@ agent 특유 문제
 - 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업
 
 필요성
-- 앞 슬라이드의 실험 운영 문제를 시스템 수준에서 다룰 틀이 필요하다
 - Autoresearch loop는 이 큰 ML lifecycle 안의 일부
 
 핵심 역할
@@ -185,7 +184,7 @@ agent 특유 문제
 - readout: `best val`, `best hidden`
 
 ---
-<!-- _class: tinytext -->
+<!-- _class: reftext -->
 <!-- footer: "관련 문헌" -->
 
 ## 12. 관련 문헌
@@ -242,120 +241,64 @@ agent 특유 문제
 <small>source: [SMAC3 docs](https://automl.github.io/SMAC3/main/), [Components](https://automl.github.io/SMAC3/v2.0.2/advanced_usage/1_components.html), [Intensifier](https://automl.github.io/SMAC3/v2.2.0/api/smac.intensifier.intensifier.html)</small>
 
 ---
-<!-- footer: "질문 1 결과" -->
+<!-- footer: "질문 1 표" -->
 
-## 15. 질문 1 결과
+## 15. 질문 1 표
 
-![w:1440](./assets/cross_dataset_winners.svg)
+![w:1440](./assets/question1_comparison_table.svg)
 
-- validation winner와 hidden-test winner는 `4`개 중 `3`개 데이터셋에서 갈렸다.
-- 질문 1의 결론은 `better than baseline`이 아니라 `dataset-dependent portfolio`에 가깝다.
-
----
-<!-- footer: "질문 2 셋업" -->
-
-## 16. 질문 2 셋업
-
-| 항목 | 설정 |
-| --- | --- |
-| benchmarks | `fashion`, `twenty`, `spam`, `cifar` |
-| model | `mlp` |
-| conditions | dataset당 `14` |
-| budget | condition당 `100 + finalize 1` |
-
-- 각 데이터셋은 fresh isolated root에서 다시 시작했다.
-- 각 root 안에서 `14`개 condition마다 서로 다른 subagent를 띄웠다.
-- 이번 질문은 `어떤 harness를 남길 것인가`다.
+- 질문 1의 winner는 고정되지 않았다. `fashion`, `cifar`는 hybrid 계열이, `twenty`, `spam`은 plain/direct tier가 상단에 남았다.
+- 그래서 baseline 비교의 결론은 단일 champion보다 dataset별 shortlist에 가깝다.
 
 ---
-<!-- footer: "실행 규칙" -->
+<!-- footer: "질문 1 추적 A" -->
 
-## 17. 실험 설정
+## 16. 질문 1 추적 A
 
-| 항목 | 설정 |
-| --- | --- |
-| subagent isolation | condition별 독립 context |
-| submission width | run당 `1` candidate |
-| duplicate policy | 기존과 같은 config 금지 |
-| validity gate | `100 runs + finalized 1` 검산 |
+![w:1440](./assets/question1_history_panel_a.svg)
 
-- context mixing과 repeated config를 막기 위해 실행 규칙을 강화했다.
-- 첫 `twenty_newsgroups` wave는 contaminated run이라 버리고 clean rerun만 채택했다.
+- `fashion`과 `twenty`의 frontier 모양이 다르다. 전자는 advisor stack이 late gain을 만들었고, 후자는 plain exploit이 만든 초반 우위를 끝까지 지켰다.
 
 ---
-<!-- footer: "결과 매트릭스" -->
+<!-- footer: "질문 1 추적 B" -->
 
-## 18. 탐색 축
+## 17. 질문 1 추적 B
 
-| Dataset | best val | best hidden | signal |
-| --- | --- | --- | --- |
-| `fashion` | `advanced_tpe_smac` / `screening_tpe_smac` | `advanced_smac` tier | hybrid peak, `SMAC` finalize |
-| `twenty` | `ratchet_plain` | `ratchet_plain` | plain exploit 승리 |
-| `spam` | `screening_plain` | `advanced_tpe_smac` | saturated regime |
-| `cifar` | `ratchet_tpe_smac` | `screening_plain` | peak와 finalize 분리 |
+![w:1440](./assets/question1_history_panel_b.svg)
 
-- 질문 2는 이 차이를 harness 관점에서 읽는 작업이다.
+- `spam`은 조기 포화, `cifar`는 긴 plateau 뒤 late jump가 반복됐다. 같은 budget이어도 좋은 비교군이 달라지는 이유다.
 
 ---
-<!-- footer: "Fashion" -->
+<!-- footer: "질문 2 표" -->
 
-## 19. 결과 요약
+## 18. 질문 2 표
 
-| 관점 | 조건 | 점수 |
-| --- | --- | --- |
-| best val | `advanced_tpe_smac`, `screening_tpe_smac` | `0.865` |
-| best hidden | `advanced_smac`, `ratchet_smac`, `screening_smac`, `smac_direct` | `0.853` |
-| reading | peak는 hybrid, finalize는 `SMAC` 계열 |  |
+![w:1440](./assets/question2_comparison_table.svg)
 
-- `fashion_mnist`에서는 model-based advisor가 late-stage generalization에 유리했다.
-- direct `SMAC`도 top hidden tier에 들어서, agent만의 독점 우위는 아니었다.
+- harness 비교도 dataset마다 달랐다. 즉 `무슨 advisor를 붙였나`만으로는 결과를 설명할 수 없고, `어떤 search loop를 돌렸나`가 별도 요인이다.
 
 ---
-<!-- footer: "Twenty" -->
+<!-- footer: "질문 2 추적 A" -->
 
-## 20. Twenty 결과
+## 19. 질문 2 추적 A
 
-| 관점 | 조건 | 점수 |
-| --- | --- | --- |
-| best val | `ratchet_plain` | `0.5658` |
-| best hidden | `ratchet_plain` | `0.5767` |
-| next tier | `advanced_tpe`, `ratchet_tpe`, `screening_tpe`, `tpe_direct` | `0.5458` hidden |
+![w:1440](./assets/question2_history_panel_a.svg)
 
-- `twenty_newsgroups`에서는 plain harness가 advisor를 붙인 변형보다 더 좋았다.
-- 이 태스크에선 exploit loop 자체가 충분히 강했고, advisor가 추가 이득을 못 만들었다.
+- `fashion`에선 `screening/advanced`가 frontier를 올렸고, `twenty`에선 `ratchet`가 초반 exploit 우위를 유지했다.
 
 ---
-<!-- footer: "Spam" -->
+<!-- footer: "질문 2 추적 B" -->
 
-## 21. Spam 결과
+## 20. 질문 2 추적 B
 
-| 관점 | 조건 | 점수 |
-| --- | --- | --- |
-| best val | `screening_plain` | `0.9916` |
-| best hidden | `advanced_tpe_smac` | `0.9833` |
-| strong hidden tier | `smac_direct`, `advanced_smac`, `ratchet_smac`, `screening_smac`, `ratchet_tpe_smac` | `0.9821` |
+![w:1440](./assets/question2_history_panel_b.svg)
 
-- `sms_spam`은 거의 saturate돼서 validation 차이가 매우 작다.
-- 이런 regime에선 `best val`보다 `finalize hidden`이 harness 판정에 더 중요하다.
-
----
-<!-- footer: "CIFAR" -->
-
-## 22. CIFAR 결과
-
-| 관점 | 조건 | 점수 |
-| --- | --- | --- |
-| best val | `ratchet_tpe_smac` | `0.4400` |
-| best hidden | `screening_plain` | `0.3917` |
-| next hidden tier | `advanced_tpe`, `ratchet_tpe`, `screening_tpe`, `tpe_direct` | `0.3900` |
-
-- `cifar10`에선 hybrid가 peak를 끌어올렸지만 finalize winner는 plain이었다.
-- 따라서 search trace의 ceiling만 보면 harness를 잘못 고를 수 있다.
+- `spam`은 `screening`, `cifar`는 `ratchet`가 상단 frontier를 만들었다. harness는 해석 틀이 아니라 실제 search policy다.
 
 ---
 <!-- footer: "공통 패턴" -->
 
-## 23. 공통 패턴
+## 21. 공통 패턴
 
 - winner는 dataset마다 달랐다.
 - `best val`과 `best hidden`은 `fashion`, `spam`, `cifar`에서 갈렸다.
@@ -363,19 +306,9 @@ agent 특유 문제
 - direct baseline도 여러 데이터셋에서 top tier에 남아 있었다.
 
 ---
-<!-- footer: "Harness 해석" -->
-
-## 24. Harness 해석
-
-![w:1440](./assets/profile_hidden_gap_heatmap.svg)
-
-- `fashion`은 tie에 가깝고, `twenty`는 `ratchet`, `spam`은 `advanced`, `cifar`는 `screening`이 앞섰다.
-- 즉 `무슨 advisor를 붙였나`만큼 `무슨 harness가 무엇을 보게 만들었나`가 중요했다.
-
----
 <!-- footer: "운영 교훈" -->
 
-## 25. 운영 교훈
+## 22. 운영 교훈
 
 - subagent isolation 없이는 dataset 간 context가 섞인다.
 - run당 `1` candidate 제한이 없으면 비교 단위가 흐려진다.
@@ -385,7 +318,7 @@ agent 특유 문제
 ---
 <!-- footer: "핵심 함의" -->
 
-## 26. 핵심 함의
+## 23. 핵심 함의
 
 - harness effect는 advisor effect만큼 컸다.
 - validation 최적화와 finalize 최적화는 다른 문제였다.
@@ -395,7 +328,7 @@ agent 특유 문제
 ---
 <!-- footer: "추천" -->
 
-## 27. 운영 교훈
+## 24. 추천
 
 추천
 - default winner 하나를 고정하지 말고 dataset별 shortlist를 운영한다.
@@ -405,7 +338,7 @@ agent 특유 문제
 ---
 <!-- footer: "한계" -->
 
-## 28. 한계
+## 25. 한계
 
 - single split, repeated seed 평균 없음
 - model family는 `mlp` 하나만 사용했다
@@ -416,7 +349,7 @@ agent 특유 문제
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 29. References
+## 26. References
 
 | 구분 | 예시 |
 | --- | --- |

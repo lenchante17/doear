@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1460" height="776" viewBox="0 0 1460 776">
+<style>
+.bg{fill:#fffdf8;}
+.title{font-family:Helvetica,Arial,sans-serif;font-size:30px;font-weight:700;fill:#1f2328;}
+.subtitle{font-family:Helvetica,Arial,sans-serif;font-size:16px;fill:#5b6470;}
+.label{font-family:Helvetica,Arial,sans-serif;fill:#1f2328;}
+.subtle{font-family:Helvetica,Arial,sans-serif;fill:#5b6470;}
+.grid{stroke:#e8ebf0;stroke-width:1;}
+</style>
+<rect class="bg" width="1460" height="776"/>
+<text class="title" x="54" y="38">Question 1: Comparison Groups x Datasets</text>
+<text class="subtitle" x="54" y="63">Cell value is the best validation reached by that comparison group on the dataset.</text>
+<rect x="54" y="96" width="1402" height="534" rx="20" fill="#ffffff" stroke="#d7dce3" stroke-width="1.2"/>
+<rect x="304" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="448.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">Fashion-MNIST</text>
+<rect x="592" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="736.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">Twenty Newsgroups</text>
+<rect x="880" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="1024.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">SMS Spam</text>
+<rect x="1168" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="1312.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">CIFAR-10</text>
+<rect x="54" y="96" width="250" height="74" fill="#f8fafc"/>
+<text class="label" x="76" y="140.0" font-size="20" font-weight="700">Comparison Group</text>
+<rect x="54" y="170" width="1402" height="92" fill="#ffffff"/>
+<line class="grid" x1="54" y1="170" x2="1456" y2="170"/>
+<text x="76" y="210.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#2563eb">Plain Agent</text>
+<text class="subtle" x="76" y="234.0" font-size="13">best val among group conditions</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="630"/>
+<text class="label" x="448.0" y="208.0" text-anchor="middle" font-size="24" font-weight="700">0.861</text>
+<text class="subtle" x="448.0" y="232.0" text-anchor="middle" font-size="14">Scr Plain</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="630"/>
+<text class="label" x="736.0" y="208.0" text-anchor="middle" font-size="24" font-weight="700">0.566</text>
+<text class="subtle" x="736.0" y="232.0" text-anchor="middle" font-size="14">Rat Plain</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="630"/>
+<text class="label" x="1024.0" y="208.0" text-anchor="middle" font-size="24" font-weight="700">0.992</text>
+<text class="subtle" x="1024.0" y="232.0" text-anchor="middle" font-size="14">Scr Plain</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="630"/>
+<text class="label" x="1312.0" y="208.0" text-anchor="middle" font-size="24" font-weight="700">0.417</text>
+<text class="subtle" x="1312.0" y="232.0" text-anchor="middle" font-size="14">Adv Plain</text>
+<rect x="54" y="262" width="1402" height="92" fill="#fcfcfd"/>
+<line class="grid" x1="54" y1="262" x2="1456" y2="262"/>
+<text x="76" y="302.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#f59e0b">Agent + TPE</text>
+<text class="subtle" x="76" y="326.0" font-size="13">best val among group conditions</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="630"/>
+<text class="label" x="448.0" y="300.0" text-anchor="middle" font-size="24" font-weight="700">0.854</text>
+<text class="subtle" x="448.0" y="324.0" text-anchor="middle" font-size="14">tie x3</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="630"/>
+<text class="label" x="736.0" y="300.0" text-anchor="middle" font-size="24" font-weight="700">0.551</text>
+<text class="subtle" x="736.0" y="324.0" text-anchor="middle" font-size="14">tie x3</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="630"/>
+<text class="label" x="1024.0" y="300.0" text-anchor="middle" font-size="24" font-weight="700">0.990</text>
+<text class="subtle" x="1024.0" y="324.0" text-anchor="middle" font-size="14">tie x3</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="630"/>
+<text class="label" x="1312.0" y="300.0" text-anchor="middle" font-size="24" font-weight="700">0.428</text>
+<text class="subtle" x="1312.0" y="324.0" text-anchor="middle" font-size="14">tie x3</text>
+<rect x="54" y="354" width="1402" height="92" fill="#ffffff"/>
+<line class="grid" x1="54" y1="354" x2="1456" y2="354"/>
+<text x="76" y="394.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#16a34a">Agent + SMAC</text>
+<text class="subtle" x="76" y="418.0" font-size="13">best val among group conditions</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="630"/>
+<text class="label" x="448.0" y="392.0" text-anchor="middle" font-size="24" font-weight="700">0.863</text>
+<text class="subtle" x="448.0" y="416.0" text-anchor="middle" font-size="14">tie x3</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="630"/>
+<text class="label" x="736.0" y="392.0" text-anchor="middle" font-size="24" font-weight="700">0.543</text>
+<text class="subtle" x="736.0" y="416.0" text-anchor="middle" font-size="14">tie x3</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="630"/>
+<text class="label" x="1024.0" y="392.0" text-anchor="middle" font-size="24" font-weight="700">0.989</text>
+<text class="subtle" x="1024.0" y="416.0" text-anchor="middle" font-size="14">tie x3</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="630"/>
+<text class="label" x="1312.0" y="392.0" text-anchor="middle" font-size="24" font-weight="700">0.413</text>
+<text class="subtle" x="1312.0" y="416.0" text-anchor="middle" font-size="14">tie x3</text>
+<rect x="54" y="446" width="1402" height="92" fill="#fcfcfd"/>
+<line class="grid" x1="54" y1="446" x2="1456" y2="446"/>
+<text x="76" y="486.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#dc2626">Agent + TPE+SMAC</text>
+<text class="subtle" x="76" y="510.0" font-size="13">best val among group conditions</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="630"/>
+<text class="label" x="448.0" y="484.0" text-anchor="middle" font-size="24" font-weight="700">0.865</text>
+<text class="subtle" x="448.0" y="508.0" text-anchor="middle" font-size="14">tie x2</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="630"/>
+<text class="label" x="736.0" y="484.0" text-anchor="middle" font-size="24" font-weight="700">0.542</text>
+<text class="subtle" x="736.0" y="508.0" text-anchor="middle" font-size="14">Adv T+S</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="630"/>
+<text class="label" x="1024.0" y="484.0" text-anchor="middle" font-size="24" font-weight="700">0.990</text>
+<text class="subtle" x="1024.0" y="508.0" text-anchor="middle" font-size="14">Scr T+S</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="630"/>
+<text class="label" x="1312.0" y="484.0" text-anchor="middle" font-size="24" font-weight="700">0.440</text>
+<text class="subtle" x="1312.0" y="508.0" text-anchor="middle" font-size="14">Rat T+S</text>
+<rect x="54" y="538" width="1402" height="92" fill="#ffffff"/>
+<line class="grid" x1="54" y1="538" x2="1456" y2="538"/>
+<text x="76" y="578.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#64748b">Direct</text>
+<text class="subtle" x="76" y="602.0" font-size="13">best val among group conditions</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="630"/>
+<text class="label" x="448.0" y="576.0" text-anchor="middle" font-size="24" font-weight="700">0.863</text>
+<text class="subtle" x="448.0" y="600.0" text-anchor="middle" font-size="14">SMAC Dir</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="630"/>
+<text class="label" x="736.0" y="576.0" text-anchor="middle" font-size="24" font-weight="700">0.551</text>
+<text class="subtle" x="736.0" y="600.0" text-anchor="middle" font-size="14">TPE Dir</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="630"/>
+<text class="label" x="1024.0" y="576.0" text-anchor="middle" font-size="24" font-weight="700">0.990</text>
+<text class="subtle" x="1024.0" y="600.0" text-anchor="middle" font-size="14">TPE Dir</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="630"/>
+<text class="label" x="1312.0" y="576.0" text-anchor="middle" font-size="24" font-weight="700">0.428</text>
+<text class="subtle" x="1312.0" y="600.0" text-anchor="middle" font-size="14">TPE Dir</text>
+<line class="grid" x1="54" y1="630" x2="1456" y2="630"/>
+</svg>
