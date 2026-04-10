@@ -266,9 +266,44 @@ agent 특유 문제
 - `spam`은 조기 포화, `cifar`는 긴 plateau 뒤 late jump가 반복됐다. 같은 budget이어도 direct와 agent의 유불리가 dataset마다 달라진다.
 
 ---
+<!-- footer: "Autoresearch 한계" -->
+
+## 18. Autoresearch 한계
+
+- 실험이 즉흥적으로 이어지기 쉽다.
+- 왜 이 실험을 했는지 attribution이 약해지기 쉽다.
+- 큰 수정, 작은 튜닝, 검증 실험이 한 loop 안에 섞인다.
+- robustness, replication, interaction 확인이 뒤로 밀린다.
+- 잘 정리된 random search로 퇴화할 위험이 있다.
+
+---
+<!-- footer: "Harness 요구" -->
+
+## 19. Harness Requirements
+
+- 무엇을 먼저 볼지 정하는 우선순위가 필요하다.
+- 어떤 조합을 함께 볼지 정하는 규율이 필요하다.
+- 탐색 단계와 검증 단계를 분리해야 한다.
+- 작은 수정과 큰 수정을 다르게 다루는 운영 규칙이 필요하다.
+- 실패도 다음 round 설계에 남기는 구조가 필요하다.
+
+---
+<!-- footer: "DOE 연결" -->
+
+## 20. DOE As Harness
+
+| Autoresearch need | DOE concept |
+| --- | --- |
+| 무엇부터 실험할까 | screening |
+| 어떤 조합을 함께 볼까 | factorial design |
+| 언제 정밀 탐색할까 | sequential design |
+| 안정적인가 | robust design |
+| 예산을 어떻게 나눌까 | mixture / allocation |
+
+---
 <!-- footer: "질문 2 셋업" -->
 
-## 18. 질문 2 셋업
+## 21. 질문 2 셋업
 
 비교 축
 
@@ -286,7 +321,7 @@ agent 특유 문제
 ---
 <!-- footer: "질문 2 요약" -->
 
-## 19. 질문 2 요약
+## 22. 질문 2 요약
 
 ![w:1300](./assets/question2_comparison_table.svg)
 
@@ -295,7 +330,7 @@ agent 특유 문제
 ---
 <!-- footer: "Fashion, Twenty" -->
 
-## 20. Fashion, Twenty
+## 23. Fashion, Twenty
 
 ![w:1300](./assets/question2_history_panel_a.svg)
 
@@ -304,7 +339,7 @@ agent 특유 문제
 ---
 <!-- footer: "Spam, CIFAR" -->
 
-## 21. Spam, CIFAR
+## 24. Spam, CIFAR
 
 ![w:1300](./assets/question2_history_panel_b.svg)
 
@@ -313,7 +348,7 @@ agent 특유 문제
 ---
 <!-- footer: "공통 패턴" -->
 
-## 22. 공통 패턴
+## 25. 공통 패턴
 
 - winner는 dataset마다 달랐다.
 - 같은 top score라도 frontier shape와 late gain 위치는 dataset마다 달랐다.
@@ -323,7 +358,7 @@ agent 특유 문제
 ---
 <!-- footer: "한계" -->
 
-## 23. 한계
+## 26. 한계
 
 - single split, repeated seed 평균 없음
 - model family는 `mlp` 하나만 사용했다
@@ -334,7 +369,7 @@ agent 특유 문제
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 24. References
+## 27. References
 
 | 구분 | 예시 |
 | --- | --- |
