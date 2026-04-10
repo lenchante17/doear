@@ -170,12 +170,19 @@ agent 특유 문제
 
 ## 11. 질문 1 셋업
 
-| Arm | 의미 |
+비교 항목
+
+| Arm | 구성 |
 | --- | --- |
 | baseline only | `Optuna TPE`, `SMAC3` |
 | agent only | plain `Autoresearch` |
 | hybrid | `agent + TPE`, `agent + SMAC3`, `agent + TPE+SMAC` |
 | direct | `TPE direct`, `SMAC direct` |
+
+실험 환경
+- benchmarks: `fashion`, `twenty`, `spam`, `cifar`
+- model: fixed `mlp` search space
+- readout: `best val`, `best hidden`
 
 ---
 <!-- _class: tinytext -->
