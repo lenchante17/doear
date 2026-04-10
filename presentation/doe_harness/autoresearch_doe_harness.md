@@ -128,7 +128,7 @@ agent 특유 문제
 
 ## 8. MLOps
 
-![w:740](./assets/mlops_kubeflow.svg)
+![w:630](./assets/mlops_kubeflow.svg)
 
 정의
 - 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업
