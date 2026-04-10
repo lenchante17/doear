@@ -199,23 +199,34 @@ def _winner_text(conditions: list[str]) -> str:
 
 def _build_group_series(dataset_root: Path, group_spec: dict[str, object]) -> GroupSeries:
     condition_names = tuple(group_spec["conditions"])
+    condition_evaluations: list[list[EvalPoint]] = []
     evaluations: list[EvalPoint] = []
     best_rows: list[tuple[str, float, float]] = []
     for condition_name in condition_names:
         condition_root = dataset_root / condition_name
-        evaluations.extend(_load_run_evaluations(condition_root, condition_name))
+        condition_rows = _load_run_evaluations(condition_root, condition_name)
+        condition_evaluations.append(condition_rows)
+        evaluations.extend(condition_rows)
         best_rows.append((condition_name, *_load_finalized_best(condition_root, condition_name)))
     evaluations.sort(key=lambda row: row.run_id)
 
     best_so_far: list[float] = []
     scatter_points: list[tuple[int, float]] = []
     incumbent = float("-inf")
-    for index, row in enumerate(evaluations, start=1):
-        if row.validation_score > incumbent:
-            incumbent = row.validation_score
-        else:
-            scatter_points.append((index, row.validation_score))
+    max_rounds = max((len(rows) for rows in condition_evaluations), default=0)
+    for round_index in range(max_rounds):
+        round_rows = [rows[round_index] for rows in condition_evaluations if round_index < len(rows)]
+        if not round_rows:
+            continue
+        previous_incumbent = incumbent
+        round_best = max(row.validation_score for row in round_rows)
+        if round_best > incumbent:
+            incumbent = round_best
         best_so_far.append(incumbent)
+        for row in round_rows:
+            moved_frontier = round_best > previous_incumbent and row.validation_score == round_best
+            if not moved_frontier:
+                scatter_points.append((round_index + 1, row.validation_score))
 
     winner_value = max(row[1] for row in best_rows)
     winners = sorted([row[0] for row in best_rows if row[1] == winner_value])
@@ -429,7 +440,7 @@ def _build_history_panel_svg(
         plot_height = panel_height - 72
         series = [summaries[dataset_key][group_key] for group_key in groups.keys()]
         min_score, max_score, clipped_count = _score_window(series)
-        max_steps = max(len(row.evaluations) for row in series)
+        max_steps = max(len(row.best_so_far) for row in series)
 
         parts.append(
             f'<rect x="{panel_x}" y="{panel_y}" width="{panel_width}" height="{panel_height}" rx="24" fill="{WHITE}" stroke="#d7dce3" stroke-width="1.1"/>'
@@ -476,7 +487,7 @@ def _build_history_panel_svg(
             f'<line x1="{plot_left}" y1="{plot_top + plot_height}" x2="{plot_left + plot_width}" y2="{plot_top + plot_height}" stroke="{TEXT}" stroke-width="1.2"/>'
         )
         parts.append(
-            f'<text class="subtle" x="{plot_left + plot_width / 2:.1f}" y="{plot_top + plot_height + 46:.1f}" text-anchor="middle" font-size="14">Evaluation index within comparison group</text>'
+            f'<text class="subtle" x="{plot_left + plot_width / 2:.1f}" y="{plot_top + plot_height + 46:.1f}" text-anchor="middle" font-size="14">Round index per condition (1-100 budget)</text>'
         )
 
         for row in series:

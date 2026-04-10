@@ -245,7 +245,7 @@ agent 특유 문제
 
 ## 15. 질문 1 표
 
-![w:1440](./assets/question1_comparison_table.svg)
+![w:1300](./assets/question1_comparison_table.svg)
 
 - 질문 1의 winner는 고정되지 않았다. `fashion`, `cifar`는 hybrid 계열이, `twenty`, `spam`은 plain/direct tier가 상단에 남았다.
 - 그래서 baseline 비교의 결론은 단일 champion보다 dataset별 shortlist에 가깝다.
@@ -255,7 +255,7 @@ agent 특유 문제
 
 ## 16. 질문 1 추적 A
 
-![w:1440](./assets/question1_history_panel_a.svg)
+![w:1300](./assets/question1_history_panel_a.svg)
 
 - `fashion`과 `twenty`의 frontier 모양이 다르다. 전자는 advisor stack이 late gain을 만들었고, 후자는 plain exploit이 만든 초반 우위를 끝까지 지켰다.
 
@@ -264,7 +264,7 @@ agent 특유 문제
 
 ## 17. 질문 1 추적 B
 
-![w:1440](./assets/question1_history_panel_b.svg)
+![w:1300](./assets/question1_history_panel_b.svg)
 
 - `spam`은 조기 포화, `cifar`는 긴 plateau 뒤 late jump가 반복됐다. 같은 budget이어도 좋은 비교군이 달라지는 이유다.
 
@@ -273,7 +273,7 @@ agent 특유 문제
 
 ## 18. 질문 2 표
 
-![w:1440](./assets/question2_comparison_table.svg)
+![w:1300](./assets/question2_comparison_table.svg)
 
 - harness 비교도 dataset마다 달랐다. 즉 `무슨 advisor를 붙였나`만으로는 결과를 설명할 수 없고, `어떤 search loop를 돌렸나`가 별도 요인이다.
 
@@ -282,7 +282,7 @@ agent 특유 문제
 
 ## 19. 질문 2 추적 A
 
-![w:1440](./assets/question2_history_panel_a.svg)
+![w:1300](./assets/question2_history_panel_a.svg)
 
 - `fashion`에선 `screening/advanced`가 frontier를 올렸고, `twenty`에선 `ratchet`가 초반 exploit 우위를 유지했다.
 
@@ -291,7 +291,7 @@ agent 특유 문제
 
 ## 20. 질문 2 추적 B
 
-![w:1440](./assets/question2_history_panel_b.svg)
+![w:1300](./assets/question2_history_panel_b.svg)
 
 - `spam`은 `screening`, `cifar`는 `ratchet`가 상단 frontier를 만들었다. harness는 해석 틀이 아니라 실제 search policy다.
 
