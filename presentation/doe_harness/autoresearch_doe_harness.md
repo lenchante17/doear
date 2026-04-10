@@ -180,7 +180,7 @@ agent 특유 문제
 실험 환경
 - benchmarks: `fashion`, `twenty`, `spam`, `cifar`
 - model: fixed `mlp` search space
-- readout: `best val`, `best hidden`
+- readout: `best val`, frontier trajectory
 
 ---
 <!-- _class: reftext -->
@@ -281,7 +281,7 @@ agent 특유 문제
 실험 환경
 - datasets: `fashion`, `twenty`, `spam`, `cifar`
 - variants: 각 harness 안에서 `plain`, `TPE`, `SMAC`, `TPE+SMAC`
-- readout: `best val`, `best hidden`, frontier trajectory
+- readout: `best val`, frontier trajectory
 
 ---
 <!-- footer: "질문 2 요약" -->
@@ -316,7 +316,7 @@ agent 특유 문제
 ## 22. 공통 패턴
 
 - winner는 dataset마다 달랐다.
-- `best val`과 `best hidden`은 `fashion`, `spam`, `cifar`에서 갈렸다.
+- 같은 top score라도 frontier shape와 late gain 위치는 dataset마다 달랐다.
 - hybrid가 ceiling을 높일 때도 있었지만, plain이 finalize를 더 잘하는 경우가 반복됐다.
 - direct baseline도 여러 데이터셋에서 top tier에 남아 있었다.
 
@@ -338,7 +338,7 @@ agent 특유 문제
 - harness effect는 advisor effect만큼 컸다.
 - validation 최적화와 finalize 최적화는 다른 문제였다.
 - dual advisor는 일부 데이터셋에서만 이득이 있었다.
-- harness 평가는 `best val`, `best hidden`, completeness를 함께 봐야 한다.
+- harness 평가는 `best val`, frontier, completeness를 함께 봐야 한다.
 
 ---
 <!-- footer: "추천" -->
