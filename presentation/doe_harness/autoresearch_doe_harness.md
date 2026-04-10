@@ -321,39 +321,9 @@ agent 특유 문제
 - direct baseline도 여러 데이터셋에서 top tier에 남아 있었다.
 
 ---
-<!-- footer: "운영 교훈" -->
-
-## 23. 운영 교훈
-
-- subagent isolation 없이는 dataset 간 context가 섞인다.
-- run당 `1` candidate 제한이 없으면 비교 단위가 흐려진다.
-- duplicate guard가 없으면 deterministic eval에서 같은 config를 반복하게 된다.
-- artifact count로 검산하지 않으면 early finalize나 invalid wave를 놓친다.
-
----
-<!-- footer: "핵심 함의" -->
-
-## 24. 핵심 함의
-
-- harness effect는 advisor effect만큼 컸다.
-- validation 최적화와 finalize 최적화는 다른 문제였다.
-- dual advisor는 일부 데이터셋에서만 이득이 있었다.
-- harness 평가는 `best val`, frontier, completeness를 함께 봐야 한다.
-
----
-<!-- footer: "추천" -->
-
-## 25. 추천
-
-추천
-- default winner 하나를 고정하지 말고 dataset별 shortlist를 운영한다.
-- image tabular-like regime에선 hybrid peak를, text/saturated regime에선 plain finalize를 우선 본다.
-- rerun 규칙과 contamination discard 기준을 미리 정해 둔다.
-
----
 <!-- footer: "한계" -->
 
-## 26. 한계
+## 23. 한계
 
 - single split, repeated seed 평균 없음
 - model family는 `mlp` 하나만 사용했다
@@ -364,7 +334,7 @@ agent 특유 문제
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 27. References
+## 24. References
 
 | 구분 | 예시 |
 | --- | --- |
