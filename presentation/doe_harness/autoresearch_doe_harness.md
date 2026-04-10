@@ -12,7 +12,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 # AutoML, Autoresearch, MLOps +@
 
-26.4.8
+4.10
 
 서민교
 
@@ -205,6 +205,8 @@ agent 특유 문제
 
 ![w:780](./assets/optuna_tpe_flow.svg)
 
+<div style="font-size:0.92em">
+
 `핵심 직관`
 - 지난 trial을 `상위권`과 `나머지`로 나눈다
 
@@ -214,7 +216,7 @@ agent 특유 문제
 `읽는 법`
 - "좋은 점수들이 몰린 자리"를 density로 찾는 sampler다
 
-<small>source: [Optuna TPESampler docs](https://optuna.readthedocs.io/en/v4.4.0/reference/samplers/generated/optuna.samplers.TPESampler.html)</small>
+</div>
 
 ---
 <!-- footer: "SMAC3" -->
@@ -222,6 +224,8 @@ agent 특유 문제
 ## 14. SMAC3
 
 ![w:780](./assets/smac3_flow.svg)
+
+<div style="font-size:0.92em">
 
 `핵심 직관`
 - 과거 평가 기록으로 `싸게 예측하는 대리모델`을 만든다
@@ -232,7 +236,7 @@ agent 특유 문제
 `비교 방식`
 - incumbent와 짧게 붙여 보고, 이길 가능성이 있으면 budget을 더 준다
 
-<small>source: [SMAC3 docs](https://automl.github.io/SMAC3/main/), [Components](https://automl.github.io/SMAC3/v2.0.2/advanced_usage/1_components.html), [Intensifier](https://automl.github.io/SMAC3/v2.2.0/api/smac.intensifier.intensifier.html)</small>
+</div>
 
 ---
 <!-- footer: "질문 1 표" -->
@@ -296,7 +300,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question2_variant_table.svg)
 
-- `질문 2`를 harness 단위에서 한 번 더 쪼개 보면, 같은 family 안에서도 `TPE`와 `SMAC`가 dataset별로 다르게 작동한다.
+- 이 표의 반복은 렌더 오류가 아니다. `single-advisor` 경로에선 family가 달라도 같은 최고점이 나왔다.
 
 ---
 <!-- footer: "질문 2 분해 A" -->
@@ -305,7 +309,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question2_variant_history_panel_a.svg)
 
-- `fashion`에선 `SMAC` 계열이 상단을 만들고, `twenty`에선 `ratchet + TPE`가 가장 먼저 frontier를 끌어올렸다.
+- `fashion`과 `twenty`에선 같은 advisor 내부에서 선이 거의 완전히 겹친다. 이 구간은 family보다 advisor가 결과를 지배했다는 뜻이다.
 
 ---
 <!-- footer: "질문 2 분해 B" -->
@@ -314,7 +318,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question2_variant_history_panel_b.svg)
 
-- `spam`은 `SMAC` 계열이, `cifar`는 `TPE` 계열이 상대적으로 더 높은 frontier를 만든다. 단일 advisor만 봐도 dataset별 패턴이 갈린다.
+- `spam`과 `cifar`도 같은 패턴이다. `TPE`와 `SMAC` 차이는 남지만, 같은 advisor 안의 family 차이는 거의 사라졌다.
 
 ---
 <!-- footer: "공통 패턴" -->

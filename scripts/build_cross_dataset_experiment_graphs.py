@@ -49,8 +49,8 @@ Q1_GROUPS = OrderedDict(
             {
                 "label": "SMAC Direct",
                 "conditions": ("smac_direct",),
-                "color": "#0f766e",
-                "dash": "3 5",
+                "color": "#111827",
+                "dash": "2 4",
             },
         ),
         (
@@ -572,7 +572,7 @@ def _build_history_panel_svg(
         for row in series:
             for step_index, score in row.scatter_points:
                 parts.append(
-                    f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.4" fill="{row.color}" opacity="0.10"/>'
+                    f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.2" fill="{row.color}" opacity="0.08"/>'
                 )
         draw_rows = list(zip(groups.keys(), series))
         draw_rows.sort(key=lambda item: 1 if item[0].endswith("_direct") else 0)
@@ -594,6 +594,14 @@ def _build_history_panel_svg(
                 f'<polyline fill="none" stroke="{row.color}" stroke-width="{line_width}" stroke-linecap="round" stroke-linejoin="round"{dash_attr} points="{polyline}"/>'
             )
             if row.best_so_far:
+                if is_direct:
+                    for marker_step in _x_tick_steps(len(row.best_so_far)):
+                        marker_x = scale_x(marker_step)
+                        marker_y = scale_y(row.best_so_far[marker_step - 1])
+                        size = 4.4 if group_key == "smac_direct" else 4.0
+                        parts.append(
+                            f'<rect x="{marker_x - size:.2f}" y="{marker_y - size:.2f}" width="{size * 2:.2f}" height="{size * 2:.2f}" rx="1.8" fill="{row.color}" stroke="{WHITE}" stroke-width="1.2"/>'
+                        )
                 end_x = scale_x(len(row.best_so_far))
                 end_y = scale_y(row.best_so_far[-1])
                 parts.append(f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="{marker_radius}" fill="{row.color}" stroke="{WHITE}" stroke-width="1.6"/>')

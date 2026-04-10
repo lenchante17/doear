@@ -5,13 +5,6 @@
   <rect x="440" y="52" width="320" height="356" rx="28" fill="#dce6ff" stroke="#22477a" stroke-width="4"/>
   <rect x="840" y="52" width="320" height="356" rx="28" fill="#f8e7b7" stroke="#654600" stroke-width="4"/>
 
-  <circle cx="78" cy="84" r="20" fill="#1f3b2d"/>
-  <text x="78" y="91" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">1</text>
-  <circle cx="478" cy="84" r="20" fill="#22477a"/>
-  <text x="478" y="91" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">2</text>
-  <circle cx="878" cy="84" r="20" fill="#654600"/>
-  <text x="878" y="91" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">3</text>
-
   <text x="200" y="100" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#1f3b2d">Split the history</text>
   <text x="600" y="100" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#22477a">Fit two densities</text>
   <text x="1000" y="100" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#654600">Sample there</text>
