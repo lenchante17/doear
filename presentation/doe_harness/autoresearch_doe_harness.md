@@ -139,15 +139,32 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 11. 질문 1 셋업
 
-- baseline only: `Optuna TPE`, `SMAC3`
-- agent only: plain `Autoresearch`
-- hybrid: `agent + TPE`, `agent + SMAC3`, `agent + TPE+SMAC`
-- 추가 조건: `TPE direct`, `SMAC direct`도 함께 비교
+| Arm | 의미 |
+| --- | --- |
+| baseline only | `Optuna TPE`, `SMAC3` |
+| agent only | plain `Autoresearch` |
+| hybrid | `agent + TPE`, `agent + SMAC3`, `agent + TPE+SMAC` |
+| direct | `TPE direct`, `SMAC direct` |
+
+---
+<!-- _class: tinytext -->
+<!-- footer: "관련 문헌" -->
+
+## 12. 관련 문헌
+
+- [Using Large Language Models for Hyperparameter Optimization](https://arxiv.org/abs/2312.04528)
+  실험 이력 기반 순차 튜닝은 가능하지만, 장기적으로 BO 우위는 불명확하다.
+- [LLAMBO: Large Language Models to Enhance Bayesian Optimization](https://arxiv.org/abs/2402.03921)
+  LLM은 BO를 대체하기보다 초기 탐색을 강화하는 보조 수단에 가깝다.
+- [AgentHPO: Large Language Model Agent for Hyper-Parameter Optimization](https://arxiv.org/abs/2402.01881)
+  Agent형 LLM HPO는 가능성을 보였지만, BO 대비 성능 우위 근거는 약하다.
+- [SLLMBO: Sequential Large Language Model-Based Hyper-parameter Optimization](https://arxiv.org/abs/2410.20302)
+  Hybrid LLM-BO 방식은 일부 태스크에서 classical BO보다 강하다.
 
 ---
 <!-- footer: "Optuna TPE" -->
 
-## 12. Optuna TPE
+## 13. Optuna TPE
 
 ![w:980](./assets/optuna_tpe_flow.svg)
 
@@ -159,7 +176,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "SMAC3" -->
 
-## 13. SMAC3
+## 14. SMAC3
 
 ![w:980](./assets/smac3_flow.svg)
 
@@ -171,7 +188,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "결과 TBD" -->
 
-## 14. 결과 TBD
+## 15. 결과 TBD
 
 **TBD**
 
@@ -183,7 +200,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "질문 2 셋업" -->
 
-## 15. 질문 2 셋업
+## 16. 질문 2 셋업
 
 | Agent | 운영 방식 | 질문 |
 | --- | --- | --- |
@@ -194,7 +211,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "실험 설정" -->
 
-## 16. 실험 설정
+## 17. 실험 설정
 
 | 항목 | 설정 |
 | --- | --- |
@@ -209,7 +226,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "탐색 축" -->
 
-## 17. 탐색 축
+## 18. 탐색 축
 
 | 그룹 | 변수 |
 | --- | --- |
@@ -223,7 +240,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "결과 요약" -->
 
-## 18. 결과 요약
+## 19. 결과 요약
 
 | 관점 | 조건 | 점수 |
 | --- | --- | --- |
@@ -238,7 +255,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Ratchet" -->
 
-## 19. Ratchet
+## 20. Ratchet
 
 ![w:1460](./assets/ratchet_variants_best_and_nonbest.svg)
 
@@ -249,7 +266,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Screening" -->
 
-## 20. Screening
+## 21. Screening
 
 ![w:1460](./assets/screening_variants_best_and_nonbest.svg)
 
@@ -260,7 +277,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Advanced" -->
 
-## 21. Advanced
+## 22. Advanced
 
 ![w:1460](./assets/advanced_variants_best_and_nonbest.svg)
 
@@ -271,7 +288,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Plain" -->
 
-## 22. Plain
+## 23. Plain
 
 ![w:1460](./assets/plain_agents_best_and_nonbest.svg)
 
@@ -282,7 +299,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "TPE" -->
 
-## 23. TPE
+## 24. TPE
 
 ![w:1460](./assets/tpe_agents_best_and_nonbest.svg)
 
@@ -293,7 +310,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "SMAC" -->
 
-## 24. SMAC
+## 25. SMAC
 
 ![w:1460](./assets/smac_agents_best_and_nonbest.svg)
 
@@ -304,7 +321,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "핵심 함의" -->
 
-## 25. 핵심 함의
+## 26. 핵심 함의
 
 - harness effect는 advisor effect만큼 크다.
 - validation 최적화와 finalize 최적화는 다른 문제다.
@@ -314,7 +331,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "운영 교훈" -->
 
-## 26. 운영 교훈
+## 27. 운영 교훈
 
 - 지표: `best val`만 보지 말고 `finalize`, `artifact completeness`를 같이 봐야 한다.
 - 설계: `isolate / history / finalize` 분리가 있어야 중간 최고와 최종 승자를 함께 읽는다.
@@ -324,7 +341,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "한계" -->
 
-## 27. 한계
+## 28. 한계
 
 - 단일 benchmark, single split
 - budget `100`, top-k reseeding 없음
@@ -335,7 +352,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 28. References
+## 29. References
 
 | 구분 | 예시 |
 | --- | --- |
