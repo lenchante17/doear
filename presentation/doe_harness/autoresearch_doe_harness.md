@@ -117,12 +117,13 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 결국 운영 문제
 
 ---
-<!-- footer: "Kubeflow lifecycle" -->
+<!-- footer: "MLOps" -->
 
-## 8. MLOps는 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업이다
+## 8. MLOps
 
 ![w:880](./assets/mlops_kubeflow.svg)
 
+- 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업
 - Autoresearch loop는 이 큰 ML lifecycle 안의 일부
 
 실제 시스템
@@ -132,9 +133,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - `지속 운영`, `추적`, `승격`, `유지관리`
 
 ---
-<!-- footer: "핵심 MLOps 요소" -->
+<!-- footer: "MLOps 요소" -->
 
-## 9. AutoML과 Autoresearch가 공통으로 요구하는 MLOps 요소
+## 9. MLOps 요소
 
 | 요소 | AutoML에서의 역할 | Autoresearch에서의 역할 |
 | --- | --- | --- |
