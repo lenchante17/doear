@@ -133,14 +133,18 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 성능: `Autoresearch`는 AutoML baseline보다 낫나
 - 운영: 어떤 harness가 agent loop를 낫게 만드나
+- 질문 1은 `solver` 비교다
+- 질문 2는 `process` 비교다
 
 ---
-<!-- footer: "질문 1" -->
+<!-- footer: "비교 틀" -->
 
-## 11. 질문 1
+## 11. 비교 틀
 
 - 비교 대상: `Autoresearch`, `Optuna TPE`, `SMAC3`
 - 비교 조건: 같은 search space, benchmark, budget
+- 질문: 같은 제약에서 누가 더 좋은 후보를 찾는가
+- 의미: `free-form agent`가 baseline을 넘는지 본다
 
 ---
 <!-- footer: "Optuna TPE" -->
@@ -149,6 +153,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 방법: `good` vs `rest` density 비교
 - 의미: 강한 exploitation baseline
+- 장점: incumbent 근처를 빠르게 좁힌다
+- 한계: 구조적 실험 설계는 직접 주지 않는다
 
 ---
 <!-- footer: "SMAC3" -->
@@ -157,6 +163,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 방법: surrogate + racing
 - 의미: mixed search space baseline
+- 장점: categorical / conditional space 대응이 강하다
+- 한계: proposal quality는 높아도 실험 rationale은 주지 않는다
 
 ---
 <!-- footer: "결과 TBD" -->
@@ -167,6 +175,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 실험 진행 중
 - 동일 조건 결과 표 추가 예정
+- `best val`, `best hidden`, search trace를 함께 정리할 예정
+- 질문 1의 결론은 여기서 닫힌다
 
 ---
 <!-- footer: "질문 2" -->
@@ -175,6 +185,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 초점: 성능이 아니라 운영
 - 목표: 즉흥 loop를 실험 체계로 바꾸기
+- 같은 agent라도 harness가 trajectory를 바꾼다
+- 여기부터는 `DoE-guided harness`를 본다
 
 ---
 <!-- footer: "왜 Harness" -->
@@ -183,6 +195,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 없으면: attribution 약화, 단계 혼합
 - 결과: 잘 정리된 random search로 퇴화
+- 큰 수정과 작은 튜닝이 같은 레벨로 섞인다
+- 검증 실험이 뒤로 밀리기 쉽다
 
 ---
 <!-- footer: "DoE Harness" -->
@@ -191,20 +205,24 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 순서: `screening → interaction → refinement`
 - 장점: effect attribution, 다음 라운드 설계
+- 강점: 무엇을 바꿨는지보다 무엇이 먹혔는지 읽기 쉽다
+- 목적: 최고점 하나보다 `실험 질서`를 만든다
 
 ---
 <!-- footer: "세 프로파일" -->
 
 ## 18. 세 프로파일
 
-| Profile | 역할 |
-| --- | --- |
-| `Ratchet` | incumbent 근처 exploit |
-| `Screening` | main effect 분리 |
-| `Advanced` | interaction / refinement |
+| Profile | 역할 | 초점 |
+| --- | --- | --- |
+| `Ratchet` | incumbent 근처 exploit | 빠른 개선 |
+| `Screening` | main effect 분리 | 요인 선별 |
+| `Advanced` | interaction / refinement | 순차 설계 |
+
+- 같은 search space에서도 운영 정책은 다르다
 
 ---
-<!-- footer: "결과 요약" -->
+<!-- footer: "실험 설정" -->
 
 ## 19. 실험 설정
 
@@ -214,6 +232,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | model | `mlp` |
 | conditions | `14` |
 | budget | condition당 `100 + finalize 1` |
+
+- 비교 대상: `plain`, `TPE`, `SMAC`, `TPE+SMAC`, direct
+- 목표: code edit가 아니라 bounded `AutoML + harness` 비교
 
 ---
 <!-- footer: "탐색 축" -->
@@ -227,8 +248,10 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | optimization | `solver`, `lr`, `batch` |
 | regularization | `wd`, `dropout`, `noise` |
 
+- 한 축만 바꾸는 round와 여러 축을 묶는 round를 구분해서 본다
+
 ---
-<!-- footer: "실험 설정" -->
+<!-- footer: "결과 요약" -->
 
 ## 21. 결과 요약
 
@@ -240,6 +263,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 핵심: validation winner와 finalize winner가 다르다.
 - 함의: harness가 peak와 generalization을 다르게 만든다.
+- 따라서 mid-run 최고점만으로 harness를 평가하면 오판한다.
 
 ---
 <!-- footer: "Ratchet" -->
@@ -248,8 +272,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/ratchet_variants_best_and_nonbest.svg)
 
-- 패턴: `TPE`가 ceiling, `SMAC`이 finalize winner.
-- 함의: ratchet은 빠른 exploit엔 강하지만 최종 일반화는 advisor choice에 민감하다.
+- 관찰: `TPE`가 validation ceiling을 가장 높게 만든다.
+- 관찰: hidden winner는 `SMAC` 쪽에서 나온다.
+- 해석: ratchet은 exploit엔 강하지만 finalize 성능은 advisor choice에 민감하다.
 
 ---
 <!-- footer: "Screening" -->
@@ -258,8 +283,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/screening_variants_best_and_nonbest.svg)
 
-- 패턴: `plain`이 best val, `TPE+SMAC`이 best hidden.
-- 함의: screening policy 자체가 강하고, dual advisor 이득은 late-stage에 제한된다.
+- 관찰: `plain`이 전체 best val을 만든다.
+- 관찰: hidden에선 `TPE+SMAC`이 family 최고다.
+- 해석: screening policy 자체가 강하고, dual advisor 이득은 late-stage에서만 제한적으로 보인다.
 
 ---
 <!-- footer: "Advanced" -->
@@ -268,8 +294,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/advanced_variants_best_and_nonbest.svg)
 
-- 패턴: advisor가 붙을 때만 상위권에 오른다.
-- 함의: 복잡한 design은 짧은 budget에서 proposal quality 의존성이 크다.
+- 관찰: plain 조건은 ceiling이 낮다.
+- 관찰: advisor가 붙을 때만 상위권에 오른다.
+- 해석: 복잡한 sequential design은 짧은 budget에서 proposal quality 의존성이 크다.
 
 ---
 <!-- footer: "Plain" -->
@@ -278,8 +305,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/plain_agents_best_and_nonbest.svg)
 
-- 패턴: advisor 없이도 profile 간 gap이 크다.
-- 함의: harness choice가 baseline behavior를 먼저 결정한다.
+- 관찰: advisor 없이도 profile 간 차이가 크게 난다.
+- 관찰: `screening_plain`은 val 1등, `ratchet_plain`은 hidden family 1등이다.
+- 해석: baseline behavior는 advisor보다 harness가 먼저 규정한다.
 
 ---
 <!-- footer: "TPE" -->
@@ -288,8 +316,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/tpe_agents_best_and_nonbest.svg)
 
-- 패턴: `ratchet`과 `screening` ceiling이 수렴한다.
-- 함의: `TPE`는 profile 차이를 줄이고 incumbent 근처 수렴을 강화한다.
+- 관찰: `ratchet`과 `screening`이 같은 ceiling에 도달한다.
+- 관찰: `advanced`도 좋아지지만 상위 둘을 넘지는 못한다.
+- 해석: `TPE`는 profile 차이를 줄이고 incumbent 근처 수렴을 강화한다.
 
 ---
 <!-- footer: "SMAC" -->
@@ -298,8 +327,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/smac_agents_best_and_nonbest.svg)
 
-- 패턴: best val은 `screening`, best hidden은 `ratchet`.
-- 함의: 같은 advisor라도 harness가 selection pressure를 바꾼다.
+- 관찰: best val은 `screening_smac`에서 나온다.
+- 관찰: best hidden은 `ratchet_smac`에서 나온다.
+- 해석: 같은 advisor라도 harness가 selection pressure와 finalize generalization을 바꾼다.
 
 ---
 <!-- footer: "핵심 함의" -->
@@ -308,6 +338,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - harness effect는 advisor effect만큼 크다.
 - validation 최적화와 finalize 최적화는 다른 문제다.
+- dual advisor는 항상 단일 advisor를 이기지 않는다.
+- 따라서 harness 평가는 `누가 더 똑똑한가`보다 `무엇을 어떻게 보게 만드는가`를 봐야 한다.
 
 ---
 <!-- footer: "운영 교훈" -->
@@ -316,6 +348,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 지표: `best val`만 보지 말고 `finalize`, `artifact completeness`를 같이 봐야 한다.
 - 설계: `isolate / history / finalize` 분리가 있어야 중간 최고와 최종 승자를 함께 읽는다.
+- 로그: advisor trace에는 invalid proposal이 섞일 수 있어 guard가 필요하다.
+- 판정: run 수와 history row 수를 혼동하면 early finalize가 생긴다.
 
 ---
 <!-- footer: "한계" -->
@@ -325,6 +359,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 단일 benchmark, single split
 - budget `100`, top-k reseeding 없음
 - code-edit autoresearch는 아직 제외
+- 따라서 이번 결론은 `bounded AutoML harness` 범위에 한정된다
 
 ---
 <!-- _class: tinytext -->
