@@ -1,40 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
-  <rect width="1200" height="600" fill="#f7f3ea"/>
-  <rect x="70" y="70" width="250" height="120" rx="28" fill="#d8e7d1" stroke="#1f3b2d" stroke-width="4"/>
-  <text x="195" y="118" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#1f3b2d">Past Trials</text>
-  <text x="195" y="155" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#1f3b2d">scores + params</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
+  <rect width="1200" height="620" fill="#f7f4ec"/>
 
-  <rect x="440" y="60" width="300" height="140" rx="28" fill="#ffd9c7" stroke="#6e2f1f" stroke-width="4"/>
-  <text x="590" y="108" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#6e2f1f">Good Trials</text>
-  <text x="590" y="145" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#6e2f1f">fit l(x)</text>
-  <text x="590" y="176" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6e2f1f">high-score region</text>
+  <circle cx="170" cy="92" r="26" fill="#1f3b2d"/>
+  <text x="170" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">1</text>
+  <circle cx="450" cy="92" r="26" fill="#22477a"/>
+  <text x="450" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">2</text>
+  <circle cx="730" cy="92" r="26" fill="#6d2f1f"/>
+  <text x="730" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">3</text>
+  <circle cx="1010" cy="92" r="26" fill="#654600"/>
+  <text x="1010" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">4</text>
 
-  <rect x="440" y="260" width="300" height="140" rx="28" fill="#d9e6ff" stroke="#1f3e7a" stroke-width="4"/>
-  <text x="590" y="308" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#1f3e7a">Rest Trials</text>
-  <text x="590" y="345" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#1f3e7a">fit g(x)</text>
-  <text x="590" y="376" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#1f3e7a">background region</text>
+  <rect x="50" y="130" width="240" height="210" rx="28" fill="#d9e6d2" stroke="#1f3b2d" stroke-width="4"/>
+  <text x="170" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#1f3b2d">Run History</text>
+  <text x="170" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1f3b2d">past trials</text>
+  <text x="170" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1f3b2d">params + score</text>
+  <text x="170" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#1f3b2d">evidence for</text>
+  <text x="170" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#1f3b2d">good vs rest</text>
 
-  <rect x="840" y="165" width="290" height="130" rx="28" fill="#f8e7b7" stroke="#5d4300" stroke-width="4"/>
-  <text x="985" y="210" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#5d4300">Sample x</text>
-  <text x="985" y="247" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#5d4300">maximize l(x)/g(x)</text>
+  <rect x="330" y="130" width="240" height="210" rx="28" fill="#dce6ff" stroke="#22477a" stroke-width="4"/>
+  <text x="450" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#22477a">Search Model</text>
+  <text x="450" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22477a">top gamma →</text>
+  <text x="450" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22477a">good set → l(x)</text>
+  <text x="450" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22477a">rest → g(x)</text>
 
-  <rect x="870" y="365" width="230" height="100" rx="24" fill="#fff8ea" stroke="#5d4300" stroke-width="3"/>
-  <text x="985" y="407" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#5d4300">Exploit</text>
-  <text x="985" y="438" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#5d4300">promising zone</text>
+  <rect x="610" y="130" width="240" height="210" rx="28" fill="#ffd9c7" stroke="#6d2f1f" stroke-width="4"/>
+  <text x="730" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#6d2f1f">Selection Rule</text>
+  <text x="730" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#6d2f1f">rank candidates by</text>
+  <text x="730" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#6d2f1f">l(x) / g(x)</text>
+  <text x="730" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6d2f1f">high ratio =</text>
+  <text x="730" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6d2f1f">good-like region</text>
 
-  <path d="M320 130 C365 130, 385 120, 440 115" fill="none" stroke="#1f3b2d" stroke-width="5"/>
-  <polygon points="431,104 454,114 432,126" fill="#1f3b2d"/>
+  <rect x="890" y="130" width="240" height="210" rx="28" fill="#f8e7b7" stroke="#654600" stroke-width="4"/>
+  <text x="1010" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#654600">Next Trial</text>
+  <text x="1010" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#654600">sample one</text>
+  <text x="1010" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#654600">config</text>
+  <text x="1010" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#654600">exploit promising</text>
+  <text x="1010" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#654600">zone first</text>
 
-  <path d="M320 130 C365 130, 385 310, 440 330" fill="none" stroke="#1f3b2d" stroke-width="5"/>
-  <polygon points="430,317 452,332 426,338" fill="#1f3b2d"/>
+  <path d="M290 235 C302 235, 314 235, 330 235" fill="none" stroke="#1f3b2d" stroke-width="5"/>
+  <polygon points="318,224 342,235 318,246" fill="#1f3b2d"/>
+  <path d="M570 235 C582 235, 594 235, 610 235" fill="none" stroke="#22477a" stroke-width="5"/>
+  <polygon points="598,224 622,235 598,246" fill="#22477a"/>
+  <path d="M850 235 C862 235, 874 235, 890 235" fill="none" stroke="#6d2f1f" stroke-width="5"/>
+  <polygon points="878,224 902,235 878,246" fill="#6d2f1f"/>
 
-  <path d="M740 130 C790 130, 800 180, 840 210" fill="none" stroke="#6e2f1f" stroke-width="5"/>
-  <polygon points="829,193 852,209 826,214" fill="#6e2f1f"/>
-
-  <path d="M740 330 C790 330, 800 255, 840 235" fill="none" stroke="#1f3e7a" stroke-width="5"/>
-  <polygon points="828,226 852,229 832,245" fill="#1f3e7a"/>
-
-  <text x="600" y="525" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#50381a">
-    TPE: split trials, estimate two densities, sample where the good density dominates
+  <text x="600" y="500" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#50381a">
+    TPE turns trial history into two densities, then samples where the good density dominates.
   </text>
 </svg>

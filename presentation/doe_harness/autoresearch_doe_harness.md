@@ -168,10 +168,12 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:980](./assets/optuna_tpe_flow.svg)
 
-- 핵심 아이디어: 좋은 trial과 나머지 trial을 분리해 density를 학습한다
-- 다음 제안은 `good / rest` 비율이 큰 쪽을 우선 샘플링한다
-- 강점: bounded search space에서 incumbent 근처를 빠르게 좁힌다
-- 성격: `exploit-heavy` baseline이라 agent 없는 강한 비교선이 된다
+- `Run History`: observed trial을 `good set`과 `rest`로 나눈다
+- `Search Model`: `l(x)`는 good set, `g(x)`는 rest의 density를 근사한다
+- `Selection Rule`: `l(x) / g(x)`가 큰 후보를 다음 trial로 고른다
+- 함의: bounded space에서 빠르게 수렴하는 `exploit-heavy` baseline이다
+
+<small>source: [Optuna TPESampler docs](https://optuna.readthedocs.io/en/v4.4.0/reference/samplers/generated/optuna.samplers.TPESampler.html)</small>
 
 ---
 <!-- footer: "SMAC3" -->
@@ -180,10 +182,12 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:980](./assets/smac3_flow.svg)
 
-- 핵심 아이디어: surrogate model로 promising region을 예측한다
-- evaluation budget은 racing으로 유망한 config에 더 배분한다
-- 강점: categorical, mixed, conditional search space 대응이 강하다
-- 성격: `model-based search` baseline이라 TPE와 다른 편향을 준다
+- `Run History`: observed config-loss pair로 surrogate를 학습한다
+- `Search Model`: surrogate는 mean과 uncertainty로 promising region을 예측한다
+- `Selection Rule`: acquisition이 challenger를 고르고, intensifier가 incumbent와 붙인다
+- 함의: mixed, categorical, conditional space에서 강한 `model-based` baseline이다
+
+<small>source: [SMAC3 docs](https://automl.github.io/SMAC3/main/), [Components](https://automl.github.io/SMAC3/v2.0.2/advanced_usage/1_components.html), [Intensifier](https://automl.github.io/SMAC3/v2.2.0/api/smac.intensifier.intensifier.html)</small>
 
 ---
 <!-- footer: "결과 TBD" -->

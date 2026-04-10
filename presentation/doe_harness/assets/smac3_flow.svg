@@ -1,41 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
-  <rect width="1200" height="600" fill="#f6f2ec"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
+  <rect width="1200" height="620" fill="#f7f4ec"/>
 
-  <rect x="70" y="90" width="250" height="120" rx="28" fill="#d8e7d1" stroke="#22392c" stroke-width="4"/>
-  <text x="195" y="136" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#22392c">Past Runs</text>
-  <text x="195" y="171" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22392c">configs + losses</text>
+  <circle cx="170" cy="92" r="26" fill="#1f3b2d"/>
+  <text x="170" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">1</text>
+  <circle cx="450" cy="92" r="26" fill="#22477a"/>
+  <text x="450" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">2</text>
+  <circle cx="730" cy="92" r="26" fill="#6d2f1f"/>
+  <text x="730" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">3</text>
+  <circle cx="1010" cy="92" r="26" fill="#654600"/>
+  <text x="1010" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">4</text>
 
-  <rect x="420" y="75" width="320" height="150" rx="28" fill="#d9e6ff" stroke="#244676" stroke-width="4"/>
-  <text x="580" y="122" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#244676">Surrogate Model</text>
-  <text x="580" y="158" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#244676">estimate promising region</text>
-  <text x="580" y="190" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#244676">and uncertainty</text>
+  <rect x="50" y="130" width="240" height="210" rx="28" fill="#d9e6d2" stroke="#1f3b2d" stroke-width="4"/>
+  <text x="170" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#1f3b2d">Run History</text>
+  <text x="170" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1f3b2d">past trials</text>
+  <text x="170" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1f3b2d">configs + loss</text>
+  <text x="170" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#1f3b2d">evidence for</text>
+  <text x="170" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#1f3b2d">challengers</text>
 
-  <rect x="420" y="300" width="320" height="150" rx="28" fill="#ffd9c7" stroke="#72341f" stroke-width="4"/>
-  <text x="580" y="347" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#72341f">Racing</text>
-  <text x="580" y="383" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#72341f">allocate budget to</text>
-  <text x="580" y="415" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#72341f">better candidates</text>
+  <rect x="330" y="130" width="240" height="210" rx="28" fill="#dce6ff" stroke="#22477a" stroke-width="4"/>
+  <text x="450" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#22477a">Search Model</text>
+  <text x="450" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22477a">surrogate predicts</text>
+  <text x="450" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22477a">mean + uncertainty</text>
+  <text x="450" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#22477a">strong on mixed</text>
+  <text x="450" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#22477a">search spaces</text>
 
-  <rect x="840" y="115" width="280" height="110" rx="24" fill="#f9e6b8" stroke="#624500" stroke-width="4"/>
-  <text x="980" y="157" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" fill="#624500">Next Configs</text>
-  <text x="980" y="191" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#624500">model-based proposals</text>
+  <rect x="610" y="130" width="240" height="210" rx="28" fill="#ffd9c7" stroke="#6d2f1f" stroke-width="4"/>
+  <text x="730" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#6d2f1f">Selection Rule</text>
+  <text x="730" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#6d2f1f">acquisition ranks</text>
+  <text x="730" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#6d2f1f">challengers</text>
+  <text x="730" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6d2f1f">predicted gain +</text>
+  <text x="730" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6d2f1f">uncertainty</text>
 
-  <rect x="840" y="325" width="280" height="110" rx="24" fill="#fff8ea" stroke="#624500" stroke-width="4"/>
-  <text x="980" y="367" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" fill="#624500">Incumbent</text>
-  <text x="980" y="401" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#624500">survives more budget</text>
+  <rect x="890" y="130" width="240" height="210" rx="28" fill="#f8e7b7" stroke="#654600" stroke-width="4"/>
+  <text x="1010" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#654600">Next Trial</text>
+  <text x="1010" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#654600">race challenger</text>
+  <text x="1010" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#654600">vs incumbent</text>
+  <text x="1010" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#654600">more budget goes</text>
+  <text x="1010" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#654600">to strong configs</text>
 
-  <path d="M320 150 C370 150, 380 150, 420 150" fill="none" stroke="#22392c" stroke-width="5"/>
-  <polygon points="409,139 432,150 409,161" fill="#22392c"/>
+  <path d="M290 235 C302 235, 314 235, 330 235" fill="none" stroke="#1f3b2d" stroke-width="5"/>
+  <polygon points="318,224 342,235 318,246" fill="#1f3b2d"/>
+  <path d="M570 235 C582 235, 594 235, 610 235" fill="none" stroke="#22477a" stroke-width="5"/>
+  <polygon points="598,224 622,235 598,246" fill="#22477a"/>
+  <path d="M850 235 C862 235, 874 235, 890 235" fill="none" stroke="#6d2f1f" stroke-width="5"/>
+  <polygon points="878,224 902,235 878,246" fill="#6d2f1f"/>
 
-  <path d="M580 225 C580 255, 580 270, 580 300" fill="none" stroke="#244676" stroke-width="5"/>
-  <polygon points="569,289 580,312 591,289" fill="#244676"/>
-
-  <path d="M740 150 C780 150, 800 160, 840 170" fill="none" stroke="#244676" stroke-width="5"/>
-  <polygon points="828,160 852,173 826,182" fill="#244676"/>
-
-  <path d="M740 375 C780 375, 800 380, 840 380" fill="none" stroke="#72341f" stroke-width="5"/>
-  <polygon points="829,369 852,380 829,391" fill="#72341f"/>
-
-  <text x="600" y="525" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#50381a">
-    SMAC3: propose with a surrogate, then spend evaluation budget where the race is favorable
+  <text x="600" y="500" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#50381a">
+    SMAC3 combines a surrogate proposal step with aggressive racing over challengers.
   </text>
 </svg>
