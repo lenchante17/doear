@@ -22,8 +22,10 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ## 1. AutoML이란 무엇인가?
 
 - 모델 개발 탐색 일부 자동화
-- 대표 대상: `model selection`, `hyperparameter tuning`, `pipeline search`
-- 핵심: 비교적 주어진 `search space` 안 최적 설정 탐색
+- 대표 대상
+  - `model selection`, `hyperparameter tuning`, `pipeline search`
+- 핵심
+  - 비교적 주어진 `search space` 안 최적 설정 탐색
 
 ![w:950](./assets/automl_intro.jpeg)
 
@@ -45,10 +47,12 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 3. `Autoresearch`는 어떻게 등장했고 무엇이 다른가?
 
-- [karpathy/autoresearch](https://github.com/karpathy/autoresearch): 작은 training setup 위 `read → edit → run → keep-or-revert` loop 제시
+- 초기 제안
+  - [karpathy/autoresearch](https://github.com/karpathy/autoresearch): 작은 training setup 위 `read → edit → run → keep-or-revert` loop 제시
 - 연구 workflow 일부를 agent가 직접 수행하며, 설정 탐색을 넘어 `code`, `module`, `experiment` 자체 수정
 - AutoML의 `fixed search space` 바깥으로 확장
-- 이후 [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 등으로 빠르게 확장
+- 이후 확장
+  - [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 등으로 빠르게 확장
 
 ---
 <!-- footer: "작업 흐름" -->
@@ -60,7 +64,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 학습 코드나 설정 수정
 - 짧은 실험 실행, metric 확인
 - 나쁘면 revert, 의미 있으면 keep
-- 핵심: `edit 한 번`이 아니라 `짧은 실험 loop의 누적`
+- 핵심
+  - `edit 한 번`이 아니라 `짧은 실험 loop의 누적`
 
 `Question → Read → Edit → Run → Analyze → Next experiment`
 
@@ -83,23 +88,24 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 6. 사용례와 확장
 
-사용례
-- 문헌 조사 / deep research: [GPT Researcher](https://github.com/assafelovic/gpt-researcher)
-- 코드 수정 + 실험 반복: [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent)
-- end-to-end 연구 자동화: [AI-Scientist](https://github.com/SakanaAI/AI-Scientist)
-
-확장
-- benchmark / evaluation: [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench)
-- plugin / skill 생태계: [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools)
-- memory, reusable modules, hardware fork
+- 사용례
+  - 문헌 조사 / deep research: [GPT Researcher](https://github.com/assafelovic/gpt-researcher)
+  - 코드 수정 + 실험 반복: [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent)
+  - end-to-end 연구 자동화: [AI-Scientist](https://github.com/SakanaAI/AI-Scientist)
+- 확장
+  - benchmark / evaluation: [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench)
+  - plugin / skill 생태계: [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools)
+  - memory, reusable modules, hardware fork
 
 ---
 <!-- footer: "실험 관리 필요" -->
 
 ## 7. 체계적인 실험 관리의 필요
 
-- 공통 문제: `많은 run` 비교와 누적
-- 필수 요소: `tracking`, `lineage`, `orchestration`
+- 공통 문제
+  - `많은 run` 비교와 누적
+- 필수 요소
+  - `tracking`, `lineage`, `orchestration`
 - agent edit가 들어오면 `artifact`, `promotion`, `monitoring`, `cost control` 중요도 상승
 - 결국 운영 문제
 
@@ -123,16 +129,20 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ![w:880](./assets/mlops_kubeflow.svg)
 
 - Autoresearch loop는 이 큰 ML lifecycle 안의 일부
-- 실제 시스템: `data`, `experiment`, `model registry`, `deployment`, `monitoring`
-- 핵심 역할: `지속 운영`, `추적`, `승격`, `유지관리`
+- 실제 시스템
+  - `data`, `experiment`, `model registry`, `deployment`, `monitoring`
+- 핵심 역할
+  - `지속 운영`, `추적`, `승격`, `유지관리`
 
 ---
 <!-- footer: "두 질문" -->
 
 ## 10. 두 질문
 
-- 성능: `(AutoML의 도메인에서)` `Autoresearch`는 baseline보다 낫나
-- 운영: `Autoresearch`에 어떤 harness가 있으면 좋을까
+- 성능
+  - `(AutoML의 도메인에서)` `Autoresearch`는 baseline보다 낫나
+- 운영
+  - `Autoresearch`에 어떤 harness가 있으면 좋을까
 
 ---
 <!-- footer: "질문 1 셋업" -->
@@ -168,10 +178,14 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:980](./assets/optuna_tpe_flow.svg)
 
-- `Run History`: observed trial을 `good set`과 `rest`로 나눈다
-- `Search Model`: `l(x)`는 good set, `g(x)`는 rest의 density를 근사한다
-- `Selection Rule`: `l(x) / g(x)`가 큰 후보를 다음 trial로 고른다
-- 함의: bounded space에서 빠르게 수렴하는 `exploit-heavy` baseline이다
+- `Run History`
+  - observed trial을 `good set`과 `rest`로 나눈다
+- `Search Model`
+  - `l(x)`는 good set, `g(x)`는 rest의 density를 근사한다
+- `Selection Rule`
+  - `l(x) / g(x)`가 큰 후보를 다음 trial로 고른다
+- 함의
+  - bounded space에서 빠르게 수렴하는 `exploit-heavy` baseline이다
 
 <small>source: [Optuna TPESampler docs](https://optuna.readthedocs.io/en/v4.4.0/reference/samplers/generated/optuna.samplers.TPESampler.html)</small>
 
@@ -182,10 +196,14 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:980](./assets/smac3_flow.svg)
 
-- `Run History`: observed config-loss pair로 surrogate를 학습한다
-- `Search Model`: surrogate는 mean과 uncertainty로 promising region을 예측한다
-- `Selection Rule`: acquisition이 challenger를 고르고, intensifier가 incumbent와 붙인다
-- 함의: mixed, categorical, conditional space에서 강한 `model-based` baseline이다
+- `Run History`
+  - observed config-loss pair로 surrogate를 학습한다
+- `Search Model`
+  - surrogate는 mean과 uncertainty로 promising region을 예측한다
+- `Selection Rule`
+  - acquisition이 challenger를 고르고, intensifier가 incumbent와 붙인다
+- 함의
+  - mixed, categorical, conditional space에서 강한 `model-based` baseline이다
 
 <small>source: [SMAC3 docs](https://automl.github.io/SMAC3/main/), [Components](https://automl.github.io/SMAC3/v2.0.2/advanced_usage/1_components.html), [Intensifier](https://automl.github.io/SMAC3/v2.2.0/api/smac.intensifier.intensifier.html)</small>
 
@@ -224,8 +242,10 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | conditions | `14` |
 | budget | condition당 `100 + finalize 1` |
 
-- 비교 대상: `plain`, `TPE`, `SMAC`, `TPE+SMAC`, direct
-- 목표: code edit가 아니라 bounded `AutoML + harness` 비교
+- 비교 대상
+  - `plain`, `TPE`, `SMAC`, `TPE+SMAC`, direct
+- 목표
+  - code edit가 아니라 bounded `AutoML + harness` 비교
 
 ---
 <!-- footer: "탐색 축" -->
@@ -252,8 +272,10 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | best hidden | `ratchet_smac` | `0.4100` |
 | best direct hidden | `tpe_direct` | `0.3733` |
 
-- 핵심: validation winner와 finalize winner가 다르다.
-- 함의: harness가 peak와 generalization을 다르게 만든다.
+- 핵심
+  - validation winner와 finalize winner가 다르다.
+- 함의
+  - harness가 peak와 generalization을 다르게 만든다.
 - 따라서 mid-run 최고점만으로 harness를 평가하면 오판한다.
 
 ---
@@ -263,9 +285,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/ratchet_variants_best_and_nonbest.svg)
 
-- 관찰: `TPE`가 validation ceiling을 가장 높게 만든다.
-- 관찰: hidden winner는 `SMAC` 쪽에서 나온다.
-- 해석: ratchet은 exploit엔 강하지만 finalize 성능은 advisor choice에 민감하다.
+- 관찰
+  - `TPE`가 validation ceiling을 가장 높게 만든다.
+  - hidden winner는 `SMAC` 쪽에서 나온다.
+- 해석
+  - ratchet은 exploit엔 강하지만 finalize 성능은 advisor choice에 민감하다.
 
 ---
 <!-- footer: "Screening" -->
@@ -274,9 +298,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/screening_variants_best_and_nonbest.svg)
 
-- 관찰: `plain`이 전체 best val을 만든다.
-- 관찰: hidden에선 `TPE+SMAC`이 family 최고다.
-- 해석: screening policy 자체가 강하고, dual advisor 이득은 late-stage에서만 제한적으로 보인다.
+- 관찰
+  - `plain`이 전체 best val을 만든다.
+  - hidden에선 `TPE+SMAC`이 family 최고다.
+- 해석
+  - screening policy 자체가 강하고, dual advisor 이득은 late-stage에서만 제한적으로 보인다.
 
 ---
 <!-- footer: "Advanced" -->
@@ -285,9 +311,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/advanced_variants_best_and_nonbest.svg)
 
-- 관찰: plain 조건은 ceiling이 낮다.
-- 관찰: advisor가 붙을 때만 상위권에 오른다.
-- 해석: 복잡한 sequential design은 짧은 budget에서 proposal quality 의존성이 크다.
+- 관찰
+  - plain 조건은 ceiling이 낮다.
+  - advisor가 붙을 때만 상위권에 오른다.
+- 해석
+  - 복잡한 sequential design은 짧은 budget에서 proposal quality 의존성이 크다.
 
 ---
 <!-- footer: "Plain" -->
@@ -296,9 +324,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/plain_agents_best_and_nonbest.svg)
 
-- 관찰: advisor 없이도 profile 간 차이가 크게 난다.
-- 관찰: `screening_plain`은 val 1등, `ratchet_plain`은 hidden family 1등이다.
-- 해석: baseline behavior는 advisor보다 harness가 먼저 규정한다.
+- 관찰
+  - advisor 없이도 profile 간 차이가 크게 난다.
+  - `screening_plain`은 val 1등, `ratchet_plain`은 hidden family 1등이다.
+- 해석
+  - baseline behavior는 advisor보다 harness가 먼저 규정한다.
 
 ---
 <!-- footer: "TPE" -->
@@ -307,9 +337,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/tpe_agents_best_and_nonbest.svg)
 
-- 관찰: `ratchet`과 `screening`이 같은 ceiling에 도달한다.
-- 관찰: `advanced`도 좋아지지만 상위 둘을 넘지는 못한다.
-- 해석: `TPE`는 profile 차이를 줄이고 incumbent 근처 수렴을 강화한다.
+- 관찰
+  - `ratchet`과 `screening`이 같은 ceiling에 도달한다.
+  - `advanced`도 좋아지지만 상위 둘을 넘지는 못한다.
+- 해석
+  - `TPE`는 profile 차이를 줄이고 incumbent 근처 수렴을 강화한다.
 
 ---
 <!-- footer: "SMAC" -->
@@ -318,9 +350,11 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ![w:1460](./assets/smac_agents_best_and_nonbest.svg)
 
-- 관찰: best val은 `screening_smac`에서 나온다.
-- 관찰: best hidden은 `ratchet_smac`에서 나온다.
-- 해석: 같은 advisor라도 harness가 selection pressure와 finalize generalization을 바꾼다.
+- 관찰
+  - best val은 `screening_smac`에서 나온다.
+  - best hidden은 `ratchet_smac`에서 나온다.
+- 해석
+  - 같은 advisor라도 harness가 selection pressure와 finalize generalization을 바꾼다.
 
 ---
 <!-- footer: "핵심 함의" -->
@@ -337,10 +371,14 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 27. 운영 교훈
 
-- 지표: `best val`만 보지 말고 `finalize`, `artifact completeness`를 같이 봐야 한다.
-- 설계: `isolate / history / finalize` 분리가 있어야 중간 최고와 최종 승자를 함께 읽는다.
-- 로그: advisor trace에는 invalid proposal이 섞일 수 있어 guard가 필요하다.
-- 판정: run 수와 history row 수를 혼동하면 early finalize가 생긴다.
+- 지표
+  - `best val`만 보지 말고 `finalize`, `artifact completeness`를 같이 봐야 한다.
+- 설계
+  - `isolate / history / finalize` 분리가 있어야 중간 최고와 최종 승자를 함께 읽는다.
+- 로그
+  - advisor trace에는 invalid proposal이 섞일 수 있어 guard가 필요하다.
+- 판정
+  - run 수와 history row 수를 혼동하면 early finalize가 생긴다.
 
 ---
 <!-- footer: "한계" -->
