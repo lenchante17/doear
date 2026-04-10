@@ -266,39 +266,48 @@ agent 특유 문제
 - `spam`은 조기 포화, `cifar`는 긴 plateau 뒤 late jump가 반복됐다. 같은 budget이어도 direct와 agent의 유불리가 dataset마다 달라진다.
 
 ---
-<!-- footer: "Autoresearch 한계" -->
+<!-- footer: "한계와 요구" -->
 
-## 18. Autoresearch 한계
+## 18. 한계와 요구
 
+한계점
 - 실험이 즉흥적으로 이어지기 쉽다.
-- 왜 이 실험을 했는지 attribution이 약해지기 쉽다.
 - 큰 수정, 작은 튜닝, 검증 실험이 한 loop 안에 섞인다.
-- robustness, replication, interaction 확인이 뒤로 밀린다.
+- attribution, robustness, replication 확인이 뒤로 밀린다.
 - 잘 정리된 random search로 퇴화할 위험이 있다.
 
----
-<!-- footer: "Harness 요구" -->
-
-## 19. Harness Requirements
-
+요구사항
 - 무엇을 먼저 볼지 정하는 우선순위가 필요하다.
-- 어떤 조합을 함께 볼지 정하는 규율이 필요하다.
 - 탐색 단계와 검증 단계를 분리해야 한다.
 - 작은 수정과 큰 수정을 다르게 다루는 운영 규칙이 필요하다.
 - 실패도 다음 round 설계에 남기는 구조가 필요하다.
 
 ---
-<!-- footer: "DOE 연결" -->
+<!-- footer: "DOE 후보성" -->
 
-## 20. DOE As Harness
+## 19. 왜 DOE인가
 
-| Autoresearch need | DOE concept |
-| --- | --- |
-| 무엇부터 실험할까 | screening |
-| 어떤 조합을 함께 볼까 | factorial design |
-| 언제 정밀 탐색할까 | sequential design |
-| 안정적인가 | robust design |
-| 예산을 어떻게 나눌까 | mixture / allocation |
+질문
+- 어떤 factor를 바꿨는지 명시할 수 있어야 한다.
+
+방법
+- DOE는 factor, round, interaction을 구조적으로 기록하게 만든다.
+
+효과
+- harness 차이와 advisor 효과를 같은 틀에서 비교할 수 있다.
+
+---
+<!-- footer: "DoE 개념" -->
+
+## 20. DoE란 무엇인가
+
+- 여러 요인을 한 번에 바꿔 보며 effect를 읽는 실험 설계
+- 한 번의 최고점보다 `요인`, `상호작용`, `안정성` 파악에 강점
+- 핵심 질문: 무엇을 바꿨고, 무엇이 실제로 영향을 줬는가
+
+![w:900](./assets/doe_cake.png)
+
+[출처 이미지](https://i0.wp.com/michelbaudin.com/wp-content/uploads/2020/10/AstakhovVisualizationOfDOEOnCake.png?resize=691%2C406&ssl=1)
 
 ---
 <!-- footer: "질문 2 셋업" -->
