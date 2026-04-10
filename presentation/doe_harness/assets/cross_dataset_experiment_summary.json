@@ -3,6 +3,22 @@
     "fashion_mnist": {
       "label": "Fashion-MNIST",
       "groups": {
+        "tpe_direct": {
+          "label": "TPE Direct",
+          "best_validation": 0.854167,
+          "winner_text": "TPE Dir",
+          "winner_conditions": [
+            "tpe_direct"
+          ]
+        },
+        "smac_direct": {
+          "label": "SMAC Direct",
+          "best_validation": 0.8625,
+          "winner_text": "SMAC Dir",
+          "winner_conditions": [
+            "smac_direct"
+          ]
+        },
         "plain_agent": {
           "label": "Plain Agent",
           "best_validation": 0.860833,
@@ -39,20 +55,28 @@
             "advanced_tpe_smac",
             "screening_tpe_smac"
           ]
-        },
-        "direct": {
-          "label": "Direct",
-          "best_validation": 0.8625,
-          "winner_text": "SMAC Dir",
-          "winner_conditions": [
-            "smac_direct"
-          ]
         }
       }
     },
     "twenty_newsgroups": {
       "label": "Twenty Newsgroups",
       "groups": {
+        "tpe_direct": {
+          "label": "TPE Direct",
+          "best_validation": 0.550833,
+          "winner_text": "TPE Dir",
+          "winner_conditions": [
+            "tpe_direct"
+          ]
+        },
+        "smac_direct": {
+          "label": "SMAC Direct",
+          "best_validation": 0.543333,
+          "winner_text": "SMAC Dir",
+          "winner_conditions": [
+            "smac_direct"
+          ]
+        },
         "plain_agent": {
           "label": "Plain Agent",
           "best_validation": 0.565833,
@@ -88,20 +112,28 @@
           "winner_conditions": [
             "advanced_tpe_smac"
           ]
-        },
-        "direct": {
-          "label": "Direct",
-          "best_validation": 0.550833,
-          "winner_text": "TPE Dir",
-          "winner_conditions": [
-            "tpe_direct"
-          ]
         }
       }
     },
     "sms_spam": {
       "label": "SMS Spam",
       "groups": {
+        "tpe_direct": {
+          "label": "TPE Direct",
+          "best_validation": 0.990431,
+          "winner_text": "TPE Dir",
+          "winner_conditions": [
+            "tpe_direct"
+          ]
+        },
+        "smac_direct": {
+          "label": "SMAC Direct",
+          "best_validation": 0.989234,
+          "winner_text": "SMAC Dir",
+          "winner_conditions": [
+            "smac_direct"
+          ]
+        },
         "plain_agent": {
           "label": "Plain Agent",
           "best_validation": 0.991627,
@@ -137,20 +169,28 @@
           "winner_conditions": [
             "screening_tpe_smac"
           ]
-        },
-        "direct": {
-          "label": "Direct",
-          "best_validation": 0.990431,
-          "winner_text": "TPE Dir",
-          "winner_conditions": [
-            "tpe_direct"
-          ]
         }
       }
     },
     "cifar10": {
       "label": "CIFAR-10",
       "groups": {
+        "tpe_direct": {
+          "label": "TPE Direct",
+          "best_validation": 0.428333,
+          "winner_text": "TPE Dir",
+          "winner_conditions": [
+            "tpe_direct"
+          ]
+        },
+        "smac_direct": {
+          "label": "SMAC Direct",
+          "best_validation": 0.413333,
+          "winner_text": "SMAC Dir",
+          "winner_conditions": [
+            "smac_direct"
+          ]
+        },
         "plain_agent": {
           "label": "Plain Agent",
           "best_validation": 0.416667,
@@ -185,14 +225,6 @@
           "winner_text": "Rat T+S",
           "winner_conditions": [
             "ratchet_tpe_smac"
-          ]
-        },
-        "direct": {
-          "label": "Direct",
-          "best_validation": 0.428333,
-          "winner_text": "TPE Dir",
-          "winner_conditions": [
-            "tpe_direct"
           ]
         }
       }

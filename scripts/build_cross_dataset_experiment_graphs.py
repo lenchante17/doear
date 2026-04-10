@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import OrderedDict
 from dataclasses import dataclass
+from html import escape
 from pathlib import Path
 import json
 
@@ -35,6 +36,22 @@ DATASETS = (
 Q1_GROUPS = OrderedDict(
     (
         (
+            "tpe_direct",
+            {
+                "label": "TPE Direct",
+                "conditions": ("tpe_direct",),
+                "color": "#64748b",
+            },
+        ),
+        (
+            "smac_direct",
+            {
+                "label": "SMAC Direct",
+                "conditions": ("smac_direct",),
+                "color": "#334155",
+            },
+        ),
+        (
             "plain_agent",
             {
                 "label": "Plain Agent",
@@ -64,14 +81,6 @@ Q1_GROUPS = OrderedDict(
                 "label": "Agent + TPE+SMAC",
                 "conditions": ("ratchet_tpe_smac", "screening_tpe_smac", "advanced_tpe_smac"),
                 "color": "#dc2626",
-            },
-        ),
-        (
-            "direct",
-            {
-                "label": "Direct",
-                "conditions": ("tpe_direct", "smac_direct"),
-                "color": "#64748b",
             },
         ),
     )
@@ -128,6 +137,7 @@ SUBTLE = "#5b6470"
 GRID = "#e8ebf0"
 BG = "#fffdf8"
 WHITE = "#ffffff"
+ACCENT = "#b42318"
 
 
 @dataclass(frozen=True)
@@ -233,6 +243,10 @@ def _summaries_for_groups(group_specs: OrderedDict[str, dict[str, object]]) -> d
     return dataset_groups
 
 
+def _xml(text: object) -> str:
+    return escape(str(text), quote=False)
+
+
 def _svg_header(width: int, height: int, title: str, subtitle: str) -> list[str]:
     return [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
@@ -245,8 +259,8 @@ def _svg_header(width: int, height: int, title: str, subtitle: str) -> list[str]
         f".grid{{stroke:{GRID};stroke-width:1;}}",
         "</style>",
         f'<rect class="bg" width="{width}" height="{height}"/>',
-        f'<text class="title" x="54" y="38">{title}</text>',
-        f'<text class="subtitle" x="54" y="63">{subtitle}</text>',
+        f'<text class="title" x="54" y="38">{_xml(title)}</text>',
+        f'<text class="subtitle" x="54" y="63">{_xml(subtitle)}</text>',
     ]
 
 
@@ -271,6 +285,10 @@ def _build_table_svg(
     parts.append(
         f'<rect x="{table_x}" y="{table_y}" width="{label_width + col_width * len(DATASETS)}" height="{header_height + row_height * len(groups)}" rx="20" fill="{WHITE}" stroke="#d7dce3" stroke-width="1.2"/>'
     )
+    column_best = {
+        dataset_key: max(summaries[dataset_key][group_key].cell.best_validation for group_key in groups.keys())
+        for dataset_key, _, _ in DATASETS
+    }
 
     for index, (_, label, _) in enumerate(DATASETS):
         x = table_x + label_width + col_width * index
@@ -278,7 +296,7 @@ def _build_table_svg(
             f'<rect x="{x}" y="{table_y}" width="{col_width}" height="{header_height}" fill="#f8fafc"/>'
         )
         parts.append(
-            f'<text class="label" x="{x + col_width / 2:.1f}" y="{table_y + 44:.1f}" text-anchor="middle" font-size="20" font-weight="700">{label}</text>'
+            f'<text class="label" x="{x + col_width / 2:.1f}" y="{table_y + 44:.1f}" text-anchor="middle" font-size="20" font-weight="700">{_xml(label)}</text>'
         )
     parts.append(
         f'<rect x="{table_x}" y="{table_y}" width="{label_width}" height="{header_height}" fill="#f8fafc"/>'
@@ -297,23 +315,26 @@ def _build_table_svg(
             f'<line class="grid" x1="{table_x}" y1="{y}" x2="{table_x + label_width + col_width * len(DATASETS)}" y2="{y}"/>'
         )
         parts.append(
-            f'<text x="{table_x + 22}" y="{y + 40:.1f}" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="{group_spec["color"]}">{group_spec["label"]}</text>'
+            f'<text x="{table_x + 22}" y="{y + 40:.1f}" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="{TEXT}">{_xml(group_spec["label"])}</text>'
         )
         parts.append(
-            f'<text class="subtle" x="{table_x + 22}" y="{y + 64:.1f}" font-size="13">best val among group conditions</text>'
+            f'<text class="subtle" x="{table_x + 22}" y="{y + 64:.1f}" font-size="13">best val in row</text>'
         )
 
         for col_index, (dataset_key, _, _) in enumerate(DATASETS):
             x = table_x + label_width + col_width * col_index
             cell = summaries[dataset_key][group_key].cell
+            is_column_best = cell.best_validation == column_best[dataset_key]
+            score_fill = ACCENT if is_column_best else TEXT
+            winner_fill = ACCENT if is_column_best else SUBTLE
             parts.append(
                 f'<line class="grid" x1="{x}" y1="{table_y}" x2="{x}" y2="{table_y + header_height + row_height * len(groups)}"/>'
             )
             parts.append(
-                f'<text class="label" x="{x + col_width / 2:.1f}" y="{y + 38:.1f}" text-anchor="middle" font-size="24" font-weight="700">{cell.best_validation:.3f}</text>'
+                f'<text x="{x + col_width / 2:.1f}" y="{y + 38:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="{score_fill}">{cell.best_validation:.3f}</text>'
             )
             parts.append(
-                f'<text class="subtle" x="{x + col_width / 2:.1f}" y="{y + 62:.1f}" text-anchor="middle" font-size="14">{cell.winner_text}</text>'
+                f'<text x="{x + col_width / 2:.1f}" y="{y + 62:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="{winner_fill}">{_xml(cell.winner_text)}</text>'
             )
 
     bottom_y = table_y + header_height + row_height * len(groups)
@@ -375,28 +396,33 @@ def _build_history_panel_svg(
 ) -> None:
     width = 1460
     height = 820
-    header_h = 92
-    legend_h = 70
     panel_gap = 32
     outer_margin = 54
     panel_width = (width - outer_margin * 2 - panel_gap) / 2
-    panel_height = height - header_h - legend_h - 40
+    legend_top = 86
+    legend_cols = min(3, len(groups))
+    legend_rows = (len(groups) + legend_cols - 1) // legend_cols
+    legend_col_width = (width - outer_margin * 2) / legend_cols
+    legend_row_height = 34
+    panel_y = legend_top + legend_rows * legend_row_height + 24
+    panel_height = height - panel_y - 40
 
     parts = _svg_header(width, height, title, subtitle)
 
     for legend_index, (_, group_spec) in enumerate(groups.items()):
-        lx = 54 + legend_index * 260
-        ly = 86
+        legend_col = legend_index % legend_cols
+        legend_row = legend_index // legend_cols
+        lx = outer_margin + legend_col * legend_col_width
+        ly = legend_top + legend_row * legend_row_height
         color = group_spec["color"]
         parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx + 24}" y2="{ly}" stroke="{color}" stroke-width="3.5"/>')
         parts.append(f'<circle cx="{lx + 12}" cy="{ly + 18}" r="4" fill="{color}" opacity="0.28"/>')
-        parts.append(f'<text class="label" x="{lx + 34}" y="{ly + 5}" font-size="16">{group_spec["label"]}</text>')
+        parts.append(f'<text class="label" x="{lx + 34}" y="{ly + 5}" font-size="16">{_xml(group_spec["label"])}</text>')
         parts.append(f'<text class="subtle" x="{lx + 34}" y="{ly + 23}" font-size="13">line=best val, scatter=other evals</text>')
 
     for panel_index, dataset_key in enumerate(dataset_keys):
         dataset_label = next(label for key, label, _ in DATASETS if key == dataset_key)
         panel_x = outer_margin + panel_index * (panel_width + panel_gap)
-        panel_y = header_h + 10
         plot_left = panel_x + 62
         plot_top = panel_y + 34
         plot_width = panel_width - 86
@@ -409,11 +435,11 @@ def _build_history_panel_svg(
             f'<rect x="{panel_x}" y="{panel_y}" width="{panel_width}" height="{panel_height}" rx="24" fill="{WHITE}" stroke="#d7dce3" stroke-width="1.1"/>'
         )
         parts.append(
-            f'<text class="label" x="{panel_x + 18}" y="{panel_y + 22}" font-size="20" font-weight="700">{dataset_label}</text>'
+            f'<text class="label" x="{panel_x + 18}" y="{panel_y + 22}" font-size="20" font-weight="700">{_xml(dataset_label)}</text>'
         )
         if clipped_count:
             parts.append(
-                f'<text class="subtle" x="{panel_x + panel_width - 18}" y="{panel_y + 22}" text-anchor="end" font-size="13">lower-tail clip at {min_score:.3f} ({clipped_count} evals)</text>'
+                f'<text class="subtle" x="{panel_x + panel_width - 18}" y="{panel_y + 22}" text-anchor="end" font-size="13">{_xml(f"lower-tail clip at {min_score:.3f} ({clipped_count} evals)")}</text>'
             )
 
         def scale_x(step_index: int) -> float:
@@ -434,7 +460,7 @@ def _build_history_panel_svg(
             if tick == 4 and clipped_count:
                 label = f"<={min_score:.3f}"
             parts.append(
-                f'<text class="subtle" x="{plot_left - 10:.1f}" y="{y + 5:.1f}" text-anchor="end" font-size="13">{label}</text>'
+                f'<text class="subtle" x="{plot_left - 10:.1f}" y="{y + 5:.1f}" text-anchor="end" font-size="13">{_xml(label)}</text>'
             )
 
         for tick in range(5):
