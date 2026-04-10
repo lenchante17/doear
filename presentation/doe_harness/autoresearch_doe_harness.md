@@ -235,199 +235,184 @@ agent 특유 문제
 <small>source: [SMAC3 docs](https://automl.github.io/SMAC3/main/), [Components](https://automl.github.io/SMAC3/v2.0.2/advanced_usage/1_components.html), [Intensifier](https://automl.github.io/SMAC3/v2.2.0/api/smac.intensifier.intensifier.html)</small>
 
 ---
-<!-- footer: "결과 TBD" -->
+<!-- footer: "질문 1 결과" -->
 
-## 15. 결과 TBD
+## 15. 질문 1 결과
 
-**TBD**
+| Dataset | best val | best hidden |
+| --- | --- | --- |
+| `fashion_mnist` | hybrid `0.865` | `SMAC` family `0.853` |
+| `twenty_newsgroups` | `ratchet_plain` `0.566` | `ratchet_plain` `0.577` |
+| `sms_spam` | `screening_plain` `0.992` | `advanced_tpe_smac` `0.983` |
+| `cifar10` | `ratchet_tpe_smac` `0.440` | `screening_plain` `0.392` |
 
-- 실험 진행 중
-- 동일 조건 결과 표 추가 예정
-- `best val`, `best hidden`, search trace를 함께 정리할 예정
-- 질문 1의 결론은 여기서 닫힌다
+- `Autoresearch`와 hybrid는 strong baseline과 경쟁 가능하지만, universal winner는 아니다.
+- validation winner와 hidden-test winner는 `4`개 중 `3`개 데이터셋에서 갈렸다.
+- 질문 1의 결론은 `better than baseline`이 아니라 `dataset-dependent portfolio`에 가깝다.
 
 ---
 <!-- footer: "질문 2 셋업" -->
 
 ## 16. 질문 2 셋업
 
-| Agent | 운영 방식 | 질문 |
-| --- | --- | --- |
-| `Ratchet` | incumbent 근처 exploit | 얼마나 빨리 올리나 |
-| `Screening` | main effect 분리 | 무엇이 먹히나 |
-| `Advanced` | staged DOE | 어떻게 다음 round를 설계하나 |
+| 항목 | 설정 |
+| --- | --- |
+| benchmarks | `fashion`, `twenty`, `spam`, `cifar` |
+| model | `mlp` |
+| conditions | dataset당 `14` |
+| budget | condition당 `100 + finalize 1` |
+
+- 각 데이터셋은 fresh isolated root에서 다시 시작했다.
+- 각 root 안에서 `14`개 condition마다 서로 다른 subagent를 띄웠다.
+- 이번 질문은 `어떤 harness를 남길 것인가`다.
 
 ---
-<!-- footer: "실험 설정" -->
+<!-- footer: "실행 규칙" -->
 
 ## 17. 실험 설정
 
 | 항목 | 설정 |
 | --- | --- |
-| benchmark | `cifar10_real` |
-| model | `mlp` |
-| conditions | `14` |
-| budget | condition당 `100 + finalize 1` |
+| subagent isolation | condition별 독립 context |
+| submission width | run당 `1` candidate |
+| duplicate policy | 기존과 같은 config 금지 |
+| validity gate | `100 runs + finalized 1` 검산 |
 
-비교 대상
-- `plain`, `TPE`, `SMAC`, `TPE+SMAC`, direct
-
-목표
-- code edit가 아니라 bounded `AutoML + harness` 비교
+- context mixing과 repeated config를 막기 위해 실행 규칙을 강화했다.
+- 첫 `twenty_newsgroups` wave는 contaminated run이라 버리고 clean rerun만 채택했다.
 
 ---
-<!-- footer: "탐색 축" -->
+<!-- footer: "결과 매트릭스" -->
 
 ## 18. 탐색 축
 
-| 그룹 | 변수 |
-| --- | --- |
-| preprocessing | `normalization`, `projection`, `resampling` |
-| architecture | `hidden_dims`, `activation`, `norm layer` |
-| optimization | `solver`, `lr`, `batch` |
-| regularization | `wd`, `dropout`, `noise` |
+| Dataset | best val | best hidden | signal |
+| --- | --- | --- | --- |
+| `fashion` | `advanced_tpe_smac` / `screening_tpe_smac` | `advanced_smac` tier | hybrid peak, `SMAC` finalize |
+| `twenty` | `ratchet_plain` | `ratchet_plain` | plain exploit 승리 |
+| `spam` | `screening_plain` | `advanced_tpe_smac` | saturated regime |
+| `cifar` | `ratchet_tpe_smac` | `screening_plain` | peak와 finalize 분리 |
 
-- 한 축만 바꾸는 round와 여러 축을 묶는 round를 구분해서 본다
+- 질문 2는 이 차이를 harness 관점에서 읽는 작업이다.
 
 ---
-<!-- footer: "결과 요약" -->
+<!-- footer: "Fashion" -->
 
 ## 19. 결과 요약
 
 | 관점 | 조건 | 점수 |
 | --- | --- | --- |
-| best val | `screening_plain` | `0.4433` |
-| best hidden | `ratchet_smac` | `0.4100` |
-| best direct hidden | `tpe_direct` | `0.3733` |
+| best val | `advanced_tpe_smac`, `screening_tpe_smac` | `0.865` |
+| best hidden | `advanced_smac`, `ratchet_smac`, `screening_smac`, `smac_direct` | `0.853` |
+| reading | peak는 hybrid, finalize는 `SMAC` 계열 |  |
 
-핵심
-- validation winner와 finalize winner가 다르다.
-
-함의
-- harness가 peak와 generalization을 다르게 만든다.
-
-- 따라서 mid-run 최고점만으로 harness를 평가하면 오판한다.
+- `fashion_mnist`에서는 model-based advisor가 late-stage generalization에 유리했다.
+- direct `SMAC`도 top hidden tier에 들어서, agent만의 독점 우위는 아니었다.
 
 ---
-<!-- footer: "Ratchet" -->
+<!-- footer: "Twenty" -->
 
-## 20. Ratchet
+## 20. Twenty 결과
 
-![w:1460](./assets/ratchet_variants_best_and_nonbest.svg)
+| 관점 | 조건 | 점수 |
+| --- | --- | --- |
+| best val | `ratchet_plain` | `0.5658` |
+| best hidden | `ratchet_plain` | `0.5767` |
+| next tier | `advanced_tpe`, `ratchet_tpe`, `screening_tpe`, `tpe_direct` | `0.5458` hidden |
 
-관찰
-- `TPE`가 validation ceiling을 가장 높게 만든다.
-- hidden winner는 `SMAC` 쪽에서 나온다.
-
-해석
-- ratchet은 exploit엔 강하지만 finalize 성능은 advisor choice에 민감하다.
-
----
-<!-- footer: "Screening" -->
-
-## 21. Screening
-
-![w:1460](./assets/screening_variants_best_and_nonbest.svg)
-
-관찰
-- `plain`이 전체 best val을 만든다.
-- hidden에선 `TPE+SMAC`이 family 최고다.
-
-해석
-- screening policy 자체가 강하고, dual advisor 이득은 late-stage에서만 제한적으로 보인다.
+- `twenty_newsgroups`에서는 plain harness가 advisor를 붙인 변형보다 더 좋았다.
+- 이 태스크에선 exploit loop 자체가 충분히 강했고, advisor가 추가 이득을 못 만들었다.
 
 ---
-<!-- footer: "Advanced" -->
+<!-- footer: "Spam" -->
 
-## 22. Advanced
+## 21. Spam 결과
 
-![w:1460](./assets/advanced_variants_best_and_nonbest.svg)
+| 관점 | 조건 | 점수 |
+| --- | --- | --- |
+| best val | `screening_plain` | `0.9916` |
+| best hidden | `advanced_tpe_smac` | `0.9833` |
+| strong hidden tier | `smac_direct`, `advanced_smac`, `ratchet_smac`, `screening_smac`, `ratchet_tpe_smac` | `0.9821` |
 
-관찰
-- plain 조건은 ceiling이 낮다.
-- advisor가 붙을 때만 상위권에 오른다.
-
-해석
-- 복잡한 sequential design은 짧은 budget에서 proposal quality 의존성이 크다.
-
----
-<!-- footer: "Plain" -->
-
-## 23. Plain
-
-![w:1460](./assets/plain_agents_best_and_nonbest.svg)
-
-관찰
-- advisor 없이도 profile 간 차이가 크게 난다.
-- `screening_plain`은 val 1등, `ratchet_plain`은 hidden family 1등이다.
-
-해석
-- baseline behavior는 advisor보다 harness가 먼저 규정한다.
+- `sms_spam`은 거의 saturate돼서 validation 차이가 매우 작다.
+- 이런 regime에선 `best val`보다 `finalize hidden`이 harness 판정에 더 중요하다.
 
 ---
-<!-- footer: "TPE" -->
+<!-- footer: "CIFAR" -->
 
-## 24. TPE
+## 22. CIFAR 결과
 
-![w:1460](./assets/tpe_agents_best_and_nonbest.svg)
+| 관점 | 조건 | 점수 |
+| --- | --- | --- |
+| best val | `ratchet_tpe_smac` | `0.4400` |
+| best hidden | `screening_plain` | `0.3917` |
+| next hidden tier | `advanced_tpe`, `ratchet_tpe`, `screening_tpe`, `tpe_direct` | `0.3900` |
 
-관찰
-- `ratchet`과 `screening`이 같은 ceiling에 도달한다.
-- `advanced`도 좋아지지만 상위 둘을 넘지는 못한다.
-
-해석
-- `TPE`는 profile 차이를 줄이고 incumbent 근처 수렴을 강화한다.
+- `cifar10`에선 hybrid가 peak를 끌어올렸지만 finalize winner는 plain이었다.
+- 따라서 search trace의 ceiling만 보면 harness를 잘못 고를 수 있다.
 
 ---
-<!-- footer: "SMAC" -->
+<!-- footer: "공통 패턴" -->
 
-## 25. SMAC
+## 23. 공통 패턴
 
-![w:1460](./assets/smac_agents_best_and_nonbest.svg)
+- winner는 dataset마다 달랐다.
+- `best val`과 `best hidden`은 `fashion`, `spam`, `cifar`에서 갈렸다.
+- hybrid가 ceiling을 높일 때도 있었지만, plain이 finalize를 더 잘하는 경우가 반복됐다.
+- direct baseline도 여러 데이터셋에서 top tier에 남아 있었다.
 
-관찰
-- best val은 `screening_smac`에서 나온다.
-- best hidden은 `ratchet_smac`에서 나온다.
+---
+<!-- footer: "Harness 해석" -->
 
-해석
-- 같은 advisor라도 harness가 selection pressure와 finalize generalization을 바꾼다.
+## 24. Harness 해석
+
+| Signal | 해석 |
+| --- | --- |
+| hybrid peak 상승 | advisor가 proposal ceiling을 올린다 |
+| plain finalize 승리 | harness가 selection pressure를 바꾼다 |
+| direct top tier 잔류 | baseline BO도 여전히 강하다 |
+
+- 즉 `무슨 advisor를 붙였나`만큼 `무슨 harness가 무엇을 보게 만들었나`가 중요했다.
+
+---
+<!-- footer: "운영 교훈" -->
+
+## 25. 운영 교훈
+
+- subagent isolation 없이는 dataset 간 context가 섞인다.
+- run당 `1` candidate 제한이 없으면 비교 단위가 흐려진다.
+- duplicate guard가 없으면 deterministic eval에서 같은 config를 반복하게 된다.
+- artifact count로 검산하지 않으면 early finalize나 invalid wave를 놓친다.
 
 ---
 <!-- footer: "핵심 함의" -->
 
 ## 26. 핵심 함의
 
-- harness effect는 advisor effect만큼 크다.
-- validation 최적화와 finalize 최적화는 다른 문제다.
-- dual advisor는 항상 단일 advisor를 이기지 않는다.
-- 따라서 harness 평가는 `누가 더 똑똑한가`보다 `무엇을 어떻게 보게 만드는가`를 봐야 한다.
+- harness effect는 advisor effect만큼 컸다.
+- validation 최적화와 finalize 최적화는 다른 문제였다.
+- dual advisor는 일부 데이터셋에서만 이득이 있었다.
+- harness 평가는 `best val`, `best hidden`, completeness를 함께 봐야 한다.
 
 ---
-<!-- footer: "운영 교훈" -->
+<!-- footer: "추천" -->
 
 ## 27. 운영 교훈
 
-지표
-- `best val`만 보지 말고 `finalize`, `artifact completeness`를 같이 봐야 한다.
-
-설계
-- `isolate / history / finalize` 분리가 있어야 중간 최고와 최종 승자를 함께 읽는다.
-
-로그
-- advisor trace에는 invalid proposal이 섞일 수 있어 guard가 필요하다.
-
-판정
-- run 수와 history row 수를 혼동하면 early finalize가 생긴다.
+추천
+- default winner 하나를 고정하지 말고 dataset별 shortlist를 운영한다.
+- image tabular-like regime에선 hybrid peak를, text/saturated regime에선 plain finalize를 우선 본다.
+- rerun 규칙과 contamination discard 기준을 미리 정해 둔다.
 
 ---
 <!-- footer: "한계" -->
 
 ## 28. 한계
 
-- 단일 benchmark, single split
-- budget `100`, top-k reseeding 없음
-- code-edit autoresearch는 아직 제외
-- 따라서 이번 결론은 `bounded AutoML harness` 범위에 한정된다
+- single split, repeated seed 평균 없음
+- model family는 `mlp` 하나만 사용했다
+- budget은 condition당 `100 + finalize 1`로 짧다
+- code-edit autoresearch와 open-ended research task는 아직 제외했다
 
 ---
 <!-- _class: tinytext -->
