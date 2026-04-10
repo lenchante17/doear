@@ -131,40 +131,40 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 10. 두 질문
 
-- 성능: `Autoresearch`는 AutoML baseline보다 낫나
-- 운영: 어떤 harness가 agent loop를 낫게 만드나
+- 성능: `(AutoML의 도메인에서)` `Autoresearch`는 baseline보다 낫나
+- 과정: `Autoresearch` 과정에 어떤 harness가 있으면 좋을까
 - 질문 1은 `solver` 비교다
 - 질문 2는 `process` 비교다
 
 ---
-<!-- footer: "비교 틀" -->
+<!-- footer: "질문 1 셋업" -->
 
-## 11. 비교 틀
+## 11. 질문 1 셋업
 
-- 비교 대상: `Autoresearch`, `Optuna TPE`, `SMAC3`
+- baseline: `Optuna TPE`, `SMAC3`
+- agent: `Autoresearch`
+- hybrid: `agent + TPE`, `agent + SMAC3`
 - 비교 조건: 같은 search space, benchmark, budget
-- 질문: 같은 제약에서 누가 더 좋은 후보를 찾는가
-- 의미: `free-form agent`가 baseline을 넘는지 본다
 
 ---
 <!-- footer: "Optuna TPE" -->
 
 ## 12. Optuna TPE
 
-- 방법: `good` vs `rest` density 비교
-- 의미: 강한 exploitation baseline
-- 장점: incumbent 근처를 빠르게 좁힌다
-- 한계: 구조적 실험 설계는 직접 주지 않는다
+- 핵심 아이디어: 좋은 trial과 나머지 trial을 분리해 density를 학습한다
+- 다음 제안은 `good / rest` 비율이 큰 쪽을 우선 샘플링한다
+- 강점: bounded search space에서 incumbent 근처를 빠르게 좁힌다
+- 성격: `exploit-heavy` baseline이라 agent 없는 강한 비교선이 된다
 
 ---
 <!-- footer: "SMAC3" -->
 
 ## 13. SMAC3
 
-- 방법: surrogate + racing
-- 의미: mixed search space baseline
-- 장점: categorical / conditional space 대응이 강하다
-- 한계: proposal quality는 높아도 실험 rationale은 주지 않는다
+- 핵심 아이디어: surrogate model로 promising region을 예측한다
+- evaluation budget은 racing으로 유망한 config에 더 배분한다
+- 강점: categorical, mixed, conditional search space 대응이 강하다
+- 성격: `model-based search` baseline이라 TPE와 다른 편향을 준다
 
 ---
 <!-- footer: "결과 TBD" -->
@@ -179,14 +179,14 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 질문 1의 결론은 여기서 닫힌다
 
 ---
-<!-- footer: "질문 2" -->
+<!-- footer: "질문 2 셋업" -->
 
-## 15. 질문 2
+## 15. 질문 2 셋업
 
-- 초점: 성능이 아니라 운영
-- 목표: 즉흥 loop를 실험 체계로 바꾸기
-- 같은 agent라도 harness가 trajectory를 바꾼다
-- 여기부터는 `DoE-guided harness`를 본다
+- 비교 대상은 agent profile 세 가지다
+- `Ratchet`: incumbent 근처 exploit
+- `Screening`: main effect 분리
+- `Advanced`: interaction과 refinement까지 포함한 staged DOE
 
 ---
 <!-- footer: "왜 Harness" -->
