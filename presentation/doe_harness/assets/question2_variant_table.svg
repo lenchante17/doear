@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1460" height="868" viewBox="0 0 1460 868">
+<style>
+.bg{fill:#fffdf8;}
+.title{font-family:Helvetica,Arial,sans-serif;font-size:30px;font-weight:700;fill:#1f2328;}
+.subtitle{font-family:Helvetica,Arial,sans-serif;font-size:16px;fill:#5b6470;}
+.label{font-family:Helvetica,Arial,sans-serif;fill:#1f2328;}
+.subtle{font-family:Helvetica,Arial,sans-serif;fill:#5b6470;}
+.grid{stroke:#e8ebf0;stroke-width:1;}
+</style>
+<rect class="bg" width="1460" height="868"/>
+<text class="title" x="54" y="38">Question 2: Group + Advisor x Datasets</text>
+<rect x="54" y="96" width="1402" height="626" rx="20" fill="#ffffff" stroke="#d7dce3" stroke-width="1.2"/>
+<rect x="304" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="448.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">Fashion-MNIST</text>
+<rect x="592" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="736.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">Twenty Newsgroups</text>
+<rect x="880" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="1024.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">SMS Spam</text>
+<rect x="1168" y="96" width="288" height="74" fill="#f8fafc"/>
+<text class="label" x="1312.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">CIFAR-10</text>
+<rect x="54" y="96" width="250" height="74" fill="#f8fafc"/>
+<text class="label" x="76" y="140.0" font-size="20" font-weight="700">Comparison Group</text>
+<rect x="54" y="170" width="1402" height="92" fill="#ffffff"/>
+<line class="grid" x1="54" y1="170" x2="1456" y2="170"/>
+<text x="76" y="210.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Ratchet + TPE</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="722"/>
+<text x="448.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.854</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="722"/>
+<text x="736.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.551</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="722"/>
+<text x="1024.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.990</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
+<text x="1312.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.428</text>
+<rect x="54" y="262" width="1402" height="92" fill="#fcfcfd"/>
+<line class="grid" x1="54" y1="262" x2="1456" y2="262"/>
+<text x="76" y="302.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Ratchet + SMAC</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="722"/>
+<text x="448.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.863</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="722"/>
+<text x="736.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.543</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="722"/>
+<text x="1024.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
+<text x="1312.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.413</text>
+<rect x="54" y="354" width="1402" height="92" fill="#ffffff"/>
+<line class="grid" x1="54" y1="354" x2="1456" y2="354"/>
+<text x="76" y="394.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Screening + TPE</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="722"/>
+<text x="448.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.854</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="722"/>
+<text x="736.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.551</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="722"/>
+<text x="1024.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.990</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
+<text x="1312.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.428</text>
+<rect x="54" y="446" width="1402" height="92" fill="#fcfcfd"/>
+<line class="grid" x1="54" y1="446" x2="1456" y2="446"/>
+<text x="76" y="486.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Screening + SMAC</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="722"/>
+<text x="448.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.863</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="722"/>
+<text x="736.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.543</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="722"/>
+<text x="1024.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
+<text x="1312.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.413</text>
+<rect x="54" y="538" width="1402" height="92" fill="#ffffff"/>
+<line class="grid" x1="54" y1="538" x2="1456" y2="538"/>
+<text x="76" y="578.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Advanced + TPE</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="722"/>
+<text x="448.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.854</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="722"/>
+<text x="736.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.551</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="722"/>
+<text x="1024.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.990</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
+<text x="1312.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.428</text>
+<rect x="54" y="630" width="1402" height="92" fill="#fcfcfd"/>
+<line class="grid" x1="54" y1="630" x2="1456" y2="630"/>
+<text x="76" y="670.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Advanced + SMAC</text>
+<line class="grid" x1="304" y1="96" x2="304" y2="722"/>
+<text x="448.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.863</text>
+<line class="grid" x1="592" y1="96" x2="592" y2="722"/>
+<text x="736.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.543</text>
+<line class="grid" x1="880" y1="96" x2="880" y2="722"/>
+<text x="1024.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
+<line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
+<text x="1312.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.413</text>
+<line class="grid" x1="54" y1="722" x2="1456" y2="722"/>
+</svg>

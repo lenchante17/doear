@@ -1,51 +1,84 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
-  <rect width="1200" height="620" fill="#f7f4ec"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+  <rect width="1200" height="520" fill="#f7f4ec"/>
 
-  <circle cx="170" cy="92" r="26" fill="#1f3b2d"/>
-  <text x="170" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">1</text>
-  <circle cx="450" cy="92" r="26" fill="#22477a"/>
-  <text x="450" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">2</text>
-  <circle cx="730" cy="92" r="26" fill="#6d2f1f"/>
-  <text x="730" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">3</text>
-  <circle cx="1010" cy="92" r="26" fill="#654600"/>
-  <text x="1010" y="102" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">4</text>
+  <rect x="40" y="52" width="320" height="356" rx="28" fill="#d9e6d2" stroke="#1f3b2d" stroke-width="4"/>
+  <rect x="440" y="52" width="320" height="356" rx="28" fill="#dce6ff" stroke="#22477a" stroke-width="4"/>
+  <rect x="840" y="52" width="320" height="356" rx="28" fill="#ffd9c7" stroke="#6d2f1f" stroke-width="4"/>
 
-  <rect x="50" y="130" width="240" height="210" rx="28" fill="#d9e6d2" stroke="#1f3b2d" stroke-width="4"/>
-  <text x="170" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#1f3b2d">Run History</text>
-  <text x="170" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1f3b2d">past trials</text>
-  <text x="170" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1f3b2d">configs + loss</text>
-  <text x="170" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#1f3b2d">evidence for</text>
-  <text x="170" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#1f3b2d">challengers</text>
+  <circle cx="78" cy="84" r="20" fill="#1f3b2d"/>
+  <text x="78" y="91" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">1</text>
+  <circle cx="478" cy="84" r="20" fill="#22477a"/>
+  <text x="478" y="91" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">2</text>
+  <circle cx="878" cy="84" r="20" fill="#6d2f1f"/>
+  <text x="878" y="91" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">3</text>
 
-  <rect x="330" y="130" width="240" height="210" rx="28" fill="#dce6ff" stroke="#22477a" stroke-width="4"/>
-  <text x="450" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#22477a">Search Model</text>
-  <text x="450" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22477a">surrogate predicts</text>
-  <text x="450" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22477a">mean + uncertainty</text>
-  <text x="450" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#22477a">strong on mixed</text>
-  <text x="450" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#22477a">search spaces</text>
+  <text x="200" y="100" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#1f3b2d">Learn from trials</text>
+  <text x="600" y="100" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#22477a">Predict cheap</text>
+  <text x="1000" y="100" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#6d2f1f">Race the challenger</text>
 
-  <rect x="610" y="130" width="240" height="210" rx="28" fill="#ffd9c7" stroke="#6d2f1f" stroke-width="4"/>
-  <text x="730" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#6d2f1f">Selection Rule</text>
-  <text x="730" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#6d2f1f">acquisition ranks</text>
-  <text x="730" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#6d2f1f">challengers</text>
-  <text x="730" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6d2f1f">predicted gain +</text>
-  <text x="730" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6d2f1f">uncertainty</text>
+  <text x="200" y="130" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#1f3b2d">use past config-loss pairs</text>
+  <text x="600" y="130" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#22477a">mean plus uncertainty guide the proposal</text>
+  <text x="1000" y="130" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#6d2f1f">small budget first, more budget only if it survives</text>
 
-  <rect x="890" y="130" width="240" height="210" rx="28" fill="#f8e7b7" stroke="#654600" stroke-width="4"/>
-  <text x="1010" y="180" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" font-weight="700" fill="#654600">Next Trial</text>
-  <text x="1010" y="226" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#654600">race challenger</text>
-  <text x="1010" y="258" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#654600">vs incumbent</text>
-  <text x="1010" y="302" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#654600">more budget goes</text>
-  <text x="1010" y="330" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#654600">to strong configs</text>
+  <line x1="88" y1="340" x2="300" y2="340" stroke="#6f6a5f" stroke-width="3"/>
+  <line x1="88" y1="340" x2="88" y2="168" stroke="#6f6a5f" stroke-width="3"/>
+  <text x="194" y="368" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#6f6a5f">config axis</text>
+  <text x="62" y="250" text-anchor="middle" transform="rotate(-90 62 250)" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#6f6a5f">loss</text>
 
-  <path d="M290 235 C302 235, 314 235, 330 235" fill="none" stroke="#1f3b2d" stroke-width="5"/>
-  <polygon points="318,224 342,235 318,246" fill="#1f3b2d"/>
-  <path d="M570 235 C582 235, 594 235, 610 235" fill="none" stroke="#22477a" stroke-width="5"/>
-  <polygon points="598,224 622,235 598,246" fill="#22477a"/>
-  <path d="M850 235 C862 235, 874 235, 890 235" fill="none" stroke="#6d2f1f" stroke-width="5"/>
-  <polygon points="878,224 902,235 878,246" fill="#6d2f1f"/>
+  <circle cx="114" cy="318" r="8" fill="#a06a2a"/>
+  <circle cx="136" cy="292" r="8" fill="#a06a2a"/>
+  <circle cx="156" cy="268" r="8" fill="#a06a2a"/>
+  <circle cx="178" cy="228" r="8" fill="#a06a2a"/>
+  <circle cx="202" cy="244" r="8" fill="#a06a2a"/>
+  <circle cx="224" cy="212" r="8" fill="#a06a2a"/>
+  <circle cx="244" cy="268" r="8" fill="#a06a2a"/>
+  <circle cx="264" cy="306" r="8" fill="#a06a2a"/>
+  <circle cx="286" cy="286" r="8" fill="#a06a2a"/>
+  <text x="200" y="160" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1f3b2d">observed evaluations</text>
 
-  <text x="600" y="500" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#50381a">
-    SMAC3 combines a surrogate proposal step with aggressive racing over challengers.
+  <line x1="492" y1="340" x2="704" y2="340" stroke="#6f6a5f" stroke-width="3"/>
+  <line x1="492" y1="340" x2="492" y2="168" stroke="#6f6a5f" stroke-width="3"/>
+  <text x="598" y="368" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#6f6a5f">config axis</text>
+  <text x="466" y="250" text-anchor="middle" transform="rotate(-90 466 250)" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#6f6a5f">predicted loss</text>
+
+  <path d="M506 302 C532 292, 556 246, 582 238 C614 228, 638 260, 664 244 C684 232, 694 202, 704 190" fill="none" stroke="#22477a" stroke-width="6"/>
+  <path d="M506 330 C532 318, 556 274, 582 268 C614 258, 638 292, 664 278 C684 266, 694 236, 704 224" fill="none" stroke="#7fb0ff" stroke-width="4"/>
+  <path d="M506 274 C532 266, 556 218, 582 208 C614 198, 638 228, 664 214 C684 202, 694 170, 704 156" fill="none" stroke="#7fb0ff" stroke-width="4"/>
+  <path d="M506 274 C532 266, 556 218, 582 208 C614 198, 638 228, 664 214 C684 202, 694 170, 704 156 L704 224 C694 236, 684 266, 664 278 C638 292, 614 258, 582 268 C556 274, 532 318, 506 330 Z" fill="#7fb0ff" opacity="0.18"/>
+  <circle cx="688" cy="180" r="10" fill="#d9481e"/>
+  <text x="676" y="156" text-anchor="end" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#d9481e">challenger</text>
+  <text x="598" y="164" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#22477a">surrogate plus uncertainty</text>
+
+  <rect x="878" y="168" width="96" height="62" rx="18" fill="#efe9dd" stroke="#6f6a5f" stroke-width="3"/>
+  <text x="926" y="196" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#50381a">incumbent</text>
+  <text x="926" y="218" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#50381a">current best</text>
+  <rect x="1026" y="168" width="96" height="62" rx="18" fill="#fff1ec" stroke="#d9481e" stroke-width="3"/>
+  <text x="1074" y="196" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#d9481e">challenger</text>
+  <text x="1074" y="218" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#d9481e">new proposal</text>
+
+  <path d="M972 252 C988 252, 996 252, 1012 252" fill="none" stroke="#6d2f1f" stroke-width="4"/>
+  <polygon points="1000,242 1018,252 1000,262" fill="#6d2f1f"/>
+  <text x="1000" y="280" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#6d2f1f">quick race</text>
+
+  <rect x="878" y="304" width="76" height="34" rx="17" fill="#f2c96d"/>
+  <text x="916" y="326" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#654600">small budget</text>
+  <rect x="962" y="304" width="76" height="34" rx="17" fill="#f2c96d"/>
+  <text x="1000" y="326" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#654600">more budget</text>
+  <rect x="1046" y="304" width="76" height="34" rx="17" fill="#f2c96d"/>
+  <text x="1084" y="326" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#654600">full budget</text>
+  <path d="M954 321 C958 321, 958 321, 962 321" fill="none" stroke="#654600" stroke-width="3"/>
+  <path d="M1038 321 C1042 321, 1042 321, 1046 321" fill="none" stroke="#654600" stroke-width="3"/>
+
+  <path d="M1074 238 C1090 252, 1100 278, 1104 304" fill="none" stroke="#1f8f55" stroke-width="4"/>
+  <polygon points="1093,297 1105,312 1110,294" fill="#1f8f55"/>
+  <text x="1044" y="362" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1f8f55">only strong challengers continue</text>
+
+  <path d="M360 230 C388 230, 404 230, 440 230" fill="none" stroke="#1f3b2d" stroke-width="5"/>
+  <polygon points="426,219 448,230 426,241" fill="#1f3b2d"/>
+  <path d="M760 230 C788 230, 804 230, 840 230" fill="none" stroke="#22477a" stroke-width="5"/>
+  <polygon points="826,219 848,230 826,241" fill="#22477a"/>
+
+  <text x="600" y="472" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#50381a">
+    SMAC3 proposes with a surrogate, then spends more budget only on challengers that survive the race.
   </text>
 </svg>

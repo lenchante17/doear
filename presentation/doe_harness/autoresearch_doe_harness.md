@@ -203,19 +203,16 @@ agent 특유 문제
 
 ## 13. Optuna TPE
 
-![w:980](./assets/optuna_tpe_flow.svg)
+![w:780](./assets/optuna_tpe_flow.svg)
 
-`Run History`
-- observed trial을 `good set`과 `rest`로 나눈다
+`핵심 직관`
+- 지난 trial을 `상위권`과 `나머지`로 나눈다
 
-`Search Model`
-- `l(x)`는 good set, `g(x)`는 rest의 density를 근사한다
+`다음 점`
+- 상위권이 자주 나오고 나머지는 덜 나오는 구간을 다시 찍는다
 
-`Selection Rule`
-- `l(x) / g(x)`가 큰 후보를 다음 trial로 고른다
-
-함의
-- bounded space에서 빠르게 수렴하는 `exploit-heavy` baseline이다
+`읽는 법`
+- "좋은 점수들이 몰린 자리"를 density로 찾는 sampler다
 
 <small>source: [Optuna TPESampler docs](https://optuna.readthedocs.io/en/v4.4.0/reference/samplers/generated/optuna.samplers.TPESampler.html)</small>
 
@@ -224,19 +221,16 @@ agent 특유 문제
 
 ## 14. SMAC3
 
-![w:980](./assets/smac3_flow.svg)
+![w:780](./assets/smac3_flow.svg)
 
-`Run History`
-- observed config-loss pair로 surrogate를 학습한다
+`핵심 직관`
+- 과거 평가 기록으로 `싸게 예측하는 대리모델`을 만든다
 
-`Search Model`
-- surrogate는 mean과 uncertainty로 promising region을 예측한다
+`다음 점`
+- 평균이 좋아 보이거나 불확실성이 큰 challenger를 먼저 뽑는다
 
-`Selection Rule`
-- acquisition이 challenger를 고르고, intensifier가 incumbent와 붙인다
-
-함의
-- mixed, categorical, conditional space에서 강한 `model-based` baseline이다
+`비교 방식`
+- incumbent와 짧게 붙여 보고, 이길 가능성이 있으면 budget을 더 준다
 
 <small>source: [SMAC3 docs](https://automl.github.io/SMAC3/main/), [Components](https://automl.github.io/SMAC3/v2.0.2/advanced_usage/1_components.html), [Intensifier](https://automl.github.io/SMAC3/v2.2.0/api/smac.intensifier.intensifier.html)</small>
 
@@ -247,7 +241,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question1_comparison_table.svg)
 
-- 질문 1의 winner는 고정되지 않았다. `fashion`, `cifar`는 hybrid 계열이, `twenty`, `spam`은 plain/direct tier가 상단에 남았다.
+- 질문 1은 `ratchet` loop를 고정한 채 advisor만 바꿔 본 비교다. winner는 여전히 dataset마다 갈린다.
 - 그래서 baseline 비교의 결론은 단일 champion보다 dataset별 shortlist에 가깝다.
 
 ---
@@ -257,7 +251,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question1_history_panel_a.svg)
 
-- `fashion`과 `twenty`의 frontier 모양이 다르다. 전자는 advisor stack이 late gain을 만들었고, 후자는 plain exploit이 만든 초반 우위를 끝까지 지켰다.
+- `fashion`과 `twenty`의 frontier 모양이 다르다. 같은 `ratchet` loop 안에서도 advisor가 다르면 late gain과 early lock-in 패턴이 갈린다.
 
 ---
 <!-- footer: "질문 1 추적 B" -->
@@ -296,9 +290,36 @@ agent 특유 문제
 - `spam`은 `screening`, `cifar`는 `ratchet`가 상단 frontier를 만들었다. harness는 해석 틀이 아니라 실제 search policy다.
 
 ---
+<!-- footer: "질문 2 분해 표" -->
+
+## 21. 질문 2 분해 표
+
+![w:1300](./assets/question2_variant_table.svg)
+
+- `질문 2`를 harness 단위에서 한 번 더 쪼개 보면, 같은 family 안에서도 `TPE`와 `SMAC`가 dataset별로 다르게 작동한다.
+
+---
+<!-- footer: "질문 2 분해 A" -->
+
+## 22. 질문 2 분해 A
+
+![w:1300](./assets/question2_variant_history_panel_a.svg)
+
+- `fashion`에선 `SMAC` 계열이 상단을 만들고, `twenty`에선 `ratchet + TPE`가 가장 먼저 frontier를 끌어올렸다.
+
+---
+<!-- footer: "질문 2 분해 B" -->
+
+## 23. 질문 2 분해 B
+
+![w:1300](./assets/question2_variant_history_panel_b.svg)
+
+- `spam`은 `SMAC` 계열이, `cifar`는 `TPE` 계열이 상대적으로 더 높은 frontier를 만든다. 단일 advisor만 봐도 dataset별 패턴이 갈린다.
+
+---
 <!-- footer: "공통 패턴" -->
 
-## 21. 공통 패턴
+## 24. 공통 패턴
 
 - winner는 dataset마다 달랐다.
 - `best val`과 `best hidden`은 `fashion`, `spam`, `cifar`에서 갈렸다.
@@ -308,7 +329,7 @@ agent 특유 문제
 ---
 <!-- footer: "운영 교훈" -->
 
-## 22. 운영 교훈
+## 25. 운영 교훈
 
 - subagent isolation 없이는 dataset 간 context가 섞인다.
 - run당 `1` candidate 제한이 없으면 비교 단위가 흐려진다.
@@ -318,7 +339,7 @@ agent 특유 문제
 ---
 <!-- footer: "핵심 함의" -->
 
-## 23. 핵심 함의
+## 26. 핵심 함의
 
 - harness effect는 advisor effect만큼 컸다.
 - validation 최적화와 finalize 최적화는 다른 문제였다.
@@ -328,7 +349,7 @@ agent 특유 문제
 ---
 <!-- footer: "추천" -->
 
-## 24. 추천
+## 27. 추천
 
 추천
 - default winner 하나를 고정하지 말고 dataset별 shortlist를 운영한다.
@@ -338,7 +359,7 @@ agent 특유 문제
 ---
 <!-- footer: "한계" -->
 
-## 25. 한계
+## 28. 한계
 
 - single split, repeated seed 평균 없음
 - model family는 `mlp` 하나만 사용했다
@@ -349,7 +370,7 @@ agent 특유 문제
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 26. References
+## 29. References
 
 | 구분 | 예시 |
 | --- | --- |

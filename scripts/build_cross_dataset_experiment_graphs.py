@@ -57,7 +57,7 @@ Q1_GROUPS = OrderedDict(
             "plain_agent",
             {
                 "label": "Plain Agent",
-                "conditions": ("ratchet_plain", "screening_plain", "advanced_plain"),
+                "conditions": ("ratchet_plain",),
                 "color": "#2563eb",
                 "dash": "",
             },
@@ -66,7 +66,7 @@ Q1_GROUPS = OrderedDict(
             "agent_tpe",
             {
                 "label": "Agent + TPE",
-                "conditions": ("ratchet_tpe", "screening_tpe", "advanced_tpe"),
+                "conditions": ("ratchet_tpe",),
                 "color": "#f59e0b",
                 "dash": "12 6",
             },
@@ -75,7 +75,7 @@ Q1_GROUPS = OrderedDict(
             "agent_smac",
             {
                 "label": "Agent + SMAC",
-                "conditions": ("ratchet_smac", "screening_smac", "advanced_smac"),
+                "conditions": ("ratchet_smac",),
                 "color": "#16a34a",
                 "dash": "8 5",
             },
@@ -84,7 +84,7 @@ Q1_GROUPS = OrderedDict(
             "agent_tpe_smac",
             {
                 "label": "Agent + TPE+SMAC",
-                "conditions": ("ratchet_tpe_smac", "screening_tpe_smac", "advanced_tpe_smac"),
+                "conditions": ("ratchet_tpe_smac",),
                 "color": "#dc2626",
                 "dash": "",
             },
@@ -119,6 +119,65 @@ Q2_GROUPS = OrderedDict(
                 "conditions": ("advanced_plain", "advanced_tpe", "advanced_smac", "advanced_tpe_smac"),
                 "color": "#16a34a",
                 "dash": "4 4",
+            },
+        ),
+    )
+)
+
+Q2_TPE_SMAC_GROUPS = OrderedDict(
+    (
+        (
+            "ratchet_tpe",
+            {
+                "label": "Ratchet + TPE",
+                "conditions": ("ratchet_tpe",),
+                "color": "#2563eb",
+                "dash": "10 6",
+            },
+        ),
+        (
+            "ratchet_smac",
+            {
+                "label": "Ratchet + SMAC",
+                "conditions": ("ratchet_smac",),
+                "color": "#2563eb",
+                "dash": "3 5",
+            },
+        ),
+        (
+            "screening_tpe",
+            {
+                "label": "Screening + TPE",
+                "conditions": ("screening_tpe",),
+                "color": "#f59e0b",
+                "dash": "10 6",
+            },
+        ),
+        (
+            "screening_smac",
+            {
+                "label": "Screening + SMAC",
+                "conditions": ("screening_smac",),
+                "color": "#f59e0b",
+                "dash": "3 5",
+            },
+        ),
+        (
+            "advanced_tpe",
+            {
+                "label": "Advanced + TPE",
+                "conditions": ("advanced_tpe",),
+                "color": "#16a34a",
+                "dash": "10 6",
+            },
+        ),
+        (
+            "advanced_smac",
+            {
+                "label": "Advanced + SMAC",
+                "conditions": ("advanced_smac",),
+                "color": "#16a34a",
+                "dash": "3 5",
             },
         ),
     )
@@ -268,7 +327,7 @@ def _xml(text: object) -> str:
 
 
 def _svg_header(width: int, height: int, title: str, subtitle: str) -> list[str]:
-    return [
+    parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         "<style>",
         f".bg{{fill:{BG};}}",
@@ -280,8 +339,10 @@ def _svg_header(width: int, height: int, title: str, subtitle: str) -> list[str]
         "</style>",
         f'<rect class="bg" width="{width}" height="{height}"/>',
         f'<text class="title" x="54" y="38">{_xml(title)}</text>',
-        f'<text class="subtitle" x="54" y="63">{_xml(subtitle)}</text>',
     ]
+    if subtitle:
+        parts.append(f'<text class="subtitle" x="54" y="63">{_xml(subtitle)}</text>')
+    return parts
 
 
 def _build_table_svg(
@@ -337,24 +398,17 @@ def _build_table_svg(
         parts.append(
             f'<text x="{table_x + 22}" y="{y + 40:.1f}" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="{TEXT}">{_xml(group_spec["label"])}</text>'
         )
-        parts.append(
-            f'<text class="subtle" x="{table_x + 22}" y="{y + 64:.1f}" font-size="13">best val in row</text>'
-        )
 
         for col_index, (dataset_key, _, _) in enumerate(DATASETS):
             x = table_x + label_width + col_width * col_index
             cell = summaries[dataset_key][group_key].cell
             is_column_best = cell.best_validation == column_best[dataset_key]
             score_fill = ACCENT if is_column_best else TEXT
-            winner_fill = ACCENT if is_column_best else SUBTLE
             parts.append(
                 f'<line class="grid" x1="{x}" y1="{table_y}" x2="{x}" y2="{table_y + header_height + row_height * len(groups)}"/>'
             )
             parts.append(
-                f'<text x="{x + col_width / 2:.1f}" y="{y + 38:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="{score_fill}">{cell.best_validation:.3f}</text>'
-            )
-            parts.append(
-                f'<text x="{x + col_width / 2:.1f}" y="{y + 62:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="{winner_fill}">{_xml(cell.winner_text)}</text>'
+                f'<text x="{x + col_width / 2:.1f}" y="{y + 52:.1f}" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="{score_fill}">{cell.best_validation:.3f}</text>'
             )
 
     bottom_y = table_y + header_height + row_height * len(groups)
@@ -423,7 +477,7 @@ def _build_history_panel_svg(
     legend_cols = min(3, len(groups))
     legend_rows = (len(groups) + legend_cols - 1) // legend_cols
     legend_col_width = (width - outer_margin * 2) / legend_cols
-    legend_row_height = 34
+    legend_row_height = 24
     panel_y = legend_top + legend_rows * legend_row_height + 24
     panel_height = height - panel_y - 40
 
@@ -437,9 +491,8 @@ def _build_history_panel_svg(
         color = group_spec["color"]
         dash_attr = f' stroke-dasharray="{group_spec.get("dash", "")}"' if group_spec.get("dash", "") else ""
         parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx + 24}" y2="{ly}" stroke="{color}" stroke-width="3.5"{dash_attr}/>')
-        parts.append(f'<circle cx="{lx + 12}" cy="{ly + 18}" r="4" fill="{color}" opacity="0.28"/>')
+        parts.append(f'<circle cx="{lx + 12}" cy="{ly + 10}" r="4" fill="{color}" opacity="0.28"/>')
         parts.append(f'<text class="label" x="{lx + 34}" y="{ly + 5}" font-size="16">{_xml(group_spec["label"])}</text>')
-        parts.append(f'<text class="subtle" x="{lx + 34}" y="{ly + 23}" font-size="13">line=best val, scatter=other evals</text>')
 
     for panel_index, dataset_key in enumerate(dataset_keys):
         dataset_label = next(label for key, label, _ in DATASETS if key == dataset_key)
@@ -450,7 +503,7 @@ def _build_history_panel_svg(
         plot_height = panel_height - 72
         series = [summaries[dataset_key][group_key] for group_key in groups.keys()]
         min_score, max_score, clipped_count = _score_window(series)
-        max_steps = max(len(row.best_so_far) for row in series)
+        max_steps = max(100, max(len(row.best_so_far) for row in series))
 
         parts.append(
             f'<rect x="{panel_x}" y="{panel_y}" width="{panel_width}" height="{panel_height}" rx="24" fill="{WHITE}" stroke="#d7dce3" stroke-width="1.1"/>'
@@ -505,23 +558,29 @@ def _build_history_panel_svg(
                 parts.append(
                     f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.4" fill="{row.color}" opacity="0.18"/>'
                 )
-        for group_key, row in zip(groups.keys(), series):
+        draw_rows = list(zip(groups.keys(), series))
+        draw_rows.sort(key=lambda item: 1 if item[0].endswith("_direct") else 0)
+        for group_key, row in draw_rows:
             dash = groups[group_key].get("dash", "")
             dash_attr = f' stroke-dasharray="{dash}"' if dash else ""
+            is_direct = group_key.endswith("_direct")
+            halo_width = 9.0 if is_direct else 7.6
+            line_width = 5.2 if is_direct else 4.2
+            marker_radius = 5.6 if is_direct else 4.4
             polyline = " ".join(
                 f"{scale_x(step_index):.2f},{scale_y(score):.2f}"
                 for step_index, score in enumerate(row.best_so_far, start=1)
             )
             parts.append(
-                f'<polyline fill="none" stroke="{WHITE}" stroke-width="7.6" stroke-linecap="round" stroke-linejoin="round"{dash_attr} points="{polyline}"/>'
+                f'<polyline fill="none" stroke="{WHITE}" stroke-width="{halo_width}" stroke-linecap="round" stroke-linejoin="round"{dash_attr} points="{polyline}"/>'
             )
             parts.append(
-                f'<polyline fill="none" stroke="{row.color}" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"{dash_attr} points="{polyline}"/>'
+                f'<polyline fill="none" stroke="{row.color}" stroke-width="{line_width}" stroke-linecap="round" stroke-linejoin="round"{dash_attr} points="{polyline}"/>'
             )
             if row.best_so_far:
                 end_x = scale_x(len(row.best_so_far))
                 end_y = scale_y(row.best_so_far[-1])
-                parts.append(f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="4.4" fill="{row.color}" stroke="{WHITE}" stroke-width="1.4"/>')
+                parts.append(f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="{marker_radius}" fill="{row.color}" stroke="{WHITE}" stroke-width="1.6"/>')
 
     parts.append("</svg>")
     out_path.write_text("\n".join(parts), encoding="utf-8")
@@ -531,11 +590,13 @@ def _write_summary_json(
     out_path: Path,
     q1_summaries: dict[str, dict[str, GroupSeries]],
     q2_summaries: dict[str, dict[str, GroupSeries]],
+    q2_variant_summaries: dict[str, dict[str, GroupSeries]],
 ) -> None:
-    payload: dict[str, object] = {"question1": {}, "question2": {}}
+    payload: dict[str, object] = {"question1": {}, "question2": {}, "question2_variants": {}}
     for section_name, groups, summaries in (
         ("question1", Q1_GROUPS, q1_summaries),
         ("question2", Q2_GROUPS, q2_summaries),
+        ("question2_variants", Q2_TPE_SMAC_GROUPS, q2_variant_summaries),
     ):
         section_payload: dict[str, object] = {}
         for dataset_key, dataset_label, _ in DATASETS:
@@ -559,25 +620,33 @@ def main() -> int:
     ASSET_DIR.mkdir(parents=True, exist_ok=True)
     q1_summaries = _summaries_for_groups(Q1_GROUPS)
     q2_summaries = _summaries_for_groups(Q2_GROUPS)
+    q2_variant_summaries = _summaries_for_groups(Q2_TPE_SMAC_GROUPS)
 
     _build_table_svg(
         ASSET_DIR / "question1_comparison_table.svg",
         title="Question 1: Comparison Groups x Datasets",
-        subtitle="Cell value is the best validation reached by that comparison group on the dataset.",
+        subtitle="",
         groups=Q1_GROUPS,
         summaries=q1_summaries,
     )
     _build_table_svg(
         ASSET_DIR / "question2_comparison_table.svg",
         title="Question 2: Harness x Datasets",
-        subtitle="Each cell summarizes the best validation reached by that harness family.",
+        subtitle="",
         groups=Q2_GROUPS,
         summaries=q2_summaries,
+    )
+    _build_table_svg(
+        ASSET_DIR / "question2_variant_table.svg",
+        title="Question 2: Group + Advisor x Datasets",
+        subtitle="",
+        groups=Q2_TPE_SMAC_GROUPS,
+        summaries=q2_variant_summaries,
     )
     _build_history_panel_svg(
         ASSET_DIR / "question1_history_panel_a.svg",
         title="Question 1: Best-Val History",
-        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
+        subtitle="",
         groups=Q1_GROUPS,
         summaries=q1_summaries,
         dataset_keys=("fashion_mnist", "twenty_newsgroups"),
@@ -585,7 +654,7 @@ def main() -> int:
     _build_history_panel_svg(
         ASSET_DIR / "question1_history_panel_b.svg",
         title="Question 1: Best-Val History",
-        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
+        subtitle="",
         groups=Q1_GROUPS,
         summaries=q1_summaries,
         dataset_keys=("sms_spam", "cifar10"),
@@ -593,7 +662,7 @@ def main() -> int:
     _build_history_panel_svg(
         ASSET_DIR / "question2_history_panel_a.svg",
         title="Question 2: Best-Val History",
-        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
+        subtitle="",
         groups=Q2_GROUPS,
         summaries=q2_summaries,
         dataset_keys=("fashion_mnist", "twenty_newsgroups"),
@@ -601,15 +670,32 @@ def main() -> int:
     _build_history_panel_svg(
         ASSET_DIR / "question2_history_panel_b.svg",
         title="Question 2: Best-Val History",
-        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
+        subtitle="",
         groups=Q2_GROUPS,
         summaries=q2_summaries,
+        dataset_keys=("sms_spam", "cifar10"),
+    )
+    _build_history_panel_svg(
+        ASSET_DIR / "question2_variant_history_panel_a.svg",
+        title="Question 2: Group + Advisor History",
+        subtitle="",
+        groups=Q2_TPE_SMAC_GROUPS,
+        summaries=q2_variant_summaries,
+        dataset_keys=("fashion_mnist", "twenty_newsgroups"),
+    )
+    _build_history_panel_svg(
+        ASSET_DIR / "question2_variant_history_panel_b.svg",
+        title="Question 2: Group + Advisor History",
+        subtitle="",
+        groups=Q2_TPE_SMAC_GROUPS,
+        summaries=q2_variant_summaries,
         dataset_keys=("sms_spam", "cifar10"),
     )
     _write_summary_json(
         ASSET_DIR / "cross_dataset_experiment_summary.json",
         q1_summaries=q1_summaries,
         q2_summaries=q2_summaries,
+        q2_variant_summaries=q2_variant_summaries,
     )
     return 0
 

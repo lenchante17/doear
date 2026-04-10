@@ -9,7 +9,6 @@
 </style>
 <rect class="bg" width="1460" height="592"/>
 <text class="title" x="54" y="38">Question 2: Harness x Datasets</text>
-<text class="subtitle" x="54" y="63">Each cell summarizes the best validation reached by that harness family.</text>
 <rect x="54" y="96" width="1402" height="350" rx="20" fill="#ffffff" stroke="#d7dce3" stroke-width="1.2"/>
 <rect x="304" y="96" width="288" height="74" fill="#f8fafc"/>
 <text class="label" x="448.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">Fashion-MNIST</text>
@@ -24,50 +23,35 @@
 <rect x="54" y="170" width="1402" height="92" fill="#ffffff"/>
 <line class="grid" x1="54" y1="170" x2="1456" y2="170"/>
 <text x="76" y="210.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Ratchet</text>
-<text class="subtle" x="76" y="234.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="446"/>
-<text x="448.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.863</text>
-<text x="448.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Rat SMAC</text>
+<text x="448.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.863</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="446"/>
-<text x="736.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.566</text>
-<text x="736.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Rat Plain</text>
+<text x="736.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.566</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="446"/>
-<text x="1024.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.990</text>
-<text x="1024.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x2</text>
+<text x="1024.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.990</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="446"/>
-<text x="1312.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.440</text>
-<text x="1312.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Rat T+S</text>
+<text x="1312.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.440</text>
 <rect x="54" y="262" width="1402" height="92" fill="#fcfcfd"/>
 <line class="grid" x1="54" y1="262" x2="1456" y2="262"/>
 <text x="76" y="302.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Screening</text>
-<text class="subtle" x="76" y="326.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="446"/>
-<text x="448.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.865</text>
-<text x="448.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Scr T+S</text>
+<text x="448.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.865</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="446"/>
-<text x="736.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
-<text x="736.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Scr TPE</text>
+<text x="736.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="446"/>
-<text x="1024.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.992</text>
-<text x="1024.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Scr Plain</text>
+<text x="1024.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.992</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="446"/>
-<text x="1312.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
-<text x="1312.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Scr TPE</text>
+<text x="1312.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
 <rect x="54" y="354" width="1402" height="92" fill="#ffffff"/>
 <line class="grid" x1="54" y1="354" x2="1456" y2="354"/>
 <text x="76" y="394.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Advanced</text>
-<text class="subtle" x="76" y="418.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="446"/>
-<text x="448.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.865</text>
-<text x="448.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Adv T+S</text>
+<text x="448.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.865</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="446"/>
-<text x="736.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
-<text x="736.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Adv TPE</text>
+<text x="736.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="446"/>
-<text x="1024.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.990</text>
-<text x="1024.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x2</text>
+<text x="1024.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.990</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="446"/>
-<text x="1312.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
-<text x="1312.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Adv TPE</text>
+<text x="1312.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
 <line class="grid" x1="54" y1="446" x2="1456" y2="446"/>
 </svg>

@@ -9,7 +9,6 @@
 </style>
 <rect class="bg" width="1460" height="868"/>
 <text class="title" x="54" y="38">Question 1: Comparison Groups x Datasets</text>
-<text class="subtitle" x="54" y="63">Cell value is the best validation reached by that comparison group on the dataset.</text>
 <rect x="54" y="96" width="1402" height="626" rx="20" fill="#ffffff" stroke="#d7dce3" stroke-width="1.2"/>
 <rect x="304" y="96" width="288" height="74" fill="#f8fafc"/>
 <text class="label" x="448.0" y="140.0" text-anchor="middle" font-size="20" font-weight="700">Fashion-MNIST</text>
@@ -24,98 +23,68 @@
 <rect x="54" y="170" width="1402" height="92" fill="#ffffff"/>
 <line class="grid" x1="54" y1="170" x2="1456" y2="170"/>
 <text x="76" y="210.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">TPE Direct</text>
-<text class="subtle" x="76" y="234.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="722"/>
-<text x="448.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.854</text>
-<text x="448.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">TPE Dir</text>
+<text x="448.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.854</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="722"/>
-<text x="736.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
-<text x="736.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">TPE Dir</text>
+<text x="736.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="722"/>
-<text x="1024.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.990</text>
-<text x="1024.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">TPE Dir</text>
+<text x="1024.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.990</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
-<text x="1312.0" y="208.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
-<text x="1312.0" y="232.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">TPE Dir</text>
+<text x="1312.0" y="222.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
 <rect x="54" y="262" width="1402" height="92" fill="#fcfcfd"/>
 <line class="grid" x1="54" y1="262" x2="1456" y2="262"/>
 <text x="76" y="302.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">SMAC Direct</text>
-<text class="subtle" x="76" y="326.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="722"/>
-<text x="448.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.863</text>
-<text x="448.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">SMAC Dir</text>
+<text x="448.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.863</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="722"/>
-<text x="736.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.543</text>
-<text x="736.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">SMAC Dir</text>
+<text x="736.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.543</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="722"/>
-<text x="1024.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
-<text x="1024.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">SMAC Dir</text>
+<text x="1024.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
-<text x="1312.0" y="300.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.413</text>
-<text x="1312.0" y="324.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">SMAC Dir</text>
+<text x="1312.0" y="314.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.413</text>
 <rect x="54" y="354" width="1402" height="92" fill="#ffffff"/>
 <line class="grid" x1="54" y1="354" x2="1456" y2="354"/>
 <text x="76" y="394.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Plain Agent</text>
-<text class="subtle" x="76" y="418.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="722"/>
-<text x="448.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.861</text>
-<text x="448.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Scr Plain</text>
+<text x="448.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.855</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="722"/>
-<text x="736.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.566</text>
-<text x="736.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Rat Plain</text>
+<text x="736.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.566</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="722"/>
-<text x="1024.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.992</text>
-<text x="1024.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Scr Plain</text>
+<text x="1024.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.990</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
-<text x="1312.0" y="392.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.417</text>
-<text x="1312.0" y="416.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Adv Plain</text>
+<text x="1312.0" y="406.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.388</text>
 <rect x="54" y="446" width="1402" height="92" fill="#fcfcfd"/>
 <line class="grid" x1="54" y1="446" x2="1456" y2="446"/>
 <text x="76" y="486.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Agent + TPE</text>
-<text class="subtle" x="76" y="510.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="722"/>
-<text x="448.0" y="484.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.854</text>
-<text x="448.0" y="508.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="448.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.854</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="722"/>
-<text x="736.0" y="484.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
-<text x="736.0" y="508.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="736.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.551</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="722"/>
-<text x="1024.0" y="484.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.990</text>
-<text x="1024.0" y="508.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="1024.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.990</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
-<text x="1312.0" y="484.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
-<text x="1312.0" y="508.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="1312.0" y="498.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.428</text>
 <rect x="54" y="538" width="1402" height="92" fill="#ffffff"/>
 <line class="grid" x1="54" y1="538" x2="1456" y2="538"/>
 <text x="76" y="578.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Agent + SMAC</text>
-<text class="subtle" x="76" y="602.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="722"/>
-<text x="448.0" y="576.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.863</text>
-<text x="448.0" y="600.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="448.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.863</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="722"/>
-<text x="736.0" y="576.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.543</text>
-<text x="736.0" y="600.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="736.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.543</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="722"/>
-<text x="1024.0" y="576.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
-<text x="1024.0" y="600.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="1024.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
-<text x="1312.0" y="576.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.413</text>
-<text x="1312.0" y="600.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">tie x3</text>
+<text x="1312.0" y="590.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.413</text>
 <rect x="54" y="630" width="1402" height="92" fill="#fcfcfd"/>
 <line class="grid" x1="54" y1="630" x2="1456" y2="630"/>
 <text x="76" y="670.0" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#1f2328">Agent + TPE+SMAC</text>
-<text class="subtle" x="76" y="694.0" font-size="13">best val in row</text>
 <line class="grid" x1="304" y1="96" x2="304" y2="722"/>
-<text x="448.0" y="668.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.865</text>
-<text x="448.0" y="692.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">tie x2</text>
+<text x="448.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.860</text>
 <line class="grid" x1="592" y1="96" x2="592" y2="722"/>
-<text x="736.0" y="668.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.542</text>
-<text x="736.0" y="692.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Adv T+S</text>
+<text x="736.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.540</text>
 <line class="grid" x1="880" y1="96" x2="880" y2="722"/>
-<text x="1024.0" y="668.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.990</text>
-<text x="1024.0" y="692.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Scr T+S</text>
+<text x="1024.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#1f2328">0.989</text>
 <line class="grid" x1="1168" y1="96" x2="1168" y2="722"/>
-<text x="1312.0" y="668.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.440</text>
-<text x="1312.0" y="692.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#b42318">Rat T+S</text>
+<text x="1312.0" y="682.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="800" fill="#b42318">0.440</text>
 <line class="grid" x1="54" y1="722" x2="1456" y2="722"/>
 </svg>
