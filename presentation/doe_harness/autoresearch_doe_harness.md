@@ -17,9 +17,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 서민교
 
 ---
-<!-- footer: "AutoML 시작" -->
+<!-- footer: "AutoML" -->
 
-## 1. AutoML이란 무엇인가?
+## 1. AutoML
 
 - 모델 개발 탐색 일부 자동화
 대표 대상
@@ -33,7 +33,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "NAS" -->
 
-## 2. `Neural Architecture Search`는 AutoML의 확장이다
+## 2. Neural Architecture Search
 
 - hyperparameter 대신 architecture 탐색
 - AutoML의 `더 넓은 search space` 확장선
@@ -44,9 +44,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 `hyperparameter search → pipeline search → architecture search`
 
 ---
-<!-- footer: "Autoresearch의 등장" -->
+<!-- footer: "Autoresearch" -->
 
-## 3. `Autoresearch`는 어떻게 등장했고 무엇이 다른가?
+## 3. Autoresearch
 
 초기 제안
 - [karpathy/autoresearch](https://github.com/karpathy/autoresearch): 작은 training setup 위 `read → edit → run → keep-or-revert` loop 제시
@@ -58,9 +58,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist), [GPT Researcher](https://github.com/assafelovic/gpt-researcher) 등으로 빠르게 확장
 
 ---
-<!-- footer: "작업 흐름" -->
+<!-- footer: "Workflow" -->
 
-## 4. Agent 작업 흐름
+## 4. Autoresearch Workflow
 
 - 코드 읽기, baseline 파악
 - 작은 가설 하나 선택
@@ -88,9 +88,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | 필요한 인프라 | experiment infra | experiment + memory + harness |
 
 ---
-<!-- footer: "사용례와 확장" -->
+<!-- footer: "Applications" -->
 
-## 6. 사용례와 확장
+## 6. Autoresearch Applications
 
 사용례
 - 문헌 조사 / deep research: [GPT Researcher](https://github.com/assafelovic/gpt-researcher)
@@ -117,31 +117,38 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 결국 운영 문제
 
 ---
-<!-- footer: "핵심 MLOps 요소" -->
+<!-- footer: "Harness 요구" -->
 
-## 8. AutoML과 Autoresearch가 공통으로 요구하는 MLOps 요소
+## 8. Harness Requirements
 
-| 요소 | AutoML에서의 역할 | Autoresearch에서의 역할 |
-| --- | --- | --- |
-| tracking | sweep 비교 | hypothesis / code edit history 비교 |
-| orchestration | search job 실행 | agent + eval job 실행 |
-| registry / lineage | best model 승격 | experiment / prompt / code provenance 보존 |
-| monitoring / cost | retrain trigger, SLO | budget, drift, unsafe promotion guardrail |
+비교
+- 어떤 변경이 효과를 냈는지 run 단위로 읽어야 한다
+
+격리
+- candidate와 artifact를 분리해 오염 없는 비교가 가능해야 한다
+
+기억
+- 이전 시도와 실패 이유가 다음 round 설계에 남아야 한다
+
+판정
+- mid-run 최고점과 final hidden 성능을 따로 읽어야 한다
 
 ---
-<!-- footer: "Kubeflow lifecycle" -->
+<!-- footer: "DOE 연결" -->
 
-## 9. MLOps는 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업이다
+## 9. DOE As Harness
 
-![w:880](./assets/mlops_kubeflow.svg)
+질문
+- 어떤 factor를 바꿨는지 명시할 수 있어야 한다
 
-- Autoresearch loop는 이 큰 ML lifecycle 안의 일부
+방법
+- DOE는 factor, round, interaction을 구조적으로 기록하게 만든다
 
-실제 시스템
-- `data`, `experiment`, `model registry`, `deployment`, `monitoring`
+효과
+- agent policy 차이와 advisor 효과를 같은 틀에서 비교할 수 있다
 
-핵심 역할
-- `지속 운영`, `추적`, `승격`, `유지관리`
+의미
+- 그래서 `Autoresearch` 운영 문제를 실험 설계 문제로 다시 읽을 수 있다
 
 ---
 <!-- footer: "두 질문" -->
