@@ -40,7 +40,8 @@ Q1_GROUPS = OrderedDict(
             {
                 "label": "TPE Direct",
                 "conditions": ("tpe_direct",),
-                "color": "#64748b",
+                "color": "#6d28d9",
+                "dash": "10 6",
             },
         ),
         (
@@ -48,7 +49,8 @@ Q1_GROUPS = OrderedDict(
             {
                 "label": "SMAC Direct",
                 "conditions": ("smac_direct",),
-                "color": "#334155",
+                "color": "#0f766e",
+                "dash": "3 5",
             },
         ),
         (
@@ -57,6 +59,7 @@ Q1_GROUPS = OrderedDict(
                 "label": "Plain Agent",
                 "conditions": ("ratchet_plain", "screening_plain", "advanced_plain"),
                 "color": "#2563eb",
+                "dash": "",
             },
         ),
         (
@@ -65,6 +68,7 @@ Q1_GROUPS = OrderedDict(
                 "label": "Agent + TPE",
                 "conditions": ("ratchet_tpe", "screening_tpe", "advanced_tpe"),
                 "color": "#f59e0b",
+                "dash": "12 6",
             },
         ),
         (
@@ -73,6 +77,7 @@ Q1_GROUPS = OrderedDict(
                 "label": "Agent + SMAC",
                 "conditions": ("ratchet_smac", "screening_smac", "advanced_smac"),
                 "color": "#16a34a",
+                "dash": "8 5",
             },
         ),
         (
@@ -81,6 +86,7 @@ Q1_GROUPS = OrderedDict(
                 "label": "Agent + TPE+SMAC",
                 "conditions": ("ratchet_tpe_smac", "screening_tpe_smac", "advanced_tpe_smac"),
                 "color": "#dc2626",
+                "dash": "",
             },
         ),
     )
@@ -94,6 +100,7 @@ Q2_GROUPS = OrderedDict(
                 "label": "Ratchet",
                 "conditions": ("ratchet_plain", "ratchet_tpe", "ratchet_smac", "ratchet_tpe_smac"),
                 "color": "#2563eb",
+                "dash": "",
             },
         ),
         (
@@ -102,6 +109,7 @@ Q2_GROUPS = OrderedDict(
                 "label": "Screening",
                 "conditions": ("screening_plain", "screening_tpe", "screening_smac", "screening_tpe_smac"),
                 "color": "#f59e0b",
+                "dash": "10 5",
             },
         ),
         (
@@ -110,6 +118,7 @@ Q2_GROUPS = OrderedDict(
                 "label": "Advanced",
                 "conditions": ("advanced_plain", "advanced_tpe", "advanced_smac", "advanced_tpe_smac"),
                 "color": "#16a34a",
+                "dash": "4 4",
             },
         ),
     )
@@ -380,15 +389,15 @@ def _score_window(series: list[GroupSeries]) -> tuple[float, float, int]:
     raw_low = sorted_values[0]
     raw_high = sorted_values[-1]
     full_span = max(raw_high - raw_low, 0.001)
-    robust_floor = _quantile(sorted_values, 0.10)
-    should_clip = robust_floor > raw_low + full_span * 0.12
+    robust_floor = _quantile(sorted_values, 0.30)
+    should_clip = robust_floor > raw_low + full_span * 0.08
 
     if should_clip:
-        focus_span = max(raw_high - robust_floor, full_span * 0.12, 0.001)
-        lower_padding = max(focus_span * 0.18, full_span * 0.03, 0.001)
+        focus_span = max(raw_high - robust_floor, full_span * 0.10, 0.001)
+        lower_padding = max(focus_span * 0.05, full_span * 0.008, 0.001)
         display_low = robust_floor - lower_padding
     else:
-        lower_padding = max(full_span * 0.15, 0.001)
+        lower_padding = max(full_span * 0.08, 0.001)
         display_low = raw_low - lower_padding
 
     upper_padding = max((raw_high - display_low) * 0.08, full_span * 0.02, 0.001)
@@ -426,7 +435,8 @@ def _build_history_panel_svg(
         lx = outer_margin + legend_col * legend_col_width
         ly = legend_top + legend_row * legend_row_height
         color = group_spec["color"]
-        parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx + 24}" y2="{ly}" stroke="{color}" stroke-width="3.5"/>')
+        dash_attr = f' stroke-dasharray="{group_spec.get("dash", "")}"' if group_spec.get("dash", "") else ""
+        parts.append(f'<line x1="{lx}" y1="{ly}" x2="{lx + 24}" y2="{ly}" stroke="{color}" stroke-width="3.5"{dash_attr}/>')
         parts.append(f'<circle cx="{lx + 12}" cy="{ly + 18}" r="4" fill="{color}" opacity="0.28"/>')
         parts.append(f'<text class="label" x="{lx + 34}" y="{ly + 5}" font-size="16">{_xml(group_spec["label"])}</text>')
         parts.append(f'<text class="subtle" x="{lx + 34}" y="{ly + 23}" font-size="13">line=best val, scatter=other evals</text>')
@@ -493,13 +503,25 @@ def _build_history_panel_svg(
         for row in series:
             for step_index, score in row.scatter_points:
                 parts.append(
-                    f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.8" fill="{row.color}" opacity="0.28"/>'
+                    f'<circle cx="{scale_x(step_index):.2f}" cy="{scale_y(score):.2f}" r="2.4" fill="{row.color}" opacity="0.18"/>'
                 )
+        for group_key, row in zip(groups.keys(), series):
+            dash = groups[group_key].get("dash", "")
+            dash_attr = f' stroke-dasharray="{dash}"' if dash else ""
             polyline = " ".join(
                 f"{scale_x(step_index):.2f},{scale_y(score):.2f}"
                 for step_index, score in enumerate(row.best_so_far, start=1)
             )
-            parts.append(f'<polyline fill="none" stroke="{row.color}" stroke-width="3.2" points="{polyline}"/>')
+            parts.append(
+                f'<polyline fill="none" stroke="{WHITE}" stroke-width="7.6" stroke-linecap="round" stroke-linejoin="round"{dash_attr} points="{polyline}"/>'
+            )
+            parts.append(
+                f'<polyline fill="none" stroke="{row.color}" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"{dash_attr} points="{polyline}"/>'
+            )
+            if row.best_so_far:
+                end_x = scale_x(len(row.best_so_far))
+                end_y = scale_y(row.best_so_far[-1])
+                parts.append(f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="4.4" fill="{row.color}" stroke="{WHITE}" stroke-width="1.4"/>')
 
     parts.append("</svg>")
     out_path.write_text("\n".join(parts), encoding="utf-8")
