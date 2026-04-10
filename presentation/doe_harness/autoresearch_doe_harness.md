@@ -239,14 +239,8 @@ agent 특유 문제
 
 ## 15. 질문 1 결과
 
-| Dataset | best val | best hidden |
-| --- | --- | --- |
-| `fashion_mnist` | hybrid `0.865` | `SMAC` family `0.853` |
-| `twenty_newsgroups` | `ratchet_plain` `0.566` | `ratchet_plain` `0.577` |
-| `sms_spam` | `screening_plain` `0.992` | `advanced_tpe_smac` `0.983` |
-| `cifar10` | `ratchet_tpe_smac` `0.440` | `screening_plain` `0.392` |
+![w:1440](./assets/cross_dataset_winners.svg)
 
-- `Autoresearch`와 hybrid는 strong baseline과 경쟁 가능하지만, universal winner는 아니다.
 - validation winner와 hidden-test winner는 `4`개 중 `3`개 데이터셋에서 갈렸다.
 - 질문 1의 결론은 `better than baseline`이 아니라 `dataset-dependent portfolio`에 가깝다.
 
@@ -366,12 +360,9 @@ agent 특유 문제
 
 ## 24. Harness 해석
 
-| Signal | 해석 |
-| --- | --- |
-| hybrid peak 상승 | advisor가 proposal ceiling을 올린다 |
-| plain finalize 승리 | harness가 selection pressure를 바꾼다 |
-| direct top tier 잔류 | baseline BO도 여전히 강하다 |
+![w:1440](./assets/profile_hidden_gap_heatmap.svg)
 
+- `fashion`은 tie에 가깝고, `twenty`는 `ratchet`, `spam`은 `advanced`, `cifar`는 `screening`이 앞섰다.
 - 즉 `무슨 advisor를 붙였나`만큼 `무슨 harness가 무엇을 보게 만들었나`가 중요했다.
 
 ---

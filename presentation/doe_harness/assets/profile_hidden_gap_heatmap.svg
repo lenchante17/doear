@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1460" height="760" viewBox="0 0 1460 760">
+<style>
+.bg{fill:#fffdf8;}
+.title{font-family:Helvetica,Arial,sans-serif;font-size:30px;font-weight:700;fill:#1f2328;}
+.subtitle{font-family:Helvetica,Arial,sans-serif;font-size:16px;fill:#5b6470;}
+.label{font-family:Helvetica,Arial,sans-serif;fill:#1f2328;}
+.subtle{font-family:Helvetica,Arial,sans-serif;fill:#5b6470;}
+.grid{stroke:#e8ebf0;stroke-width:1;}
+</style>
+<rect class="bg" width="1460" height="760"/>
+<text class="title" x="54" y="38">Experiment 2: Hidden-Test Gap By Harness Profile</text>
+<text class="subtitle" x="54" y="63">Cell fill is the gap to the row-best hidden score. Text is the best hidden score reached by that profile.</text>
+<text class="label" x="325.0" y="94.0" text-anchor="middle" font-size="19" font-weight="700">Ratchet</text>
+<text class="label" x="615.0" y="94.0" text-anchor="middle" font-size="19" font-weight="700">Screening</text>
+<text class="label" x="905.0" y="94.0" text-anchor="middle" font-size="19" font-weight="700">Advanced</text>
+<text class="label" x="1195.0" y="94.0" text-anchor="middle" font-size="19" font-weight="700">Direct</text>
+<text class="label" x="162.0" y="194.8" text-anchor="end" font-size="18" font-weight="700">Fashion-MNIST</text>
+<rect x="188.0" y="126.0" width="274.0" height="125.5" rx="18" fill="#1d8f6a" stroke="#d7dce3" stroke-width="1"/>
+<text x="325.0" y="182.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.853</text>
+<text x="325.0" y="206.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Rat SMAC</text>
+<text x="325.0" y="241.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">+0.000 vs row best</text>
+<rect x="478.0" y="126.0" width="274.0" height="125.5" rx="18" fill="#1d8f6a" stroke="#d7dce3" stroke-width="1"/>
+<text x="615.0" y="182.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.853</text>
+<text x="615.0" y="206.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Scr SMAC</text>
+<text x="615.0" y="241.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">+0.000 vs row best</text>
+<rect x="768.0" y="126.0" width="274.0" height="125.5" rx="18" fill="#1d8f6a" stroke="#d7dce3" stroke-width="1"/>
+<text x="905.0" y="182.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.853</text>
+<text x="905.0" y="206.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Adv SMAC</text>
+<text x="905.0" y="241.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">+0.000 vs row best</text>
+<rect x="1058.0" y="126.0" width="274.0" height="125.5" rx="18" fill="#1d8f6a" stroke="#d7dce3" stroke-width="1"/>
+<text x="1195.0" y="182.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.853</text>
+<text x="1195.0" y="206.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">SMAC Dir</text>
+<text x="1195.0" y="241.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">+0.000 vs row best</text>
+<text class="label" x="162.0" y="336.2" text-anchor="end" font-size="18" font-weight="700">Twenty Newsgroups</text>
+<rect x="188.0" y="267.5" width="274.0" height="125.5" rx="18" fill="#1d8f6a" stroke="#d7dce3" stroke-width="1"/>
+<text x="325.0" y="324.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.577</text>
+<text x="325.0" y="348.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Rat Plain</text>
+<text x="325.0" y="383.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">+0.000 vs row best</text>
+<rect x="478.0" y="267.5" width="274.0" height="125.5" rx="18" fill="#dcdcc4" stroke="#d7dce3" stroke-width="1"/>
+<text x="615.0" y="324.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#1f2328">0.550</text>
+<text x="615.0" y="348.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Scr Plain</text>
+<text x="615.0" y="383.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#5b6470">-0.027 vs row best</text>
+<rect x="768.0" y="267.5" width="274.0" height="125.5" rx="18" fill="#d6dac1" stroke="#d7dce3" stroke-width="1"/>
+<text x="905.0" y="324.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#1f2328">0.551</text>
+<text x="905.0" y="348.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">Adv T+S</text>
+<text x="905.0" y="383.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#5b6470">-0.026 vs row best</text>
+<rect x="1058.0" y="267.5" width="274.0" height="125.5" rx="18" fill="#eee4cc" stroke="#d7dce3" stroke-width="1"/>
+<text x="1195.0" y="324.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#1f2328">0.547</text>
+<text x="1195.0" y="348.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#5b6470">SMAC Dir</text>
+<text x="1195.0" y="383.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#5b6470">-0.029 vs row best</text>
+<text class="label" x="162.0" y="477.8" text-anchor="end" font-size="18" font-weight="700">SMS Spam</text>
+<rect x="188.0" y="409.0" width="274.0" height="125.5" rx="18" fill="#26926e" stroke="#d7dce3" stroke-width="1"/>
+<text x="325.0" y="465.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.982</text>
+<text x="325.0" y="489.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Rat T+S</text>
+<text x="325.0" y="524.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">-0.001 vs row best</text>
+<rect x="478.0" y="409.0" width="274.0" height="125.5" rx="18" fill="#26926e" stroke="#d7dce3" stroke-width="1"/>
+<text x="615.0" y="465.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.982</text>
+<text x="615.0" y="489.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Scr SMAC</text>
+<text x="615.0" y="524.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">-0.001 vs row best</text>
+<rect x="768.0" y="409.0" width="274.0" height="125.5" rx="18" fill="#1d8f6a" stroke="#d7dce3" stroke-width="1"/>
+<text x="905.0" y="465.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.983</text>
+<text x="905.0" y="489.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Adv T+S</text>
+<text x="905.0" y="524.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">+0.000 vs row best</text>
+<rect x="1058.0" y="409.0" width="274.0" height="125.5" rx="18" fill="#26926e" stroke="#d7dce3" stroke-width="1"/>
+<text x="1195.0" y="465.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.982</text>
+<text x="1195.0" y="489.8" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">SMAC Dir</text>
+<text x="1195.0" y="524.5" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">-0.001 vs row best</text>
+<text class="label" x="162.0" y="619.2" text-anchor="end" font-size="18" font-weight="700">CIFAR-10</text>
+<rect x="188.0" y="550.5" width="274.0" height="125.5" rx="18" fill="#299470" stroke="#d7dce3" stroke-width="1"/>
+<text x="325.0" y="607.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.390</text>
+<text x="325.0" y="631.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Rat TPE</text>
+<text x="325.0" y="666.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">-0.002 vs row best</text>
+<rect x="478.0" y="550.5" width="274.0" height="125.5" rx="18" fill="#1d8f6a" stroke="#d7dce3" stroke-width="1"/>
+<text x="615.0" y="607.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.392</text>
+<text x="615.0" y="631.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Scr Plain</text>
+<text x="615.0" y="666.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">+0.000 vs row best</text>
+<rect x="768.0" y="550.5" width="274.0" height="125.5" rx="18" fill="#299470" stroke="#d7dce3" stroke-width="1"/>
+<text x="905.0" y="607.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.390</text>
+<text x="905.0" y="631.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">Adv TPE</text>
+<text x="905.0" y="666.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">-0.002 vs row best</text>
+<rect x="1058.0" y="550.5" width="274.0" height="125.5" rx="18" fill="#299470" stroke="#d7dce3" stroke-width="1"/>
+<text x="1195.0" y="607.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="24" font-weight="700" fill="#ffffff">0.390</text>
+<text x="1195.0" y="631.2" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#eef8f4">TPE Dir</text>
+<text x="1195.0" y="666.0" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#eef8f4">-0.002 vs row best</text>
+<rect x="180.0" y="718.0" width="52" height="14" rx="4" fill="#f4e6cf" stroke="#d7dce3" stroke-width="0.8"/>
+<rect x="248.0" y="718.0" width="52" height="14" rx="4" fill="#adc9ae" stroke="#d7dce3" stroke-width="0.8"/>
+<rect x="316.0" y="718.0" width="52" height="14" rx="4" fill="#66ad8c" stroke="#d7dce3" stroke-width="0.8"/>
+<rect x="384.0" y="718.0" width="52" height="14" rx="4" fill="#1d8f6a" stroke="#d7dce3" stroke-width="0.8"/>
+<text class="subtle" x="468.0" y="730.0" font-size="14">lighter = farther from the dataset-best hidden score</text>
+</svg>
