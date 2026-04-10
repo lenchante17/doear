@@ -322,15 +322,47 @@ def _build_table_svg(
     out_path.write_text("\n".join(parts), encoding="utf-8")
 
 
-def _score_bounds(series: list[GroupSeries]) -> tuple[float, float]:
+def _quantile(sorted_values: list[float], q: float) -> float:
+    if not sorted_values:
+        raise ValueError("quantile requires at least one value")
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    position = (len(sorted_values) - 1) * q
+    lower_index = int(position)
+    upper_index = min(lower_index + 1, len(sorted_values) - 1)
+    fraction = position - lower_index
+    lower = sorted_values[lower_index]
+    upper = sorted_values[upper_index]
+    return lower + (upper - lower) * fraction
+
+
+def _score_window(series: list[GroupSeries]) -> tuple[float, float, int]:
     values: list[float] = []
+    eval_values: list[float] = []
     for row in series:
         values.extend(row.best_so_far)
         values.extend(score for _, score in row.scatter_points)
-    low = min(values)
-    high = max(values)
-    span = max(high - low, 0.01)
-    return low - max(span * 0.15, 0.01), high + max(span * 0.08, 0.01)
+        eval_values.extend(point.validation_score for point in row.evaluations)
+
+    sorted_values = sorted(values)
+    raw_low = sorted_values[0]
+    raw_high = sorted_values[-1]
+    full_span = max(raw_high - raw_low, 0.001)
+    robust_floor = _quantile(sorted_values, 0.10)
+    should_clip = robust_floor > raw_low + full_span * 0.12
+
+    if should_clip:
+        focus_span = max(raw_high - robust_floor, full_span * 0.12, 0.001)
+        lower_padding = max(focus_span * 0.18, full_span * 0.03, 0.001)
+        display_low = robust_floor - lower_padding
+    else:
+        lower_padding = max(full_span * 0.15, 0.001)
+        display_low = raw_low - lower_padding
+
+    upper_padding = max((raw_high - display_low) * 0.08, full_span * 0.02, 0.001)
+    display_high = raw_high + upper_padding
+    clipped_count = sum(1 for score in eval_values if score < display_low)
+    return display_low, display_high, clipped_count
 
 
 def _build_history_panel_svg(
@@ -370,7 +402,7 @@ def _build_history_panel_svg(
         plot_width = panel_width - 86
         plot_height = panel_height - 72
         series = [summaries[dataset_key][group_key] for group_key in groups.keys()]
-        min_score, max_score = _score_bounds(series)
+        min_score, max_score, clipped_count = _score_window(series)
         max_steps = max(len(row.evaluations) for row in series)
 
         parts.append(
@@ -379,6 +411,10 @@ def _build_history_panel_svg(
         parts.append(
             f'<text class="label" x="{panel_x + 18}" y="{panel_y + 22}" font-size="20" font-weight="700">{dataset_label}</text>'
         )
+        if clipped_count:
+            parts.append(
+                f'<text class="subtle" x="{panel_x + panel_width - 18}" y="{panel_y + 22}" text-anchor="end" font-size="13">lower-tail clip at {min_score:.3f} ({clipped_count} evals)</text>'
+            )
 
         def scale_x(step_index: int) -> float:
             if max_steps <= 1:
@@ -386,15 +422,19 @@ def _build_history_panel_svg(
             return plot_left + ((step_index - 1) / (max_steps - 1)) * plot_width
 
         def scale_y(score: float) -> float:
-            return plot_top + (max_score - score) / (max_score - min_score) * plot_height
+            clamped = min(max(score, min_score), max_score)
+            return plot_top + (max_score - clamped) / (max_score - min_score) * plot_height
 
         for tick in range(5):
             ratio = tick / 4
             score = max_score - ratio * (max_score - min_score)
             y = plot_top + ratio * plot_height
             parts.append(f'<line class="grid" x1="{plot_left}" y1="{y:.1f}" x2="{plot_left + plot_width}" y2="{y:.1f}"/>')
+            label = f"{score:.3f}"
+            if tick == 4 and clipped_count:
+                label = f"<={min_score:.3f}"
             parts.append(
-                f'<text class="subtle" x="{plot_left - 10:.1f}" y="{y + 5:.1f}" text-anchor="end" font-size="13">{score:.3f}</text>'
+                f'<text class="subtle" x="{plot_left - 10:.1f}" y="{y + 5:.1f}" text-anchor="end" font-size="13">{label}</text>'
             )
 
         for tick in range(5):
@@ -478,7 +518,7 @@ def main() -> int:
     _build_history_panel_svg(
         ASSET_DIR / "question1_history_panel_a.svg",
         title="Question 1: Best-Val History",
-        subtitle="Line is cumulative best validation inside each comparison group. Scatter marks evaluations that did not move the frontier.",
+        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
         groups=Q1_GROUPS,
         summaries=q1_summaries,
         dataset_keys=("fashion_mnist", "twenty_newsgroups"),
@@ -486,7 +526,7 @@ def main() -> int:
     _build_history_panel_svg(
         ASSET_DIR / "question1_history_panel_b.svg",
         title="Question 1: Best-Val History",
-        subtitle="Line is cumulative best validation inside each comparison group. Scatter marks evaluations that did not move the frontier.",
+        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
         groups=Q1_GROUPS,
         summaries=q1_summaries,
         dataset_keys=("sms_spam", "cifar10"),
@@ -494,7 +534,7 @@ def main() -> int:
     _build_history_panel_svg(
         ASSET_DIR / "question2_history_panel_a.svg",
         title="Question 2: Best-Val History",
-        subtitle="Line is cumulative best validation inside each harness family. Scatter marks evaluations that did not move the frontier.",
+        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
         groups=Q2_GROUPS,
         summaries=q2_summaries,
         dataset_keys=("fashion_mnist", "twenty_newsgroups"),
@@ -502,7 +542,7 @@ def main() -> int:
     _build_history_panel_svg(
         ASSET_DIR / "question2_history_panel_b.svg",
         title="Question 2: Best-Val History",
-        subtitle="Line is cumulative best validation inside each harness family. Scatter marks evaluations that did not move the frontier.",
+        subtitle="Line is cumulative best validation. Scatter is non-best evaluation. Lower-tail outliers are clipped for readability.",
         groups=Q2_GROUPS,
         summaries=q2_summaries,
         dataset_keys=("sms_spam", "cifar10"),
