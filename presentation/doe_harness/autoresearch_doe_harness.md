@@ -21,12 +21,14 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 1. AutoML
 
-- 모델 개발 탐색 일부 자동화
-대표 대상
+정의
+- 주어진 `search space` 안에서 더 좋은 모델 설정을 자동으로 찾는 방법
+
+대표 작업
 - `model selection`, `hyperparameter tuning`, `pipeline search`
 
-핵심
-- 비교적 주어진 `search space` 안 최적 설정 탐색
+초점
+- 새로운 알고리즘 자체보다 후보 비교와 설정 탐색 자동화
 
 ![w:950](./assets/automl_intro.jpeg)
 
@@ -35,7 +37,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 2. Neural Architecture Search
 
-- hyperparameter 대신 architecture 탐색
+- 설정값이 아니라 architecture 자체를 탐색
 - AutoML의 `더 넓은 search space` 확장선
 - 그래도 중심은 여전히 모델/파이프라인 후보 탐색
 
@@ -48,7 +50,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 3. Autoresearch
 
-초기 제안
+제안
 - [karpathy/autoresearch](https://github.com/karpathy/autoresearch): 작은 training setup 위 `read → edit → run → keep-or-revert` loop 제시
 
 - 연구 workflow 일부를 agent가 직접 수행하며, 설정 탐색을 넘어 `code`, `module`, `experiment` 자체 수정
@@ -62,16 +64,10 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 4. Autoresearch Workflow
 
-- 코드 읽기, baseline 파악
-- 작은 가설 하나 선택
-- 학습 코드나 설정 수정
-- 짧은 실험 실행, metric 확인
-- 나쁘면 revert, 의미 있으면 keep
-
-핵심
-- `edit 한 번`이 아니라 `짧은 실험 loop의 누적`
-
 `Question → Read → Edit → Run → Analyze → Next experiment`
+
+- agent의 출력은 단일 답보다 `다음 실험 제안`에 가깝다
+- 성능은 한 번의 edit보다 `짧은 loop의 누적`에서 나온다
 
 ---
 <!-- footer: "핵심 차이" -->
@@ -100,21 +96,21 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 확장
 - benchmark / evaluation: [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench)
 - plugin / skill 생태계: [awesome-autoresearch](https://github.com/alvinreal/awesome-autoresearch), [Awesome Auto Research Tools](https://github.com/handsome-rich/Awesome-Auto-Research-Tools)
-- memory, reusable modules, hardware fork
 
 ---
-<!-- footer: "실험 관리 필요" -->
+<!-- footer: "운영의 어려움" -->
 
-## 7. 체계적인 실험 관리의 필요
+## 7. 실험 운영의 어려움
 
-공통 문제
+공통 어려움
 - `많은 run` 비교와 누적
+- 어떤 edit가 차이를 만들었는지 추적하기 어렵다
 
-필수 요소
-- `tracking`, `lineage`, `orchestration`
+agent 특유 문제
+- `artifact`, `promotion`, `monitoring`, `cost control`까지 함께 관리해야 한다
 
-- agent edit가 들어오면 `artifact`, `promotion`, `monitoring`, `cost control` 중요도 상승
-- 결국 운영 문제
+결론
+- 이 운영 문제를 보통 `MLOps`로 다룬다
 
 ---
 <!-- footer: "MLOps" -->
@@ -125,9 +121,6 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 - 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업
 - Autoresearch loop는 이 큰 ML lifecycle 안의 일부
-
-실제 시스템
-- `data`, `experiment`, `model registry`, `deployment`, `monitoring`
 
 핵심 역할
 - `지속 운영`, `추적`, `승격`, `유지관리`
@@ -146,6 +139,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ---
 <!-- footer: "두 질문" -->
+<!-- _class: bigtext -->
 
 ## 10. 두 질문
 

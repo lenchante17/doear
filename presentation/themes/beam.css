@@ -125,6 +125,18 @@ section.tinytext > table {
   font-size: 0.68em;
 }
 
+section.bigtext > h2 {
+  font-size: 1.18em;
+}
+
+section.bigtext > p,
+section.bigtext > ul,
+section.bigtext > ol,
+section.bigtext > blockquote,
+section.bigtext > table {
+  font-size: 0.95em;
+}
+
 section img,
 img[alt~="center"] {
   display: block;
