@@ -64,10 +64,13 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 4. Autoresearch Workflow
 
-`Question → Read → Edit → Run → Analyze → Next experiment`
+`Read → Hypothesis → Edit → Run → Analyze → Next experiment`
 
 `Read`
 - baseline, failure mode, 제약을 파악한다
+
+`Hypothesis`
+- 다음 실험에서 검증할 질문 하나를 명시한다
 
 `Edit`
 - 작은 가설 하나를 코드나 설정에 반영한다
