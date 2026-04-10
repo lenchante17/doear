@@ -62,33 +62,6 @@ Q1_GROUPS = OrderedDict(
                 "dash": "",
             },
         ),
-        (
-            "agent_tpe",
-            {
-                "label": "Agent + TPE",
-                "conditions": ("ratchet_tpe",),
-                "color": "#f59e0b",
-                "dash": "12 6",
-            },
-        ),
-        (
-            "agent_smac",
-            {
-                "label": "Agent + SMAC",
-                "conditions": ("ratchet_smac",),
-                "color": "#16a34a",
-                "dash": "8 5",
-            },
-        ),
-        (
-            "agent_tpe_smac",
-            {
-                "label": "Agent + TPE+SMAC",
-                "conditions": ("ratchet_tpe_smac",),
-                "color": "#dc2626",
-                "dash": "",
-            },
-        ),
     )
 )
 

@@ -171,12 +171,11 @@ agent 특유 문제
 
 비교 항목
 
-| Arm | 구성 |
+| Method | 구성 |
 | --- | --- |
-| baseline only | `Optuna TPE`, `SMAC3` |
-| agent only | plain `Autoresearch` |
-| hybrid | `agent + TPE`, `agent + SMAC3`, `agent + TPE+SMAC` |
-| direct | `TPE direct`, `SMAC direct` |
+| `TPE Direct` | `Optuna TPE`가 직접 candidate 제안 |
+| `SMAC Direct` | `SMAC3`가 직접 candidate 제안 |
+| `Plain Agent` | advisor 없이 plain `Autoresearch` 실행 |
 
 실험 환경
 - benchmarks: `fashion`, `twenty`, `spam`, `cifar`
@@ -245,7 +244,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question1_comparison_table.svg)
 
-- 질문 1은 `ratchet` loop를 고정한 채 advisor만 바꿔 본 비교다. winner는 여전히 dataset마다 갈린다.
+- 질문 1은 `Plain Agent`와 `TPE/SMAC direct`를 같은 dataset set에서 비교한 표다. winner는 여전히 dataset마다 갈린다.
 - 그래서 baseline 비교의 결론은 단일 champion보다 dataset별 shortlist에 가깝다.
 
 ---
@@ -255,7 +254,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question1_history_panel_a.svg)
 
-- `fashion`과 `twenty`의 frontier 모양이 다르다. 같은 `ratchet` loop 안에서도 advisor가 다르면 late gain과 early lock-in 패턴이 갈린다.
+- `fashion`과 `twenty`의 frontier 모양이 다르다. `fashion`은 direct baseline이 late gain을 만들었고, `twenty`는 `Plain Agent`가 초반 우위를 끝까지 지켰다.
 
 ---
 <!-- footer: "질문 1 추적 B" -->
@@ -264,7 +263,7 @@ agent 특유 문제
 
 ![w:1300](./assets/question1_history_panel_b.svg)
 
-- `spam`은 조기 포화, `cifar`는 긴 plateau 뒤 late jump가 반복됐다. 같은 budget이어도 좋은 비교군이 달라지는 이유다.
+- `spam`은 조기 포화, `cifar`는 긴 plateau 뒤 late jump가 반복됐다. 같은 budget이어도 direct와 agent의 유불리가 dataset마다 달라진다.
 
 ---
 <!-- footer: "질문 2 셋업" -->
