@@ -125,6 +125,14 @@ section.tinytext > table {
   font-size: 0.68em;
 }
 
+section.reftext > p,
+section.reftext > ul,
+section.reftext > ol,
+section.reftext > blockquote,
+section.reftext > table {
+  font-size: 1.02em;
+}
+
 section.bigtext > h2 {
   font-size: 1.32em;
 }
