@@ -132,24 +132,24 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ## 10. 두 질문
 
 - 성능: `(AutoML의 도메인에서)` `Autoresearch`는 baseline보다 낫나
-- 과정: `Autoresearch` 과정에 어떤 harness가 있으면 좋을까
-- 질문 1은 `solver` 비교다
-- 질문 2는 `process` 비교다
+- 운영: `Autoresearch`에 어떤 harness가 있으면 좋을까
 
 ---
 <!-- footer: "질문 1 셋업" -->
 
 ## 11. 질문 1 셋업
 
-- baseline: `Optuna TPE`, `SMAC3`
-- agent: `Autoresearch`
-- hybrid: `agent + TPE`, `agent + SMAC3`
-- 비교 조건: 같은 search space, benchmark, budget
+- baseline only: `Optuna TPE`, `SMAC3`
+- agent only: plain `Autoresearch`
+- hybrid: `agent + TPE`, `agent + SMAC3`, `agent + TPE+SMAC`
+- 추가 조건: `TPE direct`, `SMAC direct`도 함께 비교
 
 ---
 <!-- footer: "Optuna TPE" -->
 
 ## 12. Optuna TPE
+
+![w:980](./assets/optuna_tpe_flow.svg)
 
 - 핵심 아이디어: 좋은 trial과 나머지 trial을 분리해 density를 학습한다
 - 다음 제안은 `good / rest` 비율이 큰 쪽을 우선 샘플링한다
@@ -160,6 +160,8 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 <!-- footer: "SMAC3" -->
 
 ## 13. SMAC3
+
+![w:980](./assets/smac3_flow.svg)
 
 - 핵심 아이디어: surrogate model로 promising region을 예측한다
 - evaluation budget은 racing으로 유망한 config에 더 배분한다
@@ -183,48 +185,16 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ## 15. 질문 2 셋업
 
-- 비교 대상은 agent profile 세 가지다
-- `Ratchet`: incumbent 근처 exploit
-- `Screening`: main effect 분리
-- `Advanced`: interaction과 refinement까지 포함한 staged DOE
-
----
-<!-- footer: "왜 Harness" -->
-
-## 16. 왜 Harness
-
-- 없으면: attribution 약화, 단계 혼합
-- 결과: 잘 정리된 random search로 퇴화
-- 큰 수정과 작은 튜닝이 같은 레벨로 섞인다
-- 검증 실험이 뒤로 밀리기 쉽다
-
----
-<!-- footer: "DoE Harness" -->
-
-## 17. DoE Harness
-
-- 순서: `screening → interaction → refinement`
-- 장점: effect attribution, 다음 라운드 설계
-- 강점: 무엇을 바꿨는지보다 무엇이 먹혔는지 읽기 쉽다
-- 목적: 최고점 하나보다 `실험 질서`를 만든다
-
----
-<!-- footer: "세 프로파일" -->
-
-## 18. 세 프로파일
-
-| Profile | 역할 | 초점 |
+| Agent | 운영 방식 | 질문 |
 | --- | --- | --- |
-| `Ratchet` | incumbent 근처 exploit | 빠른 개선 |
-| `Screening` | main effect 분리 | 요인 선별 |
-| `Advanced` | interaction / refinement | 순차 설계 |
-
-- 같은 search space에서도 운영 정책은 다르다
+| `Ratchet` | incumbent 근처 exploit | 얼마나 빨리 올리나 |
+| `Screening` | main effect 분리 | 무엇이 먹히나 |
+| `Advanced` | staged DOE | 어떻게 다음 round를 설계하나 |
 
 ---
 <!-- footer: "실험 설정" -->
 
-## 19. 실험 설정
+## 16. 실험 설정
 
 | 항목 | 설정 |
 | --- | --- |
@@ -239,7 +209,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "탐색 축" -->
 
-## 20. 탐색 축
+## 17. 탐색 축
 
 | 그룹 | 변수 |
 | --- | --- |
@@ -253,7 +223,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "결과 요약" -->
 
-## 21. 결과 요약
+## 18. 결과 요약
 
 | 관점 | 조건 | 점수 |
 | --- | --- | --- |
@@ -268,7 +238,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Ratchet" -->
 
-## 22. Ratchet
+## 19. Ratchet
 
 ![w:1460](./assets/ratchet_variants_best_and_nonbest.svg)
 
@@ -279,7 +249,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Screening" -->
 
-## 23. Screening
+## 20. Screening
 
 ![w:1460](./assets/screening_variants_best_and_nonbest.svg)
 
@@ -290,7 +260,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Advanced" -->
 
-## 24. Advanced
+## 21. Advanced
 
 ![w:1460](./assets/advanced_variants_best_and_nonbest.svg)
 
@@ -301,7 +271,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Plain" -->
 
-## 25. Plain
+## 22. Plain
 
 ![w:1460](./assets/plain_agents_best_and_nonbest.svg)
 
@@ -312,7 +282,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "TPE" -->
 
-## 26. TPE
+## 23. TPE
 
 ![w:1460](./assets/tpe_agents_best_and_nonbest.svg)
 
@@ -323,7 +293,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "SMAC" -->
 
-## 27. SMAC
+## 24. SMAC
 
 ![w:1460](./assets/smac_agents_best_and_nonbest.svg)
 
@@ -334,7 +304,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "핵심 함의" -->
 
-## 28. 핵심 함의
+## 25. 핵심 함의
 
 - harness effect는 advisor effect만큼 크다.
 - validation 최적화와 finalize 최적화는 다른 문제다.
@@ -344,7 +314,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "운영 교훈" -->
 
-## 29. 운영 교훈
+## 26. 운영 교훈
 
 - 지표: `best val`만 보지 말고 `finalize`, `artifact completeness`를 같이 봐야 한다.
 - 설계: `isolate / history / finalize` 분리가 있어야 중간 최고와 최종 승자를 함께 읽는다.
@@ -354,7 +324,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "한계" -->
 
-## 30. 한계
+## 27. 한계
 
 - 단일 benchmark, single split
 - budget `100`, top-k reseeding 없음
@@ -365,7 +335,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 31. References
+## 28. References
 
 | 구분 | 예시 |
 | --- | --- |

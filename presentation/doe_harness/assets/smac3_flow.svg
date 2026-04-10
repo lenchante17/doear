@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#f6f2ec"/>
+
+  <rect x="70" y="90" width="250" height="120" rx="28" fill="#d8e7d1" stroke="#22392c" stroke-width="4"/>
+  <text x="195" y="136" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#22392c">Past Runs</text>
+  <text x="195" y="171" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#22392c">configs + losses</text>
+
+  <rect x="420" y="75" width="320" height="150" rx="28" fill="#d9e6ff" stroke="#244676" stroke-width="4"/>
+  <text x="580" y="122" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#244676">Surrogate Model</text>
+  <text x="580" y="158" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#244676">estimate promising region</text>
+  <text x="580" y="190" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#244676">and uncertainty</text>
+
+  <rect x="420" y="300" width="320" height="150" rx="28" fill="#ffd9c7" stroke="#72341f" stroke-width="4"/>
+  <text x="580" y="347" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#72341f">Racing</text>
+  <text x="580" y="383" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#72341f">allocate budget to</text>
+  <text x="580" y="415" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#72341f">better candidates</text>
+
+  <rect x="840" y="115" width="280" height="110" rx="24" fill="#f9e6b8" stroke="#624500" stroke-width="4"/>
+  <text x="980" y="157" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" fill="#624500">Next Configs</text>
+  <text x="980" y="191" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#624500">model-based proposals</text>
+
+  <rect x="840" y="325" width="280" height="110" rx="24" fill="#fff8ea" stroke="#624500" stroke-width="4"/>
+  <text x="980" y="367" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="32" fill="#624500">Incumbent</text>
+  <text x="980" y="401" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#624500">survives more budget</text>
+
+  <path d="M320 150 C370 150, 380 150, 420 150" fill="none" stroke="#22392c" stroke-width="5"/>
+  <polygon points="409,139 432,150 409,161" fill="#22392c"/>
+
+  <path d="M580 225 C580 255, 580 270, 580 300" fill="none" stroke="#244676" stroke-width="5"/>
+  <polygon points="569,289 580,312 591,289" fill="#244676"/>
+
+  <path d="M740 150 C780 150, 800 160, 840 170" fill="none" stroke="#244676" stroke-width="5"/>
+  <polygon points="828,160 852,173 826,182" fill="#244676"/>
+
+  <path d="M740 375 C780 375, 800 380, 840 380" fill="none" stroke="#72341f" stroke-width="5"/>
+  <polygon points="829,369 852,380 829,391" fill="#72341f"/>
+
+  <text x="600" y="525" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#50381a">
+    SMAC3: propose with a surrogate, then spend evaluation budget where the race is favorable
+  </text>
+</svg>
