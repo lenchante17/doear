@@ -153,13 +153,13 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ## 12. 관련 문헌
 
 - [Using Large Language Models for Hyperparameter Optimization](https://arxiv.org/abs/2312.04528)
-  실험 이력 기반 순차 튜닝은 가능하지만, 장기적으로 BO 우위는 불명확하다.
+  - 실험 이력 기반 순차 튜닝은 가능하지만, 장기적으로 BO 우위는 불명확하다.
 - [LLAMBO: Large Language Models to Enhance Bayesian Optimization](https://arxiv.org/abs/2402.03921)
-  LLM은 BO를 대체하기보다 초기 탐색을 강화하는 보조 수단에 가깝다.
+  - LLM은 BO를 대체하기보다 초기 탐색을 강화하는 보조 수단에 가깝다.
 - [AgentHPO: Large Language Model Agent for Hyper-Parameter Optimization](https://arxiv.org/abs/2402.01881)
-  Agent형 LLM HPO는 가능성을 보였지만, BO 대비 성능 우위 근거는 약하다.
+  - Agent형 LLM HPO는 가능성을 보였지만, BO 대비 성능 우위 근거는 약하다.
 - [SLLMBO: Sequential Large Language Model-Based Hyper-parameter Optimization](https://arxiv.org/abs/2410.20302)
-  Hybrid LLM-BO 방식은 일부 태스크에서 classical BO보다 강하다.
+  - Hybrid LLM-BO 방식은 일부 태스크에서 classical BO보다 강하다.
 
 ---
 <!-- footer: "Optuna TPE" -->
