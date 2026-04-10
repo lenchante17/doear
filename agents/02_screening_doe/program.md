@@ -21,6 +21,7 @@
 
 - Read `history.md` and `report.md` before each round.
 - If advisors are enabled, refresh `advice/latest.md` before choosing the next screening contrast.
+- Treat advisor recommendations as guidance, not as mandatory submissions; you may adapt, combine, or replace them with a novel config.
 - Edit `submission.toml` to answer one screening question.
 - Submit one round and read the updated `history.md`.
 - Append a `## Run <run_id>` section to `report.md` with `Hypothesis: ...`, `Factors: ...`, `Levels: ...`, `Interpretation: ...`, `Decision: ...`, and `Next: ...`.

@@ -1,0 +1,4 @@
+mode = "agent"
+agent_profile = "01_ratchet"
+advisors = []
+proposal_count = 2

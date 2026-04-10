@@ -1,0 +1,19 @@
+benchmark = "cifar10_real"
+backend = "sklearn"
+
+[[candidates]]
+name = "mlp_anchor"
+model_family = "mlp"
+[candidates.preprocessing]
+normalization = "maxabs"
+outlier_strategy = "none"
+[candidates.resampling]
+strategy = "none"
+[candidates.model]
+hidden_dims = [64, 32]
+activation = "relu"
+solver = "adam"
+normalization_layer = "none"
+weight_decay = 0.0005
+learning_rate_init = 0.001
+batch_size = 64

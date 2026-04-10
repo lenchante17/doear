@@ -1,0 +1,54 @@
+id = "mlp_advisory_v1"
+benchmark = "fashion_mnist_real"
+backend = "sklearn"
+model_family = "mlp"
+candidate_prefix = "mlp"
+
+[defaults.preprocessing]
+normalization = "minmax"
+outlier_strategy = "none"
+
+[defaults.resampling]
+strategy = "none"
+
+[defaults.model]
+hidden_dims = [64, 32]
+activation = "relu"
+normalization_layer = "none"
+weight_decay = 0.0005
+learning_rate_init = 0.001
+batch_size = 64
+
+[[parameters]]
+path = "preprocessing.normalization"
+type = "categorical"
+choices = ["none", "minmax", "standard", "maxabs"]
+
+[[parameters]]
+path = "model.hidden_dims"
+type = "categorical"
+choices = [[32, 32], [64, 32], [64, 64], [128, 64]]
+
+[[parameters]]
+path = "model.activation"
+type = "categorical"
+choices = ["relu", "tanh", "gelu"]
+
+[[parameters]]
+path = "model.weight_decay"
+type = "float"
+low = 0.0001
+high = 0.01
+log = true
+
+[[parameters]]
+path = "model.learning_rate_init"
+type = "float"
+low = 0.0001
+high = 0.01
+log = true
+
+[[parameters]]
+path = "model.batch_size"
+type = "categorical"
+choices = [32, 64, 128]

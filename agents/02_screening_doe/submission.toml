@@ -1,0 +1,70 @@
+benchmark = "cifar10_real"
+backend = "sklearn"
+
+[[candidates]]
+name = "r250_anchor"
+model_family = "mlp"
+[candidates.preprocessing]
+normalization = "maxabs"
+outlier_strategy = "none"
+[candidates.resampling]
+strategy = "none"
+[candidates.model]
+hidden_dims = [64, 32]
+activation = "relu"
+weight_init = "auto"
+solver = "adam"
+normalization_layer = "batchnorm"
+residual_connections = false
+dropout_rate = 0.0
+input_dropout_rate = 0.1
+input_noise_std = 0.05
+hidden_noise_std = 0.05
+label_smoothing = 0.0
+gradient_clip_norm = 1.0
+bias_weight_decay = 0.005
+normalization_weight_decay = 0.02
+weight_decay = 0.0025
+use_bias = true
+learning_rate_init = 0.0000625
+learning_rate = "constant"
+batch_size = 128
+early_stopping = false
+validation_fraction = 0.1
+beta_1 = 0.97
+beta_2 = 0.9
+max_iter = 480
+
+[[candidates]]
+name = "r250_shape_128x64"
+model_family = "mlp"
+[candidates.preprocessing]
+normalization = "maxabs"
+outlier_strategy = "none"
+[candidates.resampling]
+strategy = "none"
+[candidates.model]
+hidden_dims = [128, 64]
+activation = "relu"
+weight_init = "auto"
+solver = "adam"
+normalization_layer = "batchnorm"
+residual_connections = false
+dropout_rate = 0.0
+input_dropout_rate = 0.1
+input_noise_std = 0.05
+hidden_noise_std = 0.05
+label_smoothing = 0.0
+gradient_clip_norm = 1.0
+bias_weight_decay = 0.005
+normalization_weight_decay = 0.02
+weight_decay = 0.0025
+use_bias = true
+learning_rate_init = 0.0000625
+learning_rate = "constant"
+batch_size = 128
+early_stopping = false
+validation_fraction = 0.1
+beta_1 = 0.97
+beta_2 = 0.9
+max_iter = 480

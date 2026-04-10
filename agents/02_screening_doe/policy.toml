@@ -1,0 +1,4 @@
+mode = "agent"
+agent_profile = "02_screening_doe"
+advisors = []
+proposal_count = 2

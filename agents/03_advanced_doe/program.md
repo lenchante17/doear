@@ -21,6 +21,7 @@
 
 - Read `history.md` and `report.md` before each round and reconstruct the DOE state from both.
 - If advisors are enabled, refresh `advice/latest.md` before choosing the next design question.
+- Treat advisor recommendations as guidance, not as mandatory submissions; you may adapt, combine, or replace them with a novel config.
 - Edit `submission.toml` for one design question.
 - Submit one round and read the updated `history.md`.
 - Append a `## Run <run_id>` section to `report.md` in this exact shape: `Stage: ...; Anchor: ...; Question: ...; Factors: ...; Levels: ...; Alias risk: ...; Prediction: ...; Observed signal: ...; Belief: ...; Decision: ...; Next: ...`

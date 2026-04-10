@@ -1,0 +1,87 @@
+[datasets.cifar10]
+kind = "npz_classification"
+path = "data/cifar10/cifar10.npz"
+features_key = "x"
+target_key = "y"
+max_samples = 4000
+sample_seed = 42
+task = "classification"
+description = "CIFAR-10 stored locally as npz and evaluated on a fixed 4k stratified subset."
+
+[datasets.fashion_mnist]
+kind = "npz_classification"
+path = "data/fashion_mnist/fashion_mnist.npz"
+features_key = "x"
+target_key = "y"
+max_samples = 8000
+sample_seed = 42
+task = "classification"
+description = "Fashion-MNIST stored locally as npz and evaluated on a fixed 8k stratified subset."
+
+[datasets.twenty_newsgroups]
+kind = "csv_text_classification"
+path = "data/twenty_newsgroups/twenty_newsgroups.csv"
+text_column = "text"
+target_column = "label"
+max_samples = 8000
+sample_seed = 42
+max_features = 2000
+ngram_max = 2
+min_df = 2
+task = "classification"
+description = "20 Newsgroups stored locally as CSV text and evaluated on a fixed 8k stratified subset."
+
+[datasets.sms_spam]
+kind = "csv_text_classification"
+path = "data/sms_spam/sms_spam.csv"
+text_column = "text"
+target_column = "label"
+max_features = 1000
+ngram_max = 2
+min_df = 2
+task = "classification"
+description = "SMS Spam Collection stored locally as CSV text and evaluated on the full corpus."
+
+[benchmarks.cifar10_real]
+dataset = "cifar10"
+metric = "accuracy"
+backend = "sklearn"
+random_seed = 42
+validation_size = 0.15
+test_size = 0.15
+max_candidates_per_submission = 2
+allowed_model_families = ["mlp"]
+description = "Measured CIFAR-10 benchmark using a local npz."
+
+[benchmarks.fashion_mnist_real]
+dataset = "fashion_mnist"
+metric = "accuracy"
+backend = "sklearn"
+random_seed = 42
+validation_size = 0.15
+test_size = 0.15
+max_candidates_per_submission = 2
+allowed_model_families = ["mlp"]
+description = "Measured Fashion-MNIST benchmark through scikit-learn on a fixed 8k subset."
+
+[benchmarks.twenty_newsgroups_real]
+dataset = "twenty_newsgroups"
+metric = "accuracy"
+backend = "sklearn"
+random_seed = 42
+validation_size = 0.15
+test_size = 0.15
+max_candidates_per_submission = 2
+allowed_model_families = ["mlp"]
+description = "Measured 20 Newsgroups benchmark using a local CSV text corpus."
+
+[benchmarks.sms_spam_real]
+dataset = "sms_spam"
+metric = "accuracy"
+backend = "sklearn"
+random_seed = 42
+validation_size = 0.15
+test_size = 0.15
+max_candidates_per_submission = 2
+allowed_model_families = ["mlp"]
+description = "Measured SMS spam benchmark using a local CSV text corpus."

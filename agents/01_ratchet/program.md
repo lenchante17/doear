@@ -21,6 +21,7 @@
 
 - Read `history.md` and `report.md` before each round.
 - If advisors are enabled, refresh `advice/latest.md` before editing `submission.toml`.
+- Treat advisor recommendations as guidance, not as mandatory submissions; you may adapt, combine, or replace them with a novel config.
 - Edit `submission.toml` for one small mutation around the current incumbent.
 - Submit one round and read the updated `history.md`.
 - Append a `## Run <run_id>` section to `report.md` with `Change: ...`, `Interpretation: ...`, `Decision: ...`, and `Next: ...`.

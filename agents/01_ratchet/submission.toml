@@ -1,0 +1,40 @@
+benchmark = "twenty_newsgroups_real"
+backend = "sklearn"
+
+[[candidates]]
+name = "mlp_anchor_r352_a"
+model_family = "mlp"
+[candidates.preprocessing]
+normalization = "maxabs"
+outlier_strategy = "none"
+[candidates.resampling]
+strategy = "none"
+[candidates.model]
+hidden_dims = [64, 64]
+activation = "tanh"
+solver = "adamw"
+normalization_layer = "layernorm"
+weight_init = "xavier_uniform"
+weight_decay = 0.000100000
+learning_rate_init = 0.000750
+batch_size = 64
+early_stopping = true
+
+[[candidates]]
+name = "mlp_anchor_r352_b"
+model_family = "mlp"
+[candidates.preprocessing]
+normalization = "maxabs"
+outlier_strategy = "none"
+[candidates.resampling]
+strategy = "none"
+[candidates.model]
+hidden_dims = [128, 64]
+activation = "tanh"
+solver = "adamw"
+normalization_layer = "layernorm"
+weight_init = "xavier_uniform"
+weight_decay = 0.000100000
+learning_rate_init = 0.000750
+batch_size = 64
+early_stopping = true
