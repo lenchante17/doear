@@ -127,9 +127,60 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 핵심 역할: `지속 운영`, `추적`, `승격`, `유지관리`
 
 ---
-<!-- footer: "부족한 점" -->
+<!-- footer: "큰 질문" -->
 
-## 10. Autoresearch의 단점
+## 10. 오늘의 큰 질문 두 가지
+
+1. `Autoresearch`는 기존 `AutoML` 도메인을 AutoML 기법들에 비해 잘 푸는가?
+2. `Autoresearch`에 어떤 harness를 적용하는 게 좋은가?
+
+- 질문 1은 `capability comparison`
+- 질문 2는 `operating policy / harness design`
+- 오늘 발표는 이 두 질문을 분리해서 본다.
+
+---
+<!-- footer: "Question 1 / Optuna" -->
+
+## 11. 질문 1: 비교 기준으로 왜 `Optuna TPE`를 보나
+
+- `Optuna`의 `TPESampler`는 대표적인 hyperparameter optimization baseline이다.
+- 좋은 trial 집합과 나머지 trial 집합의 density를 따로 모델링하고, 그 비율이 큰 쪽을 우선 제안한다.
+- bounded search space에서 강한 incumbent exploitation을 보여 주기 쉽다.
+- 따라서 같은 AutoML search space에서 `Autoresearch`가 이 baseline보다 더 잘 푸는지가 첫 질문이다.
+
+---
+<!-- footer: "Question 1 / SMAC3" -->
+
+## 12. 질문 1: 비교 기준으로 왜 `SMAC3`를 보나
+
+- `SMAC3`는 algorithm configuration과 hyperparameter optimization을 위한 대표적 Bayesian optimization baseline이다.
+- surrogate model과 aggressive racing을 결합해 유망한 configuration에 평가 예산을 집중한다.
+- mixed, categorical, conditional search space에서 자주 쓰이는 강한 비교 기준이다.
+- 따라서 `Autoresearch`가 local search를 넘어선다면 이 baseline 대비 장점이 드러나야 한다.
+
+---
+<!-- footer: "Question 1 / Results" -->
+
+## 13. 질문 1 실험 결과
+
+**TBD**
+
+- 현재 `Autoresearch`, `Optuna TPE`, `SMAC3` 비교 실험 진행 중
+- 같은 bounded search space, 같은 benchmark, 같은 budget 기준으로 정리 예정
+
+---
+<!-- footer: "Question 2" -->
+
+## 14. 질문 2: `Autoresearch`에 어떤 Harness를 적용할까?
+
+- 질문 1이 `누가 더 잘 푸는가`라면, 질문 2는 `agent를 어떻게 운영해야 하는가`다.
+- 여기부터는 `Autoresearch` 내부 운영 정책과 harness 설계를 본다.
+- 아래 실험은 `DoE-guided harness`가 agent loop를 더 구조화할 수 있는지에 대한 답이다.
+
+---
+<!-- footer: "왜 Harness인가" -->
+
+## 15. 왜 Harness 질문이 생기나
 
 - 실험이 즉흥적으로 이어지기 쉬움
 - 왜 이 실험을 했는지 attribution이 약함
@@ -138,9 +189,9 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 - 잘 정리된 random search로 퇴화할 위험
 
 ---
-<!-- footer: "필요한 harness" -->
+<!-- footer: "좋은 Harness" -->
 
-## 11. 어떤 Harness가 필요한가
+## 16. 어떤 Harness가 필요한가
 
 - 무엇을 먼저 볼지 정하는 우선순위
 - 어떤 조합을 함께 볼지 정하는 규율
@@ -152,7 +203,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "DoE 개념" -->
 
-## 12. Design of Experiments(DoE)란 무엇인가
+## 17. Design of Experiments(DoE)란 무엇인가
 
 - 여러 요인을 한 번에 바꿔 보며 effect를 읽는 실험 설계
 - 한 번의 최고점보다 `요인`, `상호작용`, `안정성` 파악에 강점
@@ -163,7 +214,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "빌려오는 DoE 개념" -->
 
-## 13. DoE에서 빌려오는 개념
+## 18. DoE에서 빌려오는 개념
 
 - `screening`: 중요한 요인부터 좁히기
 - `factorial thinking`: interaction 보기
@@ -174,7 +225,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "비교 agents" -->
 
-## 14. DoE-guided 운영과 비교한 Agents
+## 19. DoE-guided 운영과 비교한 Agents
 
 | Agent | 운영 방식 | 특징 |
 | --- | --- | --- |
@@ -185,7 +236,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "실험 설정" -->
 
-## 15. 실험 설정
+## 20. 실험 설정
 
 | 항목 | 설정 |
 | --- | --- |
@@ -210,7 +261,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "결과 요약" -->
 
-## 16. 최종 요약: validation 1등과 hidden 1등은 달랐다
+## 21. 최종 요약: validation 1등과 hidden 1등은 달랐다
 
 | 관점 | 조건 | Best Val | Hidden Test |
 | --- | --- | --- | --- |
@@ -227,7 +278,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Ratchet Variants" -->
 
-## 17. Ratchet 계열 비교
+## 22. Ratchet 계열 비교
 
 ![w:1460](./assets/ratchet_variants_best_and_nonbest.svg)
 
@@ -238,7 +289,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Screening Variants" -->
 
-## 18. Screening 계열 비교
+## 23. Screening 계열 비교
 
 ![w:1460](./assets/screening_variants_best_and_nonbest.svg)
 
@@ -249,7 +300,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Advanced Variants" -->
 
-## 19. Advanced 계열 비교
+## 24. Advanced 계열 비교
 
 ![w:1460](./assets/advanced_variants_best_and_nonbest.svg)
 
@@ -260,7 +311,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Plain Agents" -->
 
-## 20. Plain agent간 비교
+## 25. Plain agent간 비교
 
 ![w:1460](./assets/plain_agents_best_and_nonbest.svg)
 
@@ -271,7 +322,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "TPE Agents" -->
 
-## 21. TPE agent간 비교
+## 26. TPE agent간 비교
 
 ![w:1460](./assets/tpe_agents_best_and_nonbest.svg)
 
@@ -282,7 +333,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "SMAC Agents" -->
 
-## 22. SMAC agent간 비교
+## 27. SMAC agent간 비교
 
 ![w:1460](./assets/smac_agents_best_and_nonbest.svg)
 
@@ -293,7 +344,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "읽을 점" -->
 
-## 23. 이번 batch에서 읽을 점
+## 28. 이번 batch에서 읽을 점
 
 - `profile별 3개`는 advisor가 같은 agent 안에서 무엇을 바꾸는지 보여준다.
 - `mode별 3개`는 같은 advisor 아래에서 agent policy 차이를 보여준다.
@@ -303,7 +354,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "Harness Lesson" -->
 
-## 24. Harness 관점에서 남는 교훈
+## 29. Harness 관점에서 남는 교훈
 
 - `best val`, `hidden finalize`, `artifact completeness`를 같이 봐야 한다.
 - run count와 history row count를 혼동하면 early finalize가 생긴다.
@@ -313,7 +364,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 ---
 <!-- footer: "한계" -->
 
-## 25. 한계
+## 30. 한계
 
 - 단일 benchmark, single split batch라 분산 추정이 약하다.
 - run budget `100`은 dual-advisor의 late gain을 보기엔 짧을 수 있다.
@@ -324,7 +375,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 <!-- _class: tinytext -->
 <!-- footer: "출처" -->
 
-## 26. References
+## 31. References
 
 | 구분 | 예시 |
 | --- | --- |
@@ -332,4 +383,5 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 | end-to-end systems | [karpathy/autoresearch](https://github.com/karpathy/autoresearch), [RD-Agent](https://github.com/microsoft/RD-Agent), [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) |
 | deep research | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) |
 | evaluation | [MLE-bench](https://github.com/openai/mle-bench), [MLAgentBench](https://github.com/snap-stanford/MLAgentBench), [MLR-Bench](https://github.com/chchenhui/mlrbench) |
+| optimization baselines | [Optuna docs](https://optuna.readthedocs.io/en/stable/reference/samplers/index.html), [SMAC3 docs](https://automl.github.io/SMAC3/main/) |
 | visuals | [AutoML image](https://miro.medium.com/v2/resize:fit:1382/1*ip8VpZ4_KJP8R5EwJ3zRgw.jpeg), [NAS image](https://i.ytimg.com/vi/_dR8a5ZcBgM/sddefault.jpg), [Kubeflow model registry lifecycle image](https://www.kubeflow.org/docs/components/model-registry/images/ml-lifecycle-kubeflow-modelregistry.drawio.svg) |
