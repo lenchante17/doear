@@ -126,7 +126,7 @@ section.tinytext > table {
 }
 
 section.bigtext > h2 {
-  font-size: 1.18em;
+  font-size: 1.32em;
 }
 
 section.bigtext > p,
@@ -134,7 +134,19 @@ section.bigtext > ul,
 section.bigtext > ol,
 section.bigtext > blockquote,
 section.bigtext > table {
-  font-size: 0.95em;
+  font-size: 1.08em;
+}
+
+section.wide-table > table {
+  font-size: 0.91em;
+}
+
+section.compact-mlops > p,
+section.compact-mlops > ul,
+section.compact-mlops > ol,
+section.compact-mlops > blockquote,
+section.compact-mlops > table {
+  font-size: 0.92em;
 }
 
 section img,

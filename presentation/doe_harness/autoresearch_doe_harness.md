@@ -30,7 +30,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 초점
 - 새로운 알고리즘 자체보다 후보 비교와 설정 탐색 자동화
 
-![w:950](./assets/automl_intro.jpeg)
+![w:855](./assets/automl_intro.jpeg)
 
 ---
 <!-- footer: "NAS" -->
@@ -83,6 +83,7 @@ description: DOE를 Research Agent의 Harness로 제안하는 발표 초안
 
 ---
 <!-- footer: "핵심 차이" -->
+<!-- _class: wide-table -->
 
 ## 5. AutoML vs. Autoresearch
 
@@ -123,10 +124,11 @@ agent 특유 문제
 
 ---
 <!-- footer: "MLOps" -->
+<!-- _class: compact-mlops -->
 
 ## 8. MLOps
 
-![w:880](./assets/mlops_kubeflow.svg)
+![w:740](./assets/mlops_kubeflow.svg)
 
 정의
 - 모델 개발, 관리, 배포 파이프라인을 유지 관리하는 작업
@@ -140,6 +142,7 @@ agent 특유 문제
 
 ---
 <!-- footer: "MLOps 요소" -->
+<!-- _class: wide-table -->
 
 ## 9. MLOps 요소
 
